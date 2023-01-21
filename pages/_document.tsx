@@ -3,11 +3,14 @@ import Document, { Html, Head, Main, NextScript } from 'next/document'
 import createEmotionServer from '@emotion/server/create-instance'
 import theme, { roboto } from 'shared/theme'
 import createEmotionCache from 'shared/createEmotionCache'
+import i18nextConfig from 'next-i18next.config'
 
 export default class MyDocument extends Document {
   render() {
+    const currentLocale = this.props.__NEXT_DATA__.locale ?? i18nextConfig.i18n.defaultLocale
+
     return (
-      <Html lang="en" className={roboto.className}>
+      <Html lang={currentLocale} className={roboto.className}>
         <Head>
           {/* PWA primary color */}
           <meta name="theme-color" content={theme.palette.primary.main} />
