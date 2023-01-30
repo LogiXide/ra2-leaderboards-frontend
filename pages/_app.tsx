@@ -7,7 +7,7 @@ import { CacheProvider, EmotionCache } from '@emotion/react'
 import theme from 'shared/theme'
 import createEmotionCache from 'shared/createEmotionCache'
 
-import { Layout } from '@/components/Layout'
+import { Layout } from '@/components/Containers/Layout/Layout'
 
 import '../styles/globals.css'
 
