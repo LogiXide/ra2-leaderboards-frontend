@@ -5,6 +5,8 @@ import Head from 'next/head';
 
 import { Meta } from '@/components';
 
+import styles from '../styles/Home.module.css';
+
 interface ITypeProps {
   // Add custom props here
 }
@@ -16,7 +18,9 @@ const Home: React.FC = (): JSX.Element => {
     <>
       <Meta title="Main" description="Something text..." />
 
-      <h1>{t('hello')}</h1>
+      <div className={styles.wrapper}>
+        <h1>{t('hello')}</h1>
+      </div>
     </>
   );
 };

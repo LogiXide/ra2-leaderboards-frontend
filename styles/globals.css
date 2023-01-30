@@ -1,3 +1,4 @@
+/*minimum reset css */
 html {
    box-sizing: border-box;
    font-size: 16px;
@@ -20,4 +21,9 @@ html {
  img {
    max-width: 100%;
    height: auto;
+ }
+ /*minimum reset css */
+
+ body {
+   background-color: #ece8e1;
  }

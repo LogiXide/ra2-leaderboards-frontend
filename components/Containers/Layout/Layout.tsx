@@ -1,6 +1,6 @@
 import { Header, Footer } from '..';
 
-import { LayoutStyled } from './Layout.styles';
+import styles from './Layout.module.css';
 
 interface ITypeProps {
   children: React.ReactNode;
@@ -8,11 +8,11 @@ interface ITypeProps {
 
 const Layout: React.FC<ITypeProps> = (props): JSX.Element => {
   return (
-    <LayoutStyled>
+    <>
       <Header />
-      {props.children}
+      <div className={styles.container}>{props.children}</div>
       <Footer />
-    </LayoutStyled>
+    </>
   );
 };
 
