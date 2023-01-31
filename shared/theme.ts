@@ -1,8 +1,8 @@
 import { Roboto } from '@next/font/google'
-import { createTheme } from '@mui/material/styles'
-import { red } from '@mui/material/colors'
+import { createTheme, responsiveFontSizes } from '@mui/material/styles'
+import { red, teal } from '@mui/material/colors'
 
-export const roboto = Roboto({
+const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
   subsets: ['latin'],
   display: 'swap',
@@ -10,7 +10,7 @@ export const roboto = Roboto({
 })
 
 // Create a theme instance.
-const theme = createTheme({
+const base = createTheme({
   palette: {
     primary: {
       main: '#556cd6',
@@ -21,10 +21,15 @@ const theme = createTheme({
     error: {
       main: red.A400,
     },
+    success: {
+      main: teal[400],
+    }
   },
   typography: {
     fontFamily: roboto.style.fontFamily,
   },
 })
 
-export default theme
+const theme = responsiveFontSizes(base);
+
+export { theme, roboto }
