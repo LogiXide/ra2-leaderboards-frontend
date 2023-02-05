@@ -1,24 +1,19 @@
-import {
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-} from '@mui/material';
+import { Table, TableHead, TableBody, TableRow, Box } from '@mui/material';
 
 import { DataColumn, DataItem } from '@/components/common';
 
 import styles from './DataList.module.css';
 
-import type { ITypeDataColumn, ITypeDataList } from '@/pages/stats';
+import { ITypeDataColumn, ITypeDataList } from '@/interfaces';
 
 interface ITypeProps {
   columns: ITypeDataColumn[];
   list: ITypeDataList[];
 }
- 
+
 const DataList: React.FC<ITypeProps> = (props): JSX.Element => {
   return (
-    <div className={styles.root}>
+    <Box p={2}>
       <Table>
         <TableHead>
           <TableRow>
@@ -37,7 +32,7 @@ const DataList: React.FC<ITypeProps> = (props): JSX.Element => {
           ))}
         </TableBody>
       </Table>
-    </div>
+    </Box>
   );
 };
 

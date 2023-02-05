@@ -1,18 +1,6 @@
 import { DataList } from '@/components/common';
 
-export interface ITypeDataColumn {
-  id: number;
-  label: string;
-  render: (x: ITypeDataList) => string | number;
-}
-
-export interface ITypeDataList {
-  id: number;
-  rank: number;
-  player: string;
-  elo: number;
-  country: string;
-}
+import type { ITypeDataList, ITypeDataColumn } from '@/interfaces';
 
 const list: ITypeDataList[] = [
   {
