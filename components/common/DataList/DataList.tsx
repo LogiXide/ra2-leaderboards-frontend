@@ -5,7 +5,7 @@ import { DataColumn, DataItem } from '@/components/common';
 import type { ITypeDataColumn } from '@/components/common/DataColumn';
 
 interface ITypeProps<T> {
-  columns: ITypeDataColumn<any>[];
+  columns: ITypeDataColumn[];
   list: T[];
 }
 

@@ -3,7 +3,7 @@ import { TableCell } from '@mui/material';
 export interface ITypeDataColumn {
   id: number;
   label: string;
-  render: (x: any) => any;
+  render: (x: any) => number | string | React.ReactNode;
 }
 
 interface ITypeProps {
