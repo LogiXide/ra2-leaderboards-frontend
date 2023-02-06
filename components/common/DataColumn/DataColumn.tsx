@@ -1,5 +1,11 @@
 import { TableCell } from '@mui/material';
 
+export interface ITypeDataColumn<T> {
+  id: number;
+  label: string;
+  render: (x: T) => void;
+}
+
 interface ITypeProps {
   label: string;
 }

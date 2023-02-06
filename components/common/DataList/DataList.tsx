@@ -2,16 +2,14 @@ import { Table, TableHead, TableBody, TableRow, Box } from '@mui/material';
 
 import { DataColumn, DataItem } from '@/components/common';
 
-import styles from './DataList.module.css';
+import type { ITypeDataColumn } from '@/components/common/DataColumn';
 
-import { ITypeDataColumn, ITypeDataList } from '@/interfaces';
-
-interface ITypeProps {
-  columns: ITypeDataColumn[];
-  list: ITypeDataList[];
+interface ITypeProps<T> {
+  columns: ITypeDataColumn<any>[];
+  list: T[];
 }
 
-const DataList: React.FC<ITypeProps> = (props): JSX.Element => {
+const DataList = <T,>(props: ITypeProps<T>): JSX.Element => {
   return (
     <Box p={2}>
       <Table>
@@ -23,7 +21,7 @@ const DataList: React.FC<ITypeProps> = (props): JSX.Element => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {(props.list || []).map((item) => (
+          {(props.list || []).map((item: any) => (
             <TableRow key={item.id}>
               {(props.columns || []).map((x) => (
                 <DataItem key={x.id} content={x.render(item)} />

@@ -1,8 +1,6 @@
 import { DataList } from '@/components/common';
 
-import type { ITypeDataList, ITypeDataColumn } from '@/interfaces';
-
-const list: ITypeDataList[] = [
+const list = [
   {
     id: 1,
     rank: 1,
@@ -33,26 +31,26 @@ const list: ITypeDataList[] = [
   },
 ];
 
-const columns: ITypeDataColumn[] = [
+const columns = [
   {
     id: 1,
     label: 'Rank',
-    render: (x) => x.rank,
+    render: (x: any) => x.rank,
   },
   {
     id: 2,
     label: 'Player',
-    render: (x) => x.player,
+    render: (x: any) => x.player,
   },
   {
     id: 3,
     label: 'Elo',
-    render: (x) => x.elo,
+    render: (x: any) => x.elo,
   },
   {
     id: 4,
     label: 'Country',
-    render: (x) => x.country,
+    render: (x: any) => x.country,
   },
 ];
 
