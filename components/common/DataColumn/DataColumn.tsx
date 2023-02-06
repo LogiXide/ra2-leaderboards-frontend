@@ -1,9 +1,9 @@
 import { TableCell } from '@mui/material';
 
-export interface ITypeDataColumn<T> {
+export interface ITypeDataColumn {
   id: number;
   label: string;
-  render: (x: T) => void;
+  render: (x: any) => any;
 }
 
 interface ITypeProps {
