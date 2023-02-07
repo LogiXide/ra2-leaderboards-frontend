@@ -11,7 +11,7 @@ interface ITypeProps {
 const Layout: React.FC<ITypeProps> = (props): JSX.Element => {
   return (
     <>
-      <Header />
+      {/*<Header />*/}
       <Container>{props.children}</Container>
       <Footer />
     </>

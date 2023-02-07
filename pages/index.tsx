@@ -7,6 +7,7 @@ import { Meta } from '@/components';
 
 import styles from '../styles/Home.module.css';
 import { Button, Typography } from '@mui/material';
+import { Form } from '@/components/form/Form';
 
 interface ITypeProps {
   // Add custom props here
@@ -19,12 +20,11 @@ const Home: React.FC = (): JSX.Element => {
     <>
       <Meta title="Main" description="Something text..." />
 
-      <Typography textAlign="center" paddingTop="225px" fontWeight="600" component="h1" variant="h1" color="common.black">Red Alert 2</Typography>
-      <Typography textAlign="center" paddingTop="10px" fontWeight="500" fontStyle="italic" component="h2" variant="h2" color="common.black">Leader boards</Typography>
-
       {/*<div className={styles.wrapper}>
         <h1>{t('hello')}</h1>
       </div>*/}
+
+      <Form />
     </>
   );
 };
