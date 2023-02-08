@@ -1,6 +1,4 @@
-import { Header, Footer } from '..';
-
-import { Container } from '@mui/material';
+import { Header, Footer } from '@/components/containers';
 
 import styles from './Layout.module.css';
 
@@ -12,7 +10,7 @@ const Layout: React.FC<ITypeProps> = (props): JSX.Element => {
   return (
     <>
       <Header />
-      <Container>{props.children}</Container>
+      {props.children}
       <Footer />
     </>
   );
