@@ -6,6 +6,7 @@ import { Meta } from '@/components';
 
 import styles from '../styles/Home.module.css';
 import { Button, Typography } from '@mui/material';
+import { Form } from '@/components/form/Form';
 
 interface ITypeProps {
   // Add custom props here
@@ -18,9 +19,10 @@ const Home: React.FC = (): JSX.Element => {
     <>
       <Meta title="Main" description="Something text..." />
 
-      <div className={styles.wrapper}>
+      {/*<div className={styles.wrapper}>
         <h1>{t('hello')}</h1>
-      </div>
+      </div>*/}
+      <Form />
     </>
   );
 };
