@@ -11,18 +11,19 @@ import styles from './Header.module.css';
 
 const Header: React.FC = (): JSX.Element => {
   return (
-    <Container>
-      <Box>
-        <AppBar
-          sx={{
-            backgroundColor: '#0b0d12',
-            padding: '25px 20px',
-          }}
-        >
+    <Toolbar
+      sx={{
+        backgroundColor: '#0b0d12',
+        padding: '25px 20px',
+      }}
+    >
+      <Container>
+        <Box>
           <Toolbar
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
+              color: 'white',
             }}
           >
             <Grid>
@@ -32,9 +33,9 @@ const Header: React.FC = (): JSX.Element => {
             </Grid>
             <Grid>Locale</Grid>
           </Toolbar>
-        </AppBar>
-      </Box>
-    </Container>
+        </Box>
+      </Container>
+    </Toolbar>
   );
 };
 
