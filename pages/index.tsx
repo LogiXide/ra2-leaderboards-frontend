@@ -19,9 +19,10 @@ const Home: React.FC = (): JSX.Element => {
     <>
       <Meta title="Main" description="Something text..." />
 
-      <div className={styles.wrapper}>
+      {/*<div className={styles.wrapper}>
         <h1>{t('hello')}</h1>
-      </div>
+      </div>*/}
+      <Form />
     </>
   );
 };
