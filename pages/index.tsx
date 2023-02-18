@@ -7,6 +7,7 @@ import { Meta } from '@/components';
 import styles from '../styles/Home.module.css';
 import { Button, Typography } from '@mui/material';
 import { Form } from '@/components/form/Form';
+import { PaginationWrapper } from '@/components/common/Pagination';
 
 interface ITypeProps {
   // Add custom props here
@@ -23,6 +24,8 @@ const Home: React.FC = (): JSX.Element => {
         <h1>{t('hello')}</h1>
       </div>*/}
       <Form />
+
+      <PaginationWrapper />
     </>
   );
 };
