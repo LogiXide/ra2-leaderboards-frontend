@@ -8,11 +8,11 @@ interface ITypeProps {
 
 const Layout: React.FC<ITypeProps> = (props): JSX.Element => {
   return (
-    <>
+    <div className={styles.container}>
       <Header />
       {props.children}
       <Footer />
-    </>
+    </div>
   );
 };
 
