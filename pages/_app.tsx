@@ -6,7 +6,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import { theme } from 'shared/theme';
 import createEmotionCache from 'shared/createEmotionCache';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
+import { client } from '@/apollo/client';
 
 import { Layout } from '@/components/containers';
 
@@ -14,11 +15,6 @@ import '../styles/globals.css';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
-
-const client = new ApolloClient({
-  uri: process.env.NEXT_PUBLIC_BASE_URI,
-  cache: new InMemoryCache(),
-});
 
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;

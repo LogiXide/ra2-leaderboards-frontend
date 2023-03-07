@@ -1,24 +1,9 @@
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useImmer } from 'use-immer';
 
+import { ALL_MAPS } from '@/apollo/maps';
 import { DataList } from '@/components/common';
-import { Container } from '@mui/system';
-import { Pagination } from '@/components/common/Pagination/Pagination';
-
-const QUERY_ALL_MAPS = gql`
-  query Maps($options: MapsOptions) {
-    maps(options: $options) {
-      data {
-        id
-        name
-        spots
-        author
-        imageUrl
-      }
-      totalPages
-    }
-  }
-`;
+import { Pagination } from '@/components/common/Pagination';
 
 const columns = [
   {
@@ -50,7 +35,7 @@ const Maps: React.FC = () => {
     offset: 0,
   });
 
-  const { data, loading, error } = useQuery(QUERY_ALL_MAPS, {
+  const { data, loading, error } = useQuery(ALL_MAPS, {
     variables: {
       options: {
         offset: pageInfo.offset,
@@ -66,8 +51,6 @@ const Maps: React.FC = () => {
   if (error) {
     return <h1>Error...</h1>;
   }
-
-  console.log(data);
 
   return (
     <>
