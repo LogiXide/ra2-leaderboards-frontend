@@ -70,14 +70,14 @@ const Maps: React.FC = () => {
   console.log(data);
 
   return (
-    <Container>
+    <>
       <DataList list={data.maps.data} columns={columns} />
       <Pagination
         pageInfo={pageInfo}
         setPageInfo={setPageInfo}
         totalPages={data.maps.totalPages}
       />
-    </Container>
+    </>
   );
 };
 
