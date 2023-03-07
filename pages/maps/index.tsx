@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { useQuery, gql } from '@apollo/client';
+import { useImmer } from 'use-immer';
 
 import { DataList } from '@/components/common';
 import { Container } from '@mui/system';
@@ -44,15 +44,17 @@ const columns = [
 ];
 
 const Maps: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [offset, setOffset] = useState(0);
-  const [limit] = useState(2);
+  const [pageInfo, setPageInfo] = useImmer({
+    currentPage: 1,
+    limit: 2,
+    offset: 0,
+  });
 
   const { data, loading, error } = useQuery(QUERY_ALL_MAPS, {
     variables: {
       options: {
-        offset,
-        limit,
+        offset: pageInfo.offset,
+        limit: pageInfo.limit,
       },
     },
   });
@@ -71,12 +73,9 @@ const Maps: React.FC = () => {
     <Container>
       <DataList list={data.maps.data} columns={columns} />
       <Pagination
-        page={currentPage}
-        setPage={setCurrentPage}
-        offset={offset}
-        setOffset={setOffset}
-        limit={limit}
-        pages={data.maps.totalPages}
+        pageInfo={pageInfo}
+        setPageInfo={setPageInfo}
+        totalPages={data.maps.totalPages}
       />
     </Container>
   );

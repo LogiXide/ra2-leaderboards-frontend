@@ -17,10 +17,12 @@
     "@mui/material": "^5.11.5",
     "@next/font": "13.1.4",
     "graphql": "^16.6.0",
+    "immer": "^9.0.19",
     "next": "^13.1.6",
     "next-i18next": "^13.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "use-immer": "^0.8.1",
     "yup": "^1.0.0"
   },
   "devDependencies": {
