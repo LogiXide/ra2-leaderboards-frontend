@@ -16,7 +16,7 @@ import '../styles/globals.css';
 const clientSideEmotionCache = createEmotionCache();
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
+  uri: process.env.NEXT_PUBLIC_BASE_URI,
   cache: new InMemoryCache(),
 });
 
