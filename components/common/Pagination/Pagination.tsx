@@ -1,30 +1,38 @@
+import { Draft } from 'immer';
 import { Pagination as PaginationMui, Stack } from '@mui/material';
 
 interface ITypeProps {
-  page: number;
-  pages: number;
-  setPage: (page: number) => void;
+  totalPages: number;
+  pageInfo: {
+    currentPage: number;
+    offset: number;
+    limit: number;
+  };
+  setPageInfo: (draft: Draft<any>) => void;
 }
 
 const Pagination: React.FC<ITypeProps> = (props) => {
   const handleChangePage = (page: number) => {
-    if (page > props.pages) {
+    if (page > props.totalPages || page === 0) {
       return;
     }
 
-    props.setPage(page);
+    props.setPageInfo(
+      (draft: { currentPage: number }) => void (draft.currentPage = page)
+    );
 
-    if (page === 0) {
-      return;
-    }
+    props.setPageInfo(
+      (draft: { offset: number }) =>
+        void (draft.offset = props.pageInfo.limit * page - props.pageInfo.limit)
+    );
   };
 
   return (
     <Stack justifyContent="center" flexDirection="row">
-      {!!props.pages && (
+      {props.totalPages > 1 && (
         <PaginationMui
-          count={props.pages}
-          page={props.page}
+          count={props.totalPages}
+          page={props.pageInfo.currentPage}
           onChange={(_, page) => handleChangePage(page)}
         />
       )}
