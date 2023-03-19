@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
-const ALL_MAP_POOLS = gql`
-  query MapPools($options: MapPoolsOptions) {
+const GET_MAP_POOLS = gql`
+  query GetMapPools($options: MapPoolsOptions) {
     mapPools(options: $options) {
       data {
         id
@@ -12,4 +12,4 @@ const ALL_MAP_POOLS = gql`
   }
 `;
 
-export { ALL_MAP_POOLS };
+export { GET_MAP_POOLS };

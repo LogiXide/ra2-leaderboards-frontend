@@ -1,9 +1,34 @@
-import { useQuery } from '@apollo/client';
+import { useState } from 'react';
 import { useImmer } from 'use-immer';
+import { useQuery } from '@apollo/client';
 
-import { ALL_MAP_POOLS } from '@/apollo/mapPools';
-import { DataList } from '@/components/common';
-import { Pagination } from '@/components/common/Pagination';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import Avatar from '@mui/material/Avatar';
+
+import { DataList, Pagination } from '@/components/common';
+import FormCreateMapPool from '@/modules/mapPools/components/forms/FormCreateMapPool';
+import { GET_MAP_POOLS } from '@/modules/mapPools/api/queries/getMapPools';
+
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  maxWidth: 500,
+  width: '100%',
+  bgcolor: 'background.paper',
+  borderRadius: 1,
+  boxShadow: 24,
+  paddingTop: 2,
+  paddingLeft: 4,
+  paddingRight: 4,
+  paddingBottom: 3,
+};
 
 const columns = [
   {
@@ -14,13 +39,14 @@ const columns = [
 ];
 
 const MapPools: React.FC = () => {
+  const [open, setOpen] = useState(false);
   const [pageInfo, setPageInfo] = useImmer({
     currentPage: 1,
     limit: 2,
     offset: 0,
   });
 
-  const { data, loading, error } = useQuery(ALL_MAP_POOLS, {
+  const { data, loading, error } = useQuery(GET_MAP_POOLS, {
     variables: {
       options: {
         offset: pageInfo.offset,
@@ -28,6 +54,9 @@ const MapPools: React.FC = () => {
       },
     },
   });
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   if (loading) {
     return <h1>Loading...</h1>;
@@ -38,14 +67,51 @@ const MapPools: React.FC = () => {
   }
 
   return (
-    <>
-      <DataList list={data.mapPools.data} columns={columns} />
+    <Box mt={2}>
+      <Stack justifyContent="flex-end" alignItems="flex-end">
+        <Button onClick={handleOpen} variant="contained">
+          Add map pools
+        </Button>
+      </Stack>
+      <DataList path="map-pools" list={data.mapPools.data} columns={columns} />
       <Pagination
         pageInfo={pageInfo}
         setPageInfo={setPageInfo}
         totalPages={data.mapPools.totalPages}
       />
-    </>
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Stack
+            mb={2}
+            direction="column"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Avatar
+              sx={{
+                m: 1,
+                bgcolor: 'primary.main',
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <AddCircleIcon />
+            </Avatar>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Create map pool
+            </Typography>
+          </Stack>
+
+          <FormCreateMapPool open={open} setOpen={setOpen} />
+        </Box>
+      </Modal>
+    </Box>
   );
 };
 

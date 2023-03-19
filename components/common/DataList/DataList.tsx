@@ -1,4 +1,4 @@
-import { Table, TableHead, TableBody, TableRow, Box } from '@mui/material';
+import { Table, TableHead, TableBody, TableRow } from '@mui/material';
 
 import { DataColumn, DataItem } from '@/components/common';
 
@@ -7,30 +7,34 @@ import type { ITypeDataColumn } from '@/components/common/DataColumn';
 interface ITypeProps<T> {
   columns: ITypeDataColumn[];
   list: T[];
+  path?: string;
 }
 
-const DataList = <T,>(props: ITypeProps<T>): JSX.Element => {
+const DataList = <T,>(props: ITypeProps<T>) => {
   return (
-    <Box p={2}>
-      <Table>
-        <TableHead>
-          <TableRow>
+    <Table>
+      <TableHead>
+        <TableRow>
+          {(props.columns || []).map((x) => (
+            <DataColumn key={x.id} label={x.label} />
+          ))}
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {(props.list || []).map((item: any) => (
+          <TableRow key={item.id}>
             {(props.columns || []).map((x) => (
-              <DataColumn key={x.id} label={x.label} />
+              <DataItem
+                path={props.path || ''}
+                key={x.id}
+                id={item.id}
+                content={x.render(item)}
+              />
             ))}
           </TableRow>
-        </TableHead>
-        <TableBody>
-          {(props.list || []).map((item: any) => (
-            <TableRow key={item.id}>
-              {(props.columns || []).map((x) => (
-                <DataItem key={x.id} content={x.render(item)} />
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Box>
+        ))}
+      </TableBody>
+    </Table>
   );
 };
 
