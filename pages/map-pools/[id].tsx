@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
 
-import { UPDATE_MAP_POOL } from '@/modules/mapPools/api/mutations/updateMapPool';
+import { UPDATE_MAP_POOL } from '@/modules/maps/api/mapPools/mutations';
 
 import {
   Box,
@@ -14,8 +14,9 @@ import {
 } from '@mui/material';
 
 const mapPoolsDetail = () => {
-  const [updateMapPool] = useMutation(UPDATE_MAP_POOL);
   const [value, setValue] = useState('');
+  const [updateMapPool] = useMutation(UPDATE_MAP_POOL);
+
   const router = useRouter();
 
   const { id } = router.query;

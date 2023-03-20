@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,8 +13,8 @@ import {
 } from '@mui/material';
 import ErrorIcon from '@mui/icons-material/Error';
 
-import { CREATE_MAP_POOL } from '../../api/mutations/createMapPool';
-import { createMapPoolSchema } from '@/modules/mapPools/schemas/createMapPoolSchema';
+import { CREATE_MAP_POOL } from '@/modules/maps/api/mapPools/mutations';
+import { createMapPoolSchema } from '@/modules/maps/schemas/mapPools/create-map-pool';
 
 interface ITypeDataForm {
   mapPoolName: string;
@@ -28,9 +28,9 @@ interface ITypeProps {
 const addErrorIntoField = (errors: any) =>
   errors ? { error: true } : { error: false };
 
-const FormCreateMapPool: React.FC<ITypeProps> = (props) => {
-  const [createMapPool] = useMutation(CREATE_MAP_POOL);
+const CreateMapPoolForm: React.FC<ITypeProps> = (props) => {
   const inputRef = useRef<HTMLInputElement>();
+  const [createMapPool] = useMutation(CREATE_MAP_POOL);
 
   const {
     handleSubmit,
@@ -45,15 +45,9 @@ const FormCreateMapPool: React.FC<ITypeProps> = (props) => {
   });
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
-    }, 0);
-
-    return () => {
-      clearTimeout(timeout);
-    };
+    if (props.open) {
+      inputRef.current?.focus();
+    }
   }, [props.open]);
 
   const onSubmit = (data: ITypeDataForm) => {
@@ -72,7 +66,9 @@ const FormCreateMapPool: React.FC<ITypeProps> = (props) => {
     }
   };
 
-  const handleClose = () => props.setOpen(false);
+  const handleClose = () => {
+    props.setOpen(false);
+  };
 
   return (
     <Box
@@ -127,4 +123,4 @@ const FormCreateMapPool: React.FC<ITypeProps> = (props) => {
   );
 };
 
-export default FormCreateMapPool;
+export { CreateMapPoolForm };

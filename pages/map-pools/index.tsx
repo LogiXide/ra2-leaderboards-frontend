@@ -11,8 +11,8 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Avatar from '@mui/material/Avatar';
 
 import { DataList, Pagination } from '@/components/common';
-import FormCreateMapPool from '@/modules/mapPools/components/forms/FormCreateMapPool';
-import { GET_MAP_POOLS } from '@/modules/mapPools/api/queries/getMapPools';
+import { CreateMapPoolForm } from '@/modules/maps/components/mapPools/forms/CreateMapPoolForm';
+import { GET_MAP_POOLS } from '@/modules/maps/api/mapPools/queries';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -108,7 +108,7 @@ const MapPools: React.FC = () => {
             </Typography>
           </Stack>
 
-          <FormCreateMapPool open={open} setOpen={setOpen} />
+          <CreateMapPoolForm open={open} setOpen={setOpen} />
         </Box>
       </Modal>
     </Box>
