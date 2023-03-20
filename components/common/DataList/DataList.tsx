@@ -7,7 +7,6 @@ import type { ITypeDataColumn } from '@/components/common/DataColumn';
 interface ITypeProps<T> {
   columns: ITypeDataColumn[];
   list: T[];
-  path?: string;
 }
 
 const DataList = <T,>(props: ITypeProps<T>) => {
@@ -15,20 +14,18 @@ const DataList = <T,>(props: ITypeProps<T>) => {
     <Table>
       <TableHead>
         <TableRow>
-          {(props.columns || []).map((x) => (
-            <DataColumn key={x.id} label={x.label} />
+          {(props.columns || []).map((column) => (
+            <DataColumn key={column.id} label={column.label} />
           ))}
         </TableRow>
       </TableHead>
       <TableBody>
         {(props.list || []).map((item: any) => (
           <TableRow key={item.id}>
-            {(props.columns || []).map((x) => (
+            {(props.columns || []).map((column) => (
               <DataItem
-                path={props.path || ''}
-                key={x.id}
-                id={item.id}
-                content={x.render(item)}
+                key={`${item.id}-${column.id}`}
+                content={column.render(item)}
               />
             ))}
           </TableRow>

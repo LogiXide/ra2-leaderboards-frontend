@@ -74,11 +74,11 @@ const CreateMapPoolForm: React.FC<ITypeProps> = (props) => {
     <Box
       noValidate
       component="form"
-      sx={{ width: '100%', mt: '1rem' }}
+      sx={{ width: '100%', mt: 1 }}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Stack direction="column" spacing={1}>
-        <FormControl fullWidth sx={{ mb: '15px' }}>
+        <FormControl fullWidth sx={{ mb: 2 }}>
           <Controller
             name="mapPoolName"
             control={control}
@@ -98,8 +98,8 @@ const CreateMapPoolForm: React.FC<ITypeProps> = (props) => {
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '5px',
-                mt: '6px',
+                gap: 1,
+                mt: 1,
               }}
             >
               <ErrorIcon color="error" sx={{ width: '20px' }} />

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useImmer } from 'use-immer';
 import { useQuery } from '@apollo/client';
+import Link from 'next/link';
 
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -34,7 +35,7 @@ const columns = [
   {
     id: 1,
     label: 'Name',
-    render: (x: any) => x.name,
+    render: (x: any) => <Link href={`/map-pools/${x.id}`}>{x.name}</Link>,
   },
 ];
 
@@ -73,7 +74,7 @@ const MapPools: React.FC = () => {
           Add map pools
         </Button>
       </Stack>
-      <DataList path="map-pools" list={data.mapPools.data} columns={columns} />
+      <DataList list={data.mapPools.data} columns={columns} />
       <Pagination
         pageInfo={pageInfo}
         setPageInfo={setPageInfo}
