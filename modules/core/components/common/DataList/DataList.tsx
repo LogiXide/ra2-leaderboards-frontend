@@ -1,8 +1,8 @@
 import { Table, TableHead, TableBody, TableRow } from '@mui/material';
 
-import { DataColumn, DataItem } from '@/components/common';
+import { DataColumn, DataItem } from '@/modules/core/components/common';
 
-import type { ITypeDataColumn } from '@/components/common/DataColumn';
+import type { ITypeDataColumn } from '@/modules/core/components/common/DataColumn';
 
 interface ITypeProps<T> {
   columns: ITypeDataColumn[];
