@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Avatar from '@mui/material/Avatar';
 
-import { DataList, Pagination } from '@/components/common';
+import { DataList, Pagination } from '@/modules/core/components/common';
 import { CreateMapPoolForm } from '@/modules/maps/components/mapPools/forms/CreateMapPoolForm';
 import { GET_MAP_POOLS } from '@/modules/maps/api/mapPools/queries';
 

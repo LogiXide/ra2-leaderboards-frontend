@@ -1,4 +1,4 @@
-import { Header, Footer } from '@/components/containers';
+import { Header, Footer } from '@/modules/core/components/containers';
 import { Container } from '@mui/system';
 
 import styles from './Layout.module.css';
@@ -7,7 +7,7 @@ interface ITypeProps {
   children: React.ReactNode;
 }
 
-const Layout: React.FC<ITypeProps> = (props): JSX.Element => {
+const Layout: React.FC<ITypeProps> = (props) => {
   return (
     <div className={styles.container}>
       <Header />

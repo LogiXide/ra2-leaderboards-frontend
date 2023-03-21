@@ -9,7 +9,7 @@ import createEmotionCache from 'shared/createEmotionCache';
 import { ApolloProvider } from '@apollo/client';
 import { client } from '@/apollo/client';
 
-import { Layout } from '@/components/containers';
+import { Layout } from '@/modules/core/components/containers'
 
 import '../styles/globals.css';
 
