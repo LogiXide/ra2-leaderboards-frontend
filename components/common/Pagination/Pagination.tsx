@@ -28,7 +28,7 @@ const Pagination: React.FC<ITypeProps> = (props) => {
   };
 
   return (
-    <Stack justifyContent="center" flexDirection="row">
+    <Stack padding={2} justifyContent="center" flexDirection="row">
       {props.totalPages > 1 && (
         <PaginationMui
           count={props.totalPages}
