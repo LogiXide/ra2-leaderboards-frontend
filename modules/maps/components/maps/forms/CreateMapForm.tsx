@@ -10,6 +10,7 @@ import { TextFields } from '@/modules/core/components/TextFields';
 import { SelectFields } from '@/modules/core/components/SelectFields';
 import { CREATE_MAP } from '@/modules/maps/api/maps/mutations';
 import { createMapSchema } from '@/modules/maps/schemas/maps/create-map';
+import { CreateMapMutation, CreateMapMutationVariables } from '@/src/generated/graphql';
 
 interface ITypeDataForm {
   name: string;
@@ -24,7 +25,7 @@ interface ITypeProps {
 }
 
 const CreateMapForm: React.FC<ITypeProps> = (props) => {
-  const [createMapPool] = useMutation(CREATE_MAP);
+  const [createMapPool] = useMutation<CreateMapMutation, CreateMapMutationVariables>(CREATE_MAP);
 
   const {
     handleSubmit,

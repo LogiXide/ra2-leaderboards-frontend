@@ -10,6 +10,7 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 
 import { UPDATE_MAP } from '@/modules/maps/api/maps/mutations';
+import { UpdateMapMutation, UpdateMapMutationVariables } from '@/src/generated/graphql';
 
 const MapDetail: React.FC = () => {
   const [dataForm, setDataForm] = useState({
@@ -20,7 +21,7 @@ const MapDetail: React.FC = () => {
   });
 
   const router = useRouter();
-  const [updateMap] = useMutation(UPDATE_MAP);
+  const [updateMap] = useMutation<UpdateMapMutation, UpdateMapMutationVariables>(UPDATE_MAP);
 
   const { id } = router.query;
 

@@ -15,6 +15,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 
 import { CREATE_MAP_POOL } from '@/modules/maps/api/mapPools/mutations';
 import { createMapPoolSchema } from '@/modules/maps/schemas/mapPools/create-map-pool';
+import { CreateMapPoolMutation, CreateMapPoolMutationVariables } from '@/src/generated/graphql';
 
 interface ITypeDataForm {
   mapPoolName: string;
@@ -30,7 +31,7 @@ const addErrorIntoField = (errors: any) =>
 
 const CreateMapPoolForm: React.FC<ITypeProps> = (props) => {
   const inputRef = useRef<HTMLInputElement>();
-  const [createMapPool] = useMutation(CREATE_MAP_POOL);
+  const [createMapPool] = useMutation<CreateMapPoolMutation, CreateMapPoolMutationVariables>(CREATE_MAP_POOL);
 
   const {
     handleSubmit,

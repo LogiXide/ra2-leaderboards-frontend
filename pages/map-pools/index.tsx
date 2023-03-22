@@ -14,6 +14,7 @@ import Avatar from '@mui/material/Avatar';
 import { DataList, Pagination } from '@/modules/core/components/common';
 import { CreateMapPoolForm } from '@/modules/maps/components/mapPools/forms/CreateMapPoolForm';
 import { GET_MAP_POOLS } from '@/modules/maps/api/mapPools/queries';
+import { GetMapPoolsQuery } from '@/src/generated/graphql';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -47,7 +48,7 @@ const MapPools: React.FC = () => {
     offset: 0,
   });
 
-  const { data, loading, error } = useQuery(GET_MAP_POOLS, {
+  const { data, loading, error } = useQuery<GetMapPoolsQuery>(GET_MAP_POOLS, {
     variables: {
       options: {
         offset: pageInfo.offset,
@@ -74,11 +75,11 @@ const MapPools: React.FC = () => {
           Add map pools
         </Button>
       </Stack>
-      <DataList list={data.mapPools.data} columns={columns} />
+      <DataList list={data?.mapPools.data || []} columns={columns} />
       <Pagination
         pageInfo={pageInfo}
         setPageInfo={setPageInfo}
-        totalPages={data.mapPools.totalPages}
+        totalPages={data?.mapPools.totalPages || 0}
       />
 
       <Modal
