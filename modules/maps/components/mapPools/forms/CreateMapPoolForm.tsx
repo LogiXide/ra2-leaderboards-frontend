@@ -15,7 +15,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 
 import { CREATE_MAP_POOL } from '@/modules/maps/api/mapPools/mutations';
 import { createMapPoolSchema } from '@/modules/maps/schemas/mapPools/create-map-pool';
-import { CreateMapPoolMutation, CreateMapPoolMutationVariables } from '@/src/__generated__/graphql';
+import { CreateMapPoolMutation, CreateMapPoolMutationVariables } from '@/src/generated/graphql';
 
 interface ITypeDataForm {
   mapPoolName: string;

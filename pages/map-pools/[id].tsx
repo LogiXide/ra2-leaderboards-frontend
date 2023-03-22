@@ -11,7 +11,7 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
-import { UpdateMapPoolMutation, UpdateMapPoolMutationVariables } from '@/src/__generated__/graphql';
+import { UpdateMapPoolMutation, UpdateMapPoolMutationVariables } from '@/src/generated/graphql';
 
 const MapPoolDetail = () => {
   const [value, setValue] = useState('');

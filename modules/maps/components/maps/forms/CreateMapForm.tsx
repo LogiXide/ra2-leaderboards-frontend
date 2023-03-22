@@ -10,7 +10,7 @@ import { TextFields } from '@/modules/core/components/TextFields';
 import { SelectFields } from '@/modules/core/components/SelectFields';
 import { CREATE_MAP } from '@/modules/maps/api/maps/mutations';
 import { createMapSchema } from '@/modules/maps/schemas/maps/create-map';
-import { CreateMapMutation, CreateMapMutationVariables } from '@/src/__generated__/graphql';
+import { CreateMapMutation, CreateMapMutationVariables } from '@/src/generated/graphql';
 
 interface ITypeDataForm {
   name: string;

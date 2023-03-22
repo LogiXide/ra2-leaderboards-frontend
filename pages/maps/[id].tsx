@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 
 import { UPDATE_MAP } from '@/modules/maps/api/maps/mutations';
-import { UpdateMapMutation, UpdateMapMutationVariables } from '@/src/__generated__/graphql';
+import { UpdateMapMutation, UpdateMapMutationVariables } from '@/src/generated/graphql';
 
 const MapDetail: React.FC = () => {
   const [dataForm, setDataForm] = useState({
