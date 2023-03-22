@@ -14,6 +14,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { DataList, Pagination } from '@/modules/core/components/common';
 import { CreateMapForm } from '@/modules/maps/components/maps/forms/CreateMapForm';
 import { GET_MAPS } from '@/modules/maps/api/maps/queries';
+import { GetMapsQuery } from '@/src/__generated__/graphql';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -62,7 +63,7 @@ const Maps: React.FC = () => {
     offset: 0,
   });
 
-  const { data, loading, error } = useQuery(GET_MAPS, {
+  const { data, loading, error } = useQuery<GetMapsQuery>(GET_MAPS, {
     variables: {
       options: {
         offset: pageInfo.offset,
@@ -89,11 +90,11 @@ const Maps: React.FC = () => {
           Add map
         </Button>
       </Stack>
-      <DataList list={data.maps.data} columns={columns} />
+      <DataList list={data?.maps.data || []} columns={columns} />
       <Pagination
         pageInfo={pageInfo}
         setPageInfo={setPageInfo}
-        totalPages={data.maps.totalPages}
+        totalPages={data?.maps.totalPages || 0}
       />
 
       <Modal

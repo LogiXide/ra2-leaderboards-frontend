@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
@@ -12,10 +11,11 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
+import { UpdateMapPoolMutation, UpdateMapPoolMutationVariables } from '@/src/__generated__/graphql';
 
-const mapPoolsDetail = () => {
+const MapPoolDetail = () => {
   const [value, setValue] = useState('');
-  const [updateMapPool] = useMutation(UPDATE_MAP_POOL);
+  const [updateMapPool] = useMutation<UpdateMapPoolMutation, UpdateMapPoolMutationVariables>(UPDATE_MAP_POOL);
 
   const router = useRouter();
 
@@ -69,4 +69,4 @@ const mapPoolsDetail = () => {
   );
 };
 
-export default mapPoolsDetail;
+export default MapPoolDetail;
