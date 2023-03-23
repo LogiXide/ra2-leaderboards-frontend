@@ -8,14 +8,15 @@ import Stack from '@mui/material/Stack';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 
-import { GET_MAP, UPDATE_MAP } from '@/modules/maps/api/maps';
+import { GET_MAP } from '@/modules/maps/api/maps';
 
-import type {
+import {
+  UpdateMapDocument,
   UpdateMapMutation,
   UpdateMapMutationVariables,
-} from '@/src/generated/graphql';
+} from '@/generated/graphql';
 
-type ITypeDataForm = {
+type ITypeFormValues = {
   name: string;
   author: string;
   imageUrl: string;
@@ -32,7 +33,7 @@ const MapDetail: React.FC = () => {
     },
   });
 
-  const [dataForm, setDataForm] = useState<ITypeDataForm>({
+  const [dataForm, setDataForm] = useState<ITypeFormValues>({
     name: '',
     author: '',
     imageUrl: '',
@@ -53,7 +54,7 @@ const MapDetail: React.FC = () => {
   const [updateMap] = useMutation<
     UpdateMapMutation,
     UpdateMapMutationVariables
-  >(UPDATE_MAP);
+  >(UpdateMapDocument);
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();

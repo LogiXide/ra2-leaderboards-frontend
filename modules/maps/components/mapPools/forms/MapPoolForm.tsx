@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -15,43 +15,41 @@ import ErrorIcon from '@mui/icons-material/Error';
 
 import { CREATE_MAP_POOL } from '@/modules/maps/api/mapPools/mutations';
 import { createMapPoolSchema } from '@/modules/maps/schemas/mapPools/create-map-pool';
-import { CreateMapPoolMutation, CreateMapPoolMutationVariables } from '@/src/generated/graphql';
+import {
+  CreateMapPoolMutation,
+  CreateMapPoolMutationVariables,
+} from '@/generated/graphql';
 
-interface ITypeDataForm {
+interface ITypeFormValues {
   mapPoolName: string;
 }
 
 interface ITypeProps {
-  open: boolean;
   setOpen: (value: boolean) => void;
 }
 
 const addErrorIntoField = (errors: any) =>
   errors ? { error: true } : { error: false };
 
-const CreateMapPoolForm: React.FC<ITypeProps> = (props) => {
-  const inputRef = useRef<HTMLInputElement>();
-  const [createMapPool] = useMutation<CreateMapPoolMutation, CreateMapPoolMutationVariables>(CREATE_MAP_POOL);
+const MapPoolForm: React.FC<ITypeProps> = (props) => {
+  const [createMapPool] = useMutation<
+    CreateMapPoolMutation,
+    CreateMapPoolMutationVariables
+  >(CREATE_MAP_POOL);
 
   const {
     handleSubmit,
     control,
     formState: { errors },
     reset,
-  } = useForm<ITypeDataForm>({
+  } = useForm<ITypeFormValues>({
     defaultValues: {
       mapPoolName: '',
     },
     resolver: yupResolver(createMapPoolSchema),
   });
 
-  useEffect(() => {
-    if (props.open) {
-      inputRef.current?.focus();
-    }
-  }, [props.open]);
-
-  const onSubmit = (data: ITypeDataForm) => {
+  const onSubmit = (data: ITypeFormValues) => {
     createMapPool({
       variables: {
         input: {
@@ -85,7 +83,6 @@ const CreateMapPoolForm: React.FC<ITypeProps> = (props) => {
             control={control}
             render={({ field }) => (
               <TextField
-                inputRef={inputRef}
                 variant="filled"
                 label="Name Map Pool"
                 required
@@ -124,4 +121,4 @@ const CreateMapPoolForm: React.FC<ITypeProps> = (props) => {
   );
 };
 
-export { CreateMapPoolForm };
+export { MapPoolForm };

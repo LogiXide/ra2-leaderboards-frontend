@@ -12,9 +12,8 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Avatar from '@mui/material/Avatar';
 
 import { DataList, Pagination } from '@/modules/core/components/common';
-import { CreateMapPoolForm } from '@/modules/maps/components/mapPools/forms/CreateMapPoolForm';
-import { GET_MAP_POOLS } from '@/modules/maps/api/mapPools';
-import type { GetMapPoolsQuery } from '@/src/generated/graphql';
+import { MapPoolForm } from '@/modules/maps/components/mapPools/forms/MapPoolForm';
+import { GetMapPoolsDocument, GetMapPoolsQuery } from '@/generated/graphql';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -48,7 +47,7 @@ const MapPools: React.FC = () => {
     offset: 0,
   });
 
-  const { data, loading, error } = useQuery<GetMapPoolsQuery>(GET_MAP_POOLS, {
+  const { data, loading, error } = useQuery<GetMapPoolsQuery>(GetMapPoolsDocument, {
     variables: {
       options: {
         offset: pageInfo.offset,
@@ -110,7 +109,7 @@ const MapPools: React.FC = () => {
             </Typography>
           </Stack>
 
-          <CreateMapPoolForm open={open} setOpen={setOpen} />
+          <MapPoolForm setOpen={setOpen} />
         </Box>
       </Modal>
     </Box>

@@ -8,12 +8,13 @@ import Stack from '@mui/material/Stack';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 
-import { GET_MAP_POOL, UPDATE_MAP_POOL } from '@/modules/maps/api/mapPools';
+import { GET_MAP_POOL } from '@/modules/maps/api/mapPools';
 
-import type {
+import {
+  UpdateMapPoolDocument,
   UpdateMapPoolMutation,
   UpdateMapPoolMutationVariables,
-} from '@/src/generated/graphql';
+} from '@/generated/graphql';
 
 const MapPoolDetail = () => {
   const [valueForm, setValueForm] = useState<string>('');
@@ -21,6 +22,7 @@ const MapPoolDetail = () => {
   const { id } = router.query;
 
   const { data } = useQuery(GET_MAP_POOL, {
+    // TODO: GetMapPoolsDocument return Array ... ??
     variables: {
       id: Number(id),
     },
@@ -35,7 +37,7 @@ const MapPoolDetail = () => {
   const [updateMapPool] = useMutation<
     UpdateMapPoolMutation,
     UpdateMapPoolMutationVariables
-  >(UPDATE_MAP_POOL);
+  >(UpdateMapPoolDocument);
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();

@@ -12,9 +12,8 @@ import Typography from '@mui/material/Typography';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import { DataList, Pagination } from '@/modules/core/components/common';
-import { CreateMapForm } from '@/modules/maps/components/maps/forms/CreateMapForm';
-import { GET_MAPS } from '@/modules/maps/api/maps';
-import type { GetMapsQuery } from '@/src/generated/graphql';
+import { MapForm } from '@/modules/maps/components/maps/forms/MapForm';
+import { GetMapsDocument, GetMapsQuery } from '@/generated/graphql';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -56,14 +55,14 @@ const columns = [
 ];
 
 const Maps: React.FC = () => {
-  const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [pageInfo, setPageInfo] = useImmer({
     currentPage: 1,
     limit: 2,
     offset: 0,
   });
 
-  const { data, loading, error } = useQuery<GetMapsQuery>(GET_MAPS, {
+  const { data, loading, error } = useQuery<GetMapsQuery>(GetMapsDocument, {
     variables: {
       options: {
         offset: pageInfo.offset,
@@ -72,8 +71,8 @@ const Maps: React.FC = () => {
     },
   });
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = () => setOpenModal(true);
+  const handleClose = () => setOpenModal(false);
 
   if (loading) {
     return <h1>Loading...</h1>;
@@ -98,7 +97,7 @@ const Maps: React.FC = () => {
       />
 
       <Modal
-        open={open}
+        open={openModal}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -125,7 +124,7 @@ const Maps: React.FC = () => {
             </Typography>
           </Stack>
 
-          <CreateMapForm open={open} setOpen={setOpen} />
+          <MapForm setOpen={setOpenModal} />
         </Box>
       </Modal>
     </Box>

@@ -7,43 +7,47 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
 import { TextFields } from '@/modules/core/components/TextFields';
-import { SelectFields } from '@/modules/core/components/SelectFields';
 import { CREATE_MAP } from '@/modules/maps/api/maps/mutations';
 import { createMapSchema } from '@/modules/maps/schemas/maps/create-map';
-import { CreateMapMutation, CreateMapMutationVariables } from '@/src/generated/graphql';
 
-interface ITypeDataForm {
+import {
+  CreateMapMutation,
+  CreateMapMutationVariables,
+} from '@/generated/graphql';
+
+interface ITypeFormValues {
   name: string;
-  spots: number | null;
   imageUrl: string;
   author: string;
+  spots: number;
 }
 
-interface ITypeProps {
-  open: boolean;
+type ITypeProps = {
   setOpen: (value: boolean) => void;
 }
 
-const CreateMapForm: React.FC<ITypeProps> = (props) => {
-  const [createMapPool] = useMutation<CreateMapMutation, CreateMapMutationVariables>(CREATE_MAP);
+const MapForm: React.FC<ITypeProps> = (props) => {
+  const [createMapPool] = useMutation<
+    CreateMapMutation,
+    CreateMapMutationVariables
+  >(CREATE_MAP);
 
   const {
     handleSubmit,
     control,
     formState: { errors },
     reset,
-  } = useForm<ITypeDataForm>({
+  } = useForm<ITypeFormValues>({
     defaultValues: {
       name: '',
-      spots: null,
       author: '',
       imageUrl: '',
+      spots: 0,
     },
     resolver: yupResolver(createMapSchema),
   });
 
-  const onSubmit = (data: ITypeDataForm) => {
-    console.log(data);
+  const onSubmit = (data: ITypeFormValues) => {
     createMapPool({
       variables: {
         input: {
@@ -92,7 +96,8 @@ const CreateMapForm: React.FC<ITypeProps> = (props) => {
           name="imageUrl"
           label="Image"
         />
-        <SelectFields
+
+        <TextFields
           control={control}
           errors={errors}
           name="spots"
@@ -112,4 +117,4 @@ const CreateMapForm: React.FC<ITypeProps> = (props) => {
   );
 };
 
-export { CreateMapForm };
+export { MapForm };
