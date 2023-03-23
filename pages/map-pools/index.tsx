@@ -13,8 +13,8 @@ import Avatar from '@mui/material/Avatar';
 
 import { DataList, Pagination } from '@/modules/core/components/common';
 import { CreateMapPoolForm } from '@/modules/maps/components/mapPools/forms/CreateMapPoolForm';
-import { GET_MAP_POOLS } from '@/modules/maps/api/mapPools/queries';
-import { GetMapPoolsQuery } from '@/src/generated/graphql';
+import { GET_MAP_POOLS } from '@/modules/maps/api/mapPools';
+import type { GetMapPoolsQuery } from '@/src/generated/graphql';
 
 const style = {
   position: 'absolute' as 'absolute',

@@ -1,29 +1,59 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
 import Stack from '@mui/material/Stack';
+import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
 
-import { UPDATE_MAP } from '@/modules/maps/api/maps/mutations';
-import { UpdateMapMutation, UpdateMapMutationVariables } from '@/src/generated/graphql';
+import { GET_MAP, UPDATE_MAP } from '@/modules/maps/api/maps';
+
+import type {
+  UpdateMapMutation,
+  UpdateMapMutationVariables,
+} from '@/src/generated/graphql';
+
+type ITypeDataForm = {
+  name: string;
+  author: string;
+  imageUrl: string;
+  spots: number;
+};
 
 const MapDetail: React.FC = () => {
-  const [dataForm, setDataForm] = useState({
+  const router = useRouter();
+  const { id } = router.query;
+
+  const { data } = useQuery(GET_MAP, {
+    variables: {
+      id: Number(id),
+    },
+  });
+
+  const [dataForm, setDataForm] = useState<ITypeDataForm>({
     name: '',
     author: '',
     imageUrl: '',
-    spots: 1,
+    spots: 0,
   });
 
-  const router = useRouter();
-  const [updateMap] = useMutation<UpdateMapMutation, UpdateMapMutationVariables>(UPDATE_MAP);
+  useEffect(() => {
+    if (data) {
+      setDataForm({
+        name: data.map.name,
+        author: data.map.author,
+        spots: data.map.spots,
+        imageUrl: data.map.imageUrl,
+      });
+    }
+  }, [data]);
 
-  const { id } = router.query;
+  const [updateMap] = useMutation<
+    UpdateMapMutation,
+    UpdateMapMutationVariables
+  >(UPDATE_MAP);
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,7 +64,7 @@ const MapDetail: React.FC = () => {
           name: dataForm.name,
           author: dataForm.author,
           imageUrl: dataForm.imageUrl,
-          spots: dataForm.spots,
+          spots: Number(dataForm.spots),
         },
 
         id: Number(id),
@@ -42,9 +72,7 @@ const MapDetail: React.FC = () => {
     });
   };
 
-  const handleChangeInput = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDataForm({
       ...dataForm,
       [e.target.name]: e.target.value,
@@ -92,20 +120,15 @@ const MapDetail: React.FC = () => {
           />
         </FormControl>
 
-        <FormControl fullWidth sx={{ mb: 1 }}>
+        <FormControl variant="standard" sx={{ minWidth: 120 }}>
           <TextField
             name="spots"
             value={dataForm.spots}
-            select
+            onChange={handleChangeInput}
+            variant="filled"
             label="Spots"
             required
-            variant="filled"
-          >
-            <MenuItem value={1}>1</MenuItem>
-            <MenuItem value={2}>2</MenuItem>
-            <MenuItem value={3}>3</MenuItem>
-            <MenuItem value={4}>4</MenuItem>
-          </TextField>
+          />
         </FormControl>
 
         <Stack justifyContent="flex-end" direction="row">

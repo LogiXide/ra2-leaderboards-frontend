@@ -13,8 +13,8 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import { DataList, Pagination } from '@/modules/core/components/common';
 import { CreateMapForm } from '@/modules/maps/components/maps/forms/CreateMapForm';
-import { GET_MAPS } from '@/modules/maps/api/maps/queries';
-import { GetMapsQuery } from '@/src/generated/graphql';
+import { GET_MAPS } from '@/modules/maps/api/maps';
+import type { GetMapsQuery } from '@/src/generated/graphql';
 
 const style = {
   position: 'absolute' as 'absolute',

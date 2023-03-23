@@ -15,4 +15,16 @@ const GET_MAPS = gql`
   }
 `;
 
-export { GET_MAPS };
+const GET_MAP = gql`
+  query GetMap($id: Int!) {
+    map(id: $id) {
+      id
+      name
+      spots
+      author
+      imageUrl
+    }
+  }
+`;
+
+export { GET_MAPS, GET_MAP };
