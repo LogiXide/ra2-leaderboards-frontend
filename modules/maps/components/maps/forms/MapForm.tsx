@@ -2,13 +2,11 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
+import { Box, Button, Stack } from '@mui/material';
 
-import { TextFields } from '@/modules/core/components/TextFields';
+import { TextField } from '@/modules/core/components/TextField';
 import { CREATE_MAP } from '@/modules/maps/api/maps/mutations';
-import { createMapSchema } from '@/modules/maps/schemas/maps/create-map';
+import { mapSchema } from './map.schema';
 
 import {
   CreateMapMutation,
@@ -24,7 +22,7 @@ interface ITypeFormValues {
 
 type ITypeProps = {
   setOpen: (value: boolean) => void;
-}
+};
 
 const MapForm: React.FC<ITypeProps> = (props) => {
   const [createMapPool] = useMutation<
@@ -44,7 +42,7 @@ const MapForm: React.FC<ITypeProps> = (props) => {
       imageUrl: '',
       spots: 0,
     },
-    resolver: yupResolver(createMapSchema),
+    resolver: yupResolver(mapSchema),
   });
 
   const onSubmit = (data: ITypeFormValues) => {
@@ -78,26 +76,21 @@ const MapForm: React.FC<ITypeProps> = (props) => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <Stack direction="column">
-        <TextFields
-          control={control}
-          errors={errors}
-          name="name"
-          label="Name"
-        />
-        <TextFields
+        <TextField control={control} errors={errors} name="name" label="Name" />
+        <TextField
           control={control}
           errors={errors}
           name="author"
           label="Author"
         />
-        <TextFields
+        <TextField
           control={control}
           errors={errors}
           name="imageUrl"
           label="Image"
         />
 
-        <TextFields
+        <TextField
           control={control}
           errors={errors}
           name="spots"

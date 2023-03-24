@@ -16,7 +16,7 @@ interface ITypeProps {
 const addErrorIntoField = (errors: any) =>
   errors ? { error: true } : { error: false };
 
-const SelectFields: React.FC<ITypeProps> = (props) => {
+const SelectField: React.FC<ITypeProps> = (props) => {
   return (
     <FormControl fullWidth sx={{ mb: 1 }}>
       <Controller
@@ -46,4 +46,4 @@ const SelectFields: React.FC<ITypeProps> = (props) => {
   );
 };
 
-export { SelectFields };
+export { SelectField };

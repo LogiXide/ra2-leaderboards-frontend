@@ -3,11 +3,8 @@ import { useRouter } from 'next/router';
 import { useMutation, useQuery } from '@apollo/client';
 
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
 
+import { MapPoolForm } from '@/modules/maps/components/mapPools/forms/MapPoolForm';
 import { GET_MAP_POOL } from '@/modules/maps/api/mapPools';
 
 import {
@@ -39,13 +36,11 @@ const MapPoolDetail = () => {
     UpdateMapPoolMutationVariables
   >(UpdateMapPoolDocument);
 
-  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleUpdateMapPool = (data: { mapPoolName: string }) => {
     updateMapPool({
       variables: {
         input: {
-          name: valueForm,
+          name: data.mapPoolName,
         },
 
         id: Number(id),
@@ -53,36 +48,13 @@ const MapPoolDetail = () => {
     });
   };
 
-  const handleChangeInput = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setValueForm(e.target.value);
-  };
-
   return (
-    <Box
-      noValidate
-      component="form"
-      sx={{ width: '100%', mt: '1rem' }}
-      onSubmit={handleSubmit}
-    >
-      <Stack direction="column" spacing={1}>
-        <FormControl fullWidth sx={{ mb: '15px' }}>
-          <TextField
-            value={valueForm}
-            onChange={handleChangeInput}
-            variant="filled"
-            label="Name Map Pool"
-            required
-          />
-        </FormControl>
-
-        <Stack justifyContent="flex-end" direction="row" spacing={2}>
-          <Button type="submit" variant="outlined" color="primary">
-            Update Map Pool
-          </Button>
-        </Stack>
-      </Stack>
+    <Box mt={2}>
+      <MapPoolForm
+        handleUpdateMapPool={handleUpdateMapPool}
+        valueForm={valueForm}
+        setOpen={() => null}
+      />
     </Box>
   );
 };
