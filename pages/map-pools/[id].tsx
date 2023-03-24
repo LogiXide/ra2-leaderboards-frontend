@@ -1,33 +1,46 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 
-import { UPDATE_MAP_POOL } from '@/modules/maps/api/mapPools/mutations';
+import Box from '@mui/material/Box';
+
+import { MapPoolForm } from '@/modules/maps/components/mapPools/forms/MapPoolForm';
+import { GET_MAP_POOL } from '@/modules/maps/api/mapPools';
 
 import {
-  Box,
-  Button,
-  FormControl,
-  Stack,
-  TextField,
-} from '@mui/material';
-import { UpdateMapPoolMutation, UpdateMapPoolMutationVariables } from '@/src/generated/graphql';
+  UpdateMapPoolDocument,
+  UpdateMapPoolMutation,
+  UpdateMapPoolMutationVariables,
+} from '@/generated/graphql';
 
 const MapPoolDetail = () => {
-  const [value, setValue] = useState('');
-  const [updateMapPool] = useMutation<UpdateMapPoolMutation, UpdateMapPoolMutationVariables>(UPDATE_MAP_POOL);
-
+  const [valueForm, setValueForm] = useState<string>('');
   const router = useRouter();
-
   const { id } = router.query;
 
-  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const { data } = useQuery(GET_MAP_POOL, {
+    // TODO: GetMapPoolsDocument return Array ... ??
+    variables: {
+      id: Number(id),
+    },
+  });
 
+  useEffect(() => {
+    if (data) {
+      setValueForm(data.mapPool.name);
+    }
+  }, [data]);
+
+  const [updateMapPool] = useMutation<
+    UpdateMapPoolMutation,
+    UpdateMapPoolMutationVariables
+  >(UpdateMapPoolDocument);
+
+  const handleUpdateMapPool = (data: { mapPoolName: string }) => {
     updateMapPool({
       variables: {
         input: {
-          name: value,
+          name: data.mapPoolName,
         },
 
         id: Number(id),
@@ -35,36 +48,13 @@ const MapPoolDetail = () => {
     });
   };
 
-  const handleChangeInput = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setValue(e.target.value);
-  };
-
   return (
-    <Box
-      noValidate
-      component="form"
-      sx={{ width: '100%', mt: '1rem' }}
-      onSubmit={handleSubmit}
-    >
-      <Stack direction="column" spacing={1}>
-        <FormControl fullWidth sx={{ mb: '15px' }}>
-          <TextField
-            value={value}
-            onChange={handleChangeInput}
-            variant="filled"
-            label="Name Map Pool"
-            required
-          />
-        </FormControl>
-
-        <Stack justifyContent="flex-end" direction="row" spacing={2}>
-          <Button type="submit" variant="outlined" color="primary">
-            Update Map Pool
-          </Button>
-        </Stack>
-      </Stack>
+    <Box mt={2}>
+      <MapPoolForm
+        handleUpdateMapPool={handleUpdateMapPool}
+        valueForm={valueForm}
+        setOpen={() => null}
+      />
     </Box>
   );
 };

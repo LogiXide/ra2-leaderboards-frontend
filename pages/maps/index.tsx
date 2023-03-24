@@ -1,20 +1,26 @@
 import { useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { useImmer } from 'use-immer';
 import Link from 'next/link';
 
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+
 
 import { DataList, Pagination } from '@/modules/core/components/common';
-import { CreateMapForm } from '@/modules/maps/components/maps/forms/CreateMapForm';
-import { GET_MAPS } from '@/modules/maps/api/maps/queries';
-import { GetMapsQuery } from '@/src/generated/graphql';
+import { MapForm } from '@/modules/maps/components/maps/forms/MapForm';
+
+import { CREATE_MAP } from '@/modules/maps/api/maps';
+
+import {
+  CreateMapMutation,
+  CreateMapMutationVariables,
+  GetMapsDocument,
+  GetMapsQuery,
+} from '@/generated/graphql';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -56,14 +62,19 @@ const columns = [
 ];
 
 const Maps: React.FC = () => {
-  const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [pageInfo, setPageInfo] = useImmer({
     currentPage: 1,
     limit: 2,
     offset: 0,
   });
 
-  const { data, loading, error } = useQuery<GetMapsQuery>(GET_MAPS, {
+  const [createMap] = useMutation<
+    CreateMapMutation,
+    CreateMapMutationVariables
+  >(CREATE_MAP);
+
+  const { data, loading, error } = useQuery<GetMapsQuery>(GetMapsDocument, {
     variables: {
       options: {
         offset: pageInfo.offset,
@@ -72,8 +83,26 @@ const Maps: React.FC = () => {
     },
   });
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = () => setOpenModal(true);
+  const handleClose = () => setOpenModal(false);
+
+  const handleCreateMap = (data: {
+    name: string;
+    author: string;
+    spots: number;
+    imageUrl: string;
+  }) => {
+    createMap({
+      variables: {
+        input: {
+          name: data.name,
+          spots: Number(data.spots),
+          imageUrl: data.imageUrl,
+          author: data.author,
+        },
+      },
+    });
+  };
 
   if (loading) {
     return <h1>Loading...</h1>;
@@ -97,35 +126,19 @@ const Maps: React.FC = () => {
         totalPages={data?.maps.totalPages || 0}
       />
 
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+      <Modal open={openModal} onClose={handleClose}>
         <Box sx={style}>
-          <Stack
+          <Typography
+            display="flex"
+            justifyContent="center"
             mb={2}
-            direction="column"
-            alignItems="center"
-            justifyContent="space-between"
+            variant="h6"
+            component="h2"
           >
-            <Avatar
-              sx={{
-                m: 1,
-                bgcolor: 'primary.main',
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            >
-              <AddCircleIcon />
-            </Avatar>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Create map
-            </Typography>
-          </Stack>
+            Create map
+          </Typography>
 
-          <CreateMapForm open={open} setOpen={setOpen} />
+          <MapForm handleCreateMap={handleCreateMap} setOpen={setOpenModal} />
         </Box>
       </Modal>
     </Box>

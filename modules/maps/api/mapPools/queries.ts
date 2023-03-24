@@ -12,4 +12,13 @@ const GET_MAP_POOLS = gql`
   }
 `;
 
-export { GET_MAP_POOLS };
+const GET_MAP_POOL = gql`
+  query GetMapPool($id: Int!) {
+    mapPool(id: $id) {
+      id
+      name
+    }
+  }
+`;
+
+export { GET_MAP_POOLS, GET_MAP_POOL };

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useImmer } from 'use-immer';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import Link from 'next/link';
 
 import Button from '@mui/material/Button';
@@ -8,13 +8,17 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import Avatar from '@mui/material/Avatar';
 
 import { DataList, Pagination } from '@/modules/core/components/common';
-import { CreateMapPoolForm } from '@/modules/maps/components/mapPools/forms/CreateMapPoolForm';
-import { GET_MAP_POOLS } from '@/modules/maps/api/mapPools/queries';
-import { GetMapPoolsQuery } from '@/src/generated/graphql';
+import { MapPoolForm } from '@/modules/maps/components/mapPools/forms/MapPoolForm';
+import {
+  GetMapPoolsDocument,
+  GetMapPoolsQuery,
+  CreateMapPoolMutation,
+  CreateMapPoolMutationVariables,
+} from '@/generated/graphql';
+
+import { CREATE_MAP_POOL } from '@/modules/maps/api/mapPools';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -41,24 +45,42 @@ const columns = [
 ];
 
 const MapPools: React.FC = () => {
-  const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [pageInfo, setPageInfo] = useImmer({
     currentPage: 1,
     limit: 2,
     offset: 0,
   });
 
-  const { data, loading, error } = useQuery<GetMapPoolsQuery>(GET_MAP_POOLS, {
-    variables: {
-      options: {
-        offset: pageInfo.offset,
-        limit: pageInfo.limit,
-      },
-    },
-  });
+  const [createMapPool] = useMutation<
+    CreateMapPoolMutation,
+    CreateMapPoolMutationVariables
+  >(CREATE_MAP_POOL);
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const { data, loading, error } = useQuery<GetMapPoolsQuery>(
+    GetMapPoolsDocument,
+    {
+      variables: {
+        options: {
+          offset: pageInfo.offset,
+          limit: pageInfo.limit,
+        },
+      },
+    }
+  );
+
+  const handleOpen = () => setOpenModal(true);
+  const handleClose = () => setOpenModal(false);
+
+  const handleCreateMapPool = (data: { mapPoolName: string }) => {
+    createMapPool({
+      variables: {
+        input: {
+          name: data.mapPoolName,
+        },
+      },
+    });
+  };
 
   if (loading) {
     return <h1>Loading...</h1>;
@@ -82,35 +104,22 @@ const MapPools: React.FC = () => {
         totalPages={data?.mapPools.totalPages || 0}
       />
 
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+      <Modal open={openModal} onClose={handleClose}>
         <Box sx={style}>
-          <Stack
+          <Typography
+            display="flex"
+            justifyContent="center"
             mb={2}
-            direction="column"
-            alignItems="center"
-            justifyContent="space-between"
+            variant="h6"
+            component="h2"
           >
-            <Avatar
-              sx={{
-                m: 1,
-                bgcolor: 'primary.main',
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            >
-              <AddCircleIcon />
-            </Avatar>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Create map pool
-            </Typography>
-          </Stack>
+            Create map pool
+          </Typography>
 
-          <CreateMapPoolForm open={open} setOpen={setOpen} />
+          <MapPoolForm
+            handleCreateMapPool={handleCreateMapPool}
+            setOpen={setOpenModal}
+          />
         </Box>
       </Modal>
     </Box>
