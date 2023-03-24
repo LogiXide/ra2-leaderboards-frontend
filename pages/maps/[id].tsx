@@ -2,11 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQuery } from '@apollo/client';
 
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
+import { Box } from '@mui/material';
 
 import { GET_MAP } from '@/modules/maps/api/maps';
 
@@ -15,6 +11,7 @@ import {
   UpdateMapMutation,
   UpdateMapMutationVariables,
 } from '@/generated/graphql';
+import { MapForm } from '@/modules/maps/components/maps/forms/MapForm';
 
 type ITypeFormValues = {
   name: string;
@@ -24,6 +21,12 @@ type ITypeFormValues = {
 };
 
 const MapDetail: React.FC = () => {
+  const [valuesForm, setValuesForm] = useState<ITypeFormValues>({
+    name: '',
+    author: '',
+    imageUrl: '',
+    spots: 0,
+  });
   const router = useRouter();
   const { id } = router.query;
 
@@ -33,16 +36,9 @@ const MapDetail: React.FC = () => {
     },
   });
 
-  const [dataForm, setDataForm] = useState<ITypeFormValues>({
-    name: '',
-    author: '',
-    imageUrl: '',
-    spots: 0,
-  });
-
   useEffect(() => {
     if (data) {
-      setDataForm({
+      setValuesForm({
         name: data.map.name,
         author: data.map.author,
         spots: data.map.spots,
@@ -56,16 +52,19 @@ const MapDetail: React.FC = () => {
     UpdateMapMutationVariables
   >(UpdateMapDocument);
 
-  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleUpdateMap = (data: {
+    name: string;
+    author: string;
+    imageUrl: string;
+    spots: number;
+  }) => {
     updateMap({
       variables: {
         input: {
-          name: dataForm.name,
-          author: dataForm.author,
-          imageUrl: dataForm.imageUrl,
-          spots: Number(dataForm.spots),
+          name: data.name,
+          author: data.author,
+          imageUrl: data.imageUrl,
+          spots: Number(data.spots),
         },
 
         id: Number(id),
@@ -73,71 +72,13 @@ const MapDetail: React.FC = () => {
     });
   };
 
-  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDataForm({
-      ...dataForm,
-      [e.target.name]: e.target.value,
-    });
-  };
-
   return (
-    <Box
-      noValidate
-      component="form"
-      sx={{ width: '100%', mt: '1rem' }}
-      onSubmit={handleSubmit}
-    >
-      <Stack direction="column" spacing={1}>
-        <FormControl variant="standard" sx={{ minWidth: 120 }}>
-          <TextField
-            name="name"
-            value={dataForm.name}
-            onChange={handleChangeInput}
-            variant="filled"
-            label="Name"
-            required
-          />
-        </FormControl>
-
-        <FormControl variant="standard" sx={{ minWidth: 120 }}>
-          <TextField
-            name="author"
-            value={dataForm.author}
-            onChange={handleChangeInput}
-            variant="filled"
-            label="Author"
-            required
-          />
-        </FormControl>
-
-        <FormControl variant="standard" sx={{ minWidth: 120 }}>
-          <TextField
-            name="imageUrl"
-            value={dataForm.imageUrl}
-            onChange={handleChangeInput}
-            variant="filled"
-            label="image URL"
-            required
-          />
-        </FormControl>
-
-        <FormControl variant="standard" sx={{ minWidth: 120 }}>
-          <TextField
-            name="spots"
-            value={dataForm.spots}
-            onChange={handleChangeInput}
-            variant="filled"
-            label="Spots"
-            required
-          />
-        </FormControl>
-
-        <Stack justifyContent="flex-end" direction="row">
-          <Button type="submit" variant="outlined" color="primary">
-            Update Map
-          </Button>
-        </Stack>
-      </Stack>
+    <Box mt={2}>
+      <MapForm
+        setOpen={() => null}
+        valuesForm={valuesForm}
+        handleUpdateMap={handleUpdateMap}
+      />
     </Box>
   );
 };

@@ -45,7 +45,7 @@ const columns = [
 ];
 
 const MapPools: React.FC = () => {
-  const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [pageInfo, setPageInfo] = useImmer({
     currentPage: 1,
     limit: 2,
@@ -69,8 +69,8 @@ const MapPools: React.FC = () => {
     }
   );
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = () => setOpenModal(true);
+  const handleClose = () => setOpenModal(false);
 
   const handleCreateMapPool = (data: { mapPoolName: string }) => {
     createMapPool({
@@ -104,7 +104,7 @@ const MapPools: React.FC = () => {
         totalPages={data?.mapPools.totalPages || 0}
       />
 
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={openModal} onClose={handleClose}>
         <Box sx={style}>
           <Typography
             display="flex"
@@ -118,7 +118,7 @@ const MapPools: React.FC = () => {
 
           <MapPoolForm
             handleCreateMapPool={handleCreateMapPool}
-            setOpen={setOpen}
+            setOpen={setOpenModal}
           />
         </Box>
       </Modal>

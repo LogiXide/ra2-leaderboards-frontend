@@ -1,19 +1,26 @@
 import { useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { useImmer } from 'use-immer';
 import Link from 'next/link';
 
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+
 
 import { DataList, Pagination } from '@/modules/core/components/common';
 import { MapForm } from '@/modules/maps/components/maps/forms/MapForm';
-import { GetMapsDocument, GetMapsQuery } from '@/generated/graphql';
+
+import { CREATE_MAP } from '@/modules/maps/api/maps';
+
+import {
+  CreateMapMutation,
+  CreateMapMutationVariables,
+  GetMapsDocument,
+  GetMapsQuery,
+} from '@/generated/graphql';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -62,6 +69,11 @@ const Maps: React.FC = () => {
     offset: 0,
   });
 
+  const [createMap] = useMutation<
+    CreateMapMutation,
+    CreateMapMutationVariables
+  >(CREATE_MAP);
+
   const { data, loading, error } = useQuery<GetMapsQuery>(GetMapsDocument, {
     variables: {
       options: {
@@ -73,6 +85,24 @@ const Maps: React.FC = () => {
 
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
+
+  const handleCreateMap = (data: {
+    name: string;
+    author: string;
+    spots: number;
+    imageUrl: string;
+  }) => {
+    createMap({
+      variables: {
+        input: {
+          name: data.name,
+          spots: Number(data.spots),
+          imageUrl: data.imageUrl,
+          author: data.author,
+        },
+      },
+    });
+  };
 
   if (loading) {
     return <h1>Loading...</h1>;
@@ -96,35 +126,19 @@ const Maps: React.FC = () => {
         totalPages={data?.maps.totalPages || 0}
       />
 
-      <Modal
-        open={openModal}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+      <Modal open={openModal} onClose={handleClose}>
         <Box sx={style}>
-          <Stack
+          <Typography
+            display="flex"
+            justifyContent="center"
             mb={2}
-            direction="column"
-            alignItems="center"
-            justifyContent="space-between"
+            variant="h6"
+            component="h2"
           >
-            <Avatar
-              sx={{
-                m: 1,
-                bgcolor: 'primary.main',
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            >
-              <AddCircleIcon />
-            </Avatar>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Create map
-            </Typography>
-          </Stack>
+            Create map
+          </Typography>
 
-          <MapForm setOpen={setOpenModal} />
+          <MapForm handleCreateMap={handleCreateMap} setOpen={setOpenModal} />
         </Box>
       </Modal>
     </Box>

@@ -1,7 +1,8 @@
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { yupResolver } from '@hookform/resolvers/yup';
-
+import Link from 'next/link';
 import { Box, Button, Stack } from '@mui/material';
 
 import { TextField } from '@/modules/core/components/TextField';
@@ -13,19 +14,27 @@ import {
   CreateMapMutationVariables,
 } from '@/generated/graphql';
 
-interface ITypeFormValues {
+type ITypeFormValues = {
   name: string;
   imageUrl: string;
   author: string;
   spots: number;
-}
+};
 
 type ITypeProps = {
+  handleCreateMap?: (data: ITypeFormValues) => void;
+  handleUpdateMap?: (data: ITypeFormValues) => void;
   setOpen: (value: boolean) => void;
+  valuesForm?: {
+    name: string;
+    imageUrl: string;
+    author: string;
+    spots: number;
+  };
 };
 
 const MapForm: React.FC<ITypeProps> = (props) => {
-  const [createMapPool] = useMutation<
+  const [createMap] = useMutation<
     CreateMapMutation,
     CreateMapMutationVariables
   >(CREATE_MAP);
@@ -37,35 +46,34 @@ const MapForm: React.FC<ITypeProps> = (props) => {
     reset,
   } = useForm<ITypeFormValues>({
     defaultValues: {
-      name: '',
-      author: '',
-      imageUrl: '',
-      spots: 0,
+      name: props.valuesForm?.name || '',
+      author: props.valuesForm?.author || '',
+      imageUrl: props.valuesForm?.imageUrl || '',
+      spots: props.valuesForm?.spots || 0,
     },
     resolver: yupResolver(mapSchema),
   });
 
-  const onSubmit = (data: ITypeFormValues) => {
-    createMapPool({
-      variables: {
-        input: {
-          name: data.name,
-          spots: Number(data.spots),
-          imageUrl: data.imageUrl,
-          author: data.author,
-        },
-      },
+  useEffect(() => {
+    reset({
+      name: props.valuesForm?.name,
+      author: props.valuesForm?.author,
+      imageUrl: props.valuesForm?.imageUrl,
+      spots: props.valuesForm?.spots,
     });
+  }, [reset, props.valuesForm]);
 
-    reset();
+  const onSubmit = (data: ITypeFormValues) => {
+    if (props.handleCreateMap) {
+      console.log('create map');
+      props.handleCreateMap(data);
 
-    if (!errors.name) {
       props.setOpen(false);
     }
-  };
 
-  const handleClose = () => {
-    props.setOpen(false);
+    if (props.handleUpdateMap) {
+      props.handleUpdateMap(data);
+    }
   };
 
   return (
@@ -77,12 +85,14 @@ const MapForm: React.FC<ITypeProps> = (props) => {
     >
       <Stack direction="column">
         <TextField control={control} errors={errors} name="name" label="Name" />
+
         <TextField
           control={control}
           errors={errors}
           name="author"
           label="Author"
         />
+
         <TextField
           control={control}
           errors={errors}
@@ -98,12 +108,36 @@ const MapForm: React.FC<ITypeProps> = (props) => {
         />
 
         <Stack justifyContent="flex-end" direction="row" spacing={2}>
-          <Button onClick={handleClose} variant="outlined" color="error">
-            Cancel
-          </Button>
-          <Button type="submit" variant="outlined" color="primary">
-            Create
-          </Button>
+          {props.handleCreateMap && (
+            <>
+              <Button
+                onClick={() => props.setOpen(false)}
+                variant="outlined"
+                color="error"
+              >
+                Cancel
+              </Button>
+              <Button type="submit" variant="outlined" color="primary">
+                Create
+              </Button>
+            </>
+          )}
+
+          {props.handleUpdateMap && (
+            <>
+              <Button>
+                <Link
+                  href="/maps"
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  Back
+                </Link>
+              </Button>
+              <Button type="submit" variant="outlined" color="primary">
+                Update
+              </Button>
+            </>
+          )}
         </Stack>
       </Stack>
     </Box>
