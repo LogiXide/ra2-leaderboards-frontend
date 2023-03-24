@@ -30,10 +30,7 @@ const style = {
   bgcolor: 'background.paper',
   borderRadius: 1,
   boxShadow: 24,
-  paddingTop: 2,
-  paddingLeft: 4,
-  paddingRight: 4,
-  paddingBottom: 3,
+  padding: 3,
 };
 
 const columns = [
@@ -108,7 +105,7 @@ const MapPools: React.FC = () => {
         <Box sx={style}>
           <Typography
             display="flex"
-            justifyContent="center"
+            justifyContent="flex-start"
             mb={2}
             variant="h6"
             component="h2"
