@@ -9,6 +9,7 @@ import { DataList, Pagination } from '@/modules/core/components/common';
 import { MapForm } from '@/modules/maps/components/maps/forms/MapForm';
 
 import { CREATE_MAP } from '@/modules/maps/api/maps';
+import { config } from '@/config';
 
 import {
   CreateMapMutation,
@@ -57,7 +58,7 @@ const Maps: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [pageInfo, setPageInfo] = useImmer({
     currentPage: 1,
-    limit: 2,
+    limit: config.pagination.size,
     offset: 0,
   });
 
