@@ -3,12 +3,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import { useImmer } from 'use-immer';
 import Link from 'next/link';
 
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import Typography from '@mui/material/Typography';
-
+import { Button, Stack, Box, Modal, Typography } from '@mui/material';
 
 import { DataList, Pagination } from '@/modules/core/components/common';
 import { MapForm } from '@/modules/maps/components/maps/forms/MapForm';
@@ -32,10 +27,7 @@ const style = {
   bgcolor: 'background.paper',
   borderRadius: 1,
   boxShadow: 24,
-  paddingTop: 2,
-  paddingLeft: 4,
-  paddingRight: 4,
-  paddingBottom: 3,
+  padding: 3,
 };
 
 const columns = [
@@ -130,7 +122,7 @@ const Maps: React.FC = () => {
         <Box sx={style}>
           <Typography
             display="flex"
-            justifyContent="center"
+            justifyContent="flex-start"
             mb={2}
             variant="h6"
             component="h2"

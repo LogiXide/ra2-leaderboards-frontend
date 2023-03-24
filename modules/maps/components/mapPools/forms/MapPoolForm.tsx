@@ -83,14 +83,14 @@ const MapPoolForm: React.FC<ITypeProps> = (props) => {
 
           {props.handleUpdateMapPool && (
             <>
-              <Button>
-                <Link
-                  href="/map-pools"
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                >
-                  Back
-                </Link>
-              </Button>
+              <Link
+                href="/maps"
+                style={{
+                  textDecoration: 'none',
+                }}
+              >
+                <Button sx={{ color: 'black' }}>Back</Button>
+              </Link>
               <Button type="submit" variant="outlined" color="primary">
                 Update
               </Button>

@@ -25,12 +25,7 @@ type ITypeProps = {
   handleCreateMap?: (data: ITypeFormValues) => void;
   handleUpdateMap?: (data: ITypeFormValues) => void;
   setOpen: (value: boolean) => void;
-  valuesForm?: {
-    name: string;
-    imageUrl: string;
-    author: string;
-    spots: number;
-  };
+  valuesForm?: ITypeFormValues;
 };
 
 const MapForm: React.FC<ITypeProps> = (props) => {
@@ -107,17 +102,16 @@ const MapForm: React.FC<ITypeProps> = (props) => {
           label="Spots"
         />
 
-        <Stack justifyContent="flex-end" direction="row" spacing={2}>
+        <Stack justifyContent="flex-end" direction="row" spacing={3}>
           {props.handleCreateMap && (
             <>
               <Button
                 onClick={() => props.setOpen(false)}
-                variant="outlined"
-                color="error"
+                sx={{ color: 'black' }}
               >
                 Cancel
               </Button>
-              <Button type="submit" variant="outlined" color="primary">
+              <Button type="submit" variant="contained" color="primary">
                 Create
               </Button>
             </>
@@ -125,15 +119,15 @@ const MapForm: React.FC<ITypeProps> = (props) => {
 
           {props.handleUpdateMap && (
             <>
-              <Button>
-                <Link
-                  href="/maps"
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                >
-                  Back
-                </Link>
-              </Button>
-              <Button type="submit" variant="outlined" color="primary">
+              <Link
+                href="/maps"
+                style={{
+                  textDecoration: 'none',
+                }}
+              >
+                <Button sx={{ color: 'black' }}>Back</Button>
+              </Link>
+              <Button type="submit" variant="contained" color="primary">
                 Update
               </Button>
             </>
