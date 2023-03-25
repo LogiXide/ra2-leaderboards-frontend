@@ -1,4 +1,10 @@
-const config = {
+type ITypeConfig = {
+  pagination: {
+    size: number;
+  };
+};
+
+const config: ITypeConfig = {
   pagination: {
     size: 10,
   },
