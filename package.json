@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "codegen": "graphql-codegen --config codegen.ts",
+    "git:clean:origin": "git fetch -p",
+    "git:clean:local": "git branch --v | grep \"\\[gone\\]\" | awk '{print $1}' | xargs git branch -D",
+    "git:clean": "npm run git:clean:origin && npm run git:clean:local"
   },
   "dependencies": {
     "@apollo/client": "^3.7.9",
