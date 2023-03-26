@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 
 import { DataList, Pagination } from '@/modules/core/components/common';
 import { MapPoolForm } from '@/modules/maps/components/mapPools/forms/MapPoolForm';
+import { config } from '@/config';
+
 import {
   GetMapPoolsDocument,
   GetMapPoolsQuery,
@@ -45,7 +47,7 @@ const MapPools: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [pageInfo, setPageInfo] = useImmer({
     currentPage: 1,
-    limit: 2,
+    limit: config.pagination.size,
     offset: 0,
   });
 
