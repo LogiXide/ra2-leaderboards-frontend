@@ -9,7 +9,7 @@ import createEmotionCache from 'shared/createEmotionCache';
 import { ApolloProvider } from '@apollo/client';
 import { client } from '@/apollo/client';
 
-import { Layout } from '@/modules/core/components/containers'
+import { MainLayout } from '@/modules/core/layouts/MainLayout'
 
 import '../styles/globals.css';
 
@@ -32,9 +32,9 @@ const MyApp = (props: MyAppProps) => {
         <ThemeProvider theme={theme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
-          <Layout>
+          <MainLayout>
             <Component {...pageProps} />
-          </Layout>
+          </MainLayout>
         </ThemeProvider>
       </CacheProvider>
     </ApolloProvider>
