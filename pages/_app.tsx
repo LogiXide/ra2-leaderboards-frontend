@@ -7,11 +7,11 @@ import { CacheProvider, EmotionCache } from '@emotion/react';
 import { theme } from 'shared/theme';
 import createEmotionCache from 'shared/createEmotionCache';
 import { ApolloProvider } from '@apollo/client';
-import { client } from '@/apollo/client';
+import { client } from '@/core/apollo/coreApi';
 
-import { MainLayout } from '@/modules/core/layouts/MainLayout'
+import { MainLayout } from '@/core/layouts';
 
-import '../styles/globals.css';
+import '@/styles/globals.css';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();

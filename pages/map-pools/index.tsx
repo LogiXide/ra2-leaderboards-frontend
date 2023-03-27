@@ -1,17 +1,16 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useImmer } from 'use-immer';
 import { useQuery, useMutation } from '@apollo/client';
 import Link from 'next/link';
 
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import Typography from '@mui/material/Typography';
+import { Button, Stack, Box } from '@mui/material';
 
-import { DataList, Pagination } from '@/modules/core/components/common';
-import { MapPoolForm } from '@/modules/maps/components/mapPools/forms/MapPoolForm';
 import { config } from '@/config';
+import { DataList } from '@/core/components/data';
+import { Pagination } from '@/core/components/common';
+import { BasicModal } from '@/core/components/modals';
+import { MapPoolForm } from '@/modules/maps/components/mapPools/forms';
+import { CREATE_MAP_POOL } from '@/modules/maps/api/mapPools';
 
 import {
   GetMapPoolsDocument,
@@ -19,21 +18,6 @@ import {
   CreateMapPoolMutation,
   CreateMapPoolMutationVariables,
 } from '@/generated/graphql';
-
-import { CREATE_MAP_POOL } from '@/modules/maps/api/mapPools';
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  maxWidth: 500,
-  width: '100%',
-  bgcolor: 'background.paper',
-  borderRadius: 1,
-  boxShadow: 24,
-  padding: 3,
-};
 
 const columns = [
   {
@@ -69,17 +53,21 @@ const MapPools: React.FC = () => {
   );
 
   const handleOpen = () => setOpenModal(true);
+  
   const handleClose = () => setOpenModal(false);
 
-  const handleCreateMapPool = (data: { mapPoolName: string }) => {
-    createMapPool({
-      variables: {
-        input: {
-          name: data.mapPoolName,
+  const handleCreateMapPool = useCallback(
+    (data: { mapPoolName: string }) => {
+      createMapPool({
+        variables: {
+          input: {
+            name: data.mapPoolName,
+          },
         },
-      },
-    });
-  };
+      });
+    },
+    [createMapPool]
+  );
 
   if (loading) {
     return <h1>Loading...</h1>;
@@ -93,34 +81,28 @@ const MapPools: React.FC = () => {
     <Box mt={2}>
       <Stack justifyContent="flex-end" alignItems="flex-end">
         <Button onClick={handleOpen} variant="contained">
-          Add map pools
+          Add Map Pools
         </Button>
       </Stack>
+
       <DataList list={data?.mapPools.data || []} columns={columns} />
+
       <Pagination
         pageInfo={pageInfo}
         setPageInfo={setPageInfo}
         totalPages={data?.mapPools.totalPages || 0}
       />
 
-      <Modal open={openModal} onClose={handleClose}>
-        <Box sx={style}>
-          <Typography
-            display="flex"
-            justifyContent="flex-start"
-            mb={2}
-            variant="h6"
-            component="h2"
-          >
-            Create map pool
-          </Typography>
-
-          <MapPoolForm
-            handleCreateMapPool={handleCreateMapPool}
-            setOpen={setOpenModal}
-          />
-        </Box>
-      </Modal>
+      <BasicModal
+        open={openModal}
+        onClose={handleClose}
+        title="Create Map Pool"
+      >
+        <MapPoolForm
+          onCreateMapPool={handleCreateMapPool}
+          onClose={handleClose}
+        />
+      </BasicModal>
     </Box>
   );
 };

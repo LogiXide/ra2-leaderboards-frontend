@@ -1,31 +1,35 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import Link from 'next/link';
+import { object, string } from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+
 import { Box, Button, Stack } from '@mui/material';
 
-import { TextField } from '@/modules/core/components/TextField';
+import { TextField } from '@/core/components/forms/fields';
 
-import { mapPoolSchema } from './mapPool.schema';
-
-type ITypeFormValues = {
+type FormValuesType = {
   mapPoolName: string;
 };
 
-type ITypeProps = {
-  handleCreateMapPool?: (data: ITypeFormValues) => void;
-  handleUpdateMapPool?: (data: ITypeFormValues) => void;
-  setOpen: (value: boolean) => void;
+type PropsType = {
   valueForm?: string;
+  onClose: () => void;
+  onCreateMapPool?: (data: FormValuesType) => void;
+  onUpdateMapPool?: (data: FormValuesType) => void;
 };
 
-const MapPoolForm: React.FC<ITypeProps> = (props) => {
+const mapPoolSchema = object().shape({
+  mapPoolName: string().required('Map pool name is required'),
+});
+
+const MapPoolForm: React.FC<PropsType> = (props) => {
   const {
     handleSubmit,
     control,
     formState: { errors },
     reset,
-  } = useForm<ITypeFormValues>({
+  } = useForm<FormValuesType>({
     defaultValues: {
       mapPoolName: props.valueForm || '',
     },
@@ -38,17 +42,20 @@ const MapPoolForm: React.FC<ITypeProps> = (props) => {
     });
   }, [reset, props.valueForm]);
 
-  const onSubmit = (data: ITypeFormValues) => {
-    if (props.handleCreateMapPool) {
-      props.handleCreateMapPool(data);
+  const onSubmit = useCallback(
+    (data: FormValuesType) => {
+      if (props.onCreateMapPool) {
+        props.onCreateMapPool(data);
 
-      props.setOpen(false);
-    }
+        props.onClose();
+      }
 
-    if (props.handleUpdateMapPool) {
-      props.handleUpdateMapPool(data);
-    }
-  };
+      if (props.onUpdateMapPool) {
+        props.onUpdateMapPool(data);
+      }
+    },
+    [props]
+  );
 
   return (
     <Box
@@ -66,32 +73,30 @@ const MapPoolForm: React.FC<ITypeProps> = (props) => {
         />
 
         <Stack justifyContent="flex-end" direction="row" spacing={2}>
-          {props.handleCreateMapPool && (
+          {props.onCreateMapPool && (
             <>
-              <Button
-                onClick={() => props.setOpen(false)}
-                variant="outlined"
-                color="error"
-              >
+              <Button onClick={() => props.onClose()} sx={{ color: 'black' }}>
                 Cancel
               </Button>
-              <Button type="submit" variant="outlined" color="primary">
+
+              <Button type="submit" variant="contained" color="primary">
                 Create
               </Button>
             </>
           )}
 
-          {props.handleUpdateMapPool && (
+          {props.onUpdateMapPool && (
             <>
               <Link
-                href="/maps"
+                href="/map-pools"
                 style={{
                   textDecoration: 'none',
                 }}
               >
                 <Button sx={{ color: 'black' }}>Back</Button>
               </Link>
-              <Button type="submit" variant="outlined" color="primary">
+
+              <Button type="submit" variant="contained" color="primary">
                 Update
               </Button>
             </>
