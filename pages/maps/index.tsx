@@ -1,15 +1,16 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import { useImmer } from 'use-immer';
 import Link from 'next/link';
+import { useImmer } from 'use-immer';
 
-import { Button, Stack, Box, Modal, Typography } from '@mui/material';
+import { Button, Stack, Box } from '@mui/material';
 
-import { DataList, Pagination } from '@/modules/core/components/common';
-import { MapForm } from '@/modules/maps/components/maps/forms/MapForm';
-
-import { CREATE_MAP } from '@/modules/maps/api/maps';
 import { config } from '@/config';
+import { DataList } from '@/core/components/data';
+import { Pagination } from '@/core/components/common';
+import { BasicModal } from '@/core/components/modals';
+import { MapForm } from '@/modules/maps/components/maps/forms/MapForm';
+import { CREATE_MAP } from '@/modules/maps/api/maps';
 
 import {
   CreateMapMutation,
@@ -17,19 +18,6 @@ import {
   GetMapsDocument,
   GetMapsQuery,
 } from '@/generated/graphql';
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  maxWidth: 500,
-  width: '100%',
-  bgcolor: 'background.paper',
-  borderRadius: 1,
-  boxShadow: 24,
-  padding: 3,
-};
 
 const columns = [
   {
@@ -77,25 +65,29 @@ const Maps: React.FC = () => {
   });
 
   const handleOpen = () => setOpenModal(true);
+
   const handleClose = () => setOpenModal(false);
 
-  const handleCreateMap = (data: {
-    name: string;
-    author: string;
-    spots: number;
-    imageUrl: string;
-  }) => {
-    createMap({
-      variables: {
-        input: {
-          name: data.name,
-          spots: Number(data.spots),
-          imageUrl: data.imageUrl,
-          author: data.author,
+  const handleCreateMap = useCallback(
+    (data: {
+      name: string;
+      author: string;
+      spots: number;
+      imageUrl: string;
+    }) => {
+      createMap({
+        variables: {
+          input: {
+            name: data.name,
+            spots: Number(data.spots) || 0,
+            imageUrl: data.imageUrl,
+            author: data.author,
+          },
         },
-      },
-    });
-  };
+      });
+    },
+    [createMap]
+  );
 
   if (loading) {
     return <h1>Loading...</h1>;
@@ -109,31 +101,21 @@ const Maps: React.FC = () => {
     <Box mt={2}>
       <Stack justifyContent="flex-end" alignItems="flex-end">
         <Button onClick={handleOpen} variant="contained">
-          Add map
+          Add Map
         </Button>
       </Stack>
+
       <DataList list={data?.maps.data || []} columns={columns} />
+
       <Pagination
         pageInfo={pageInfo}
         setPageInfo={setPageInfo}
         totalPages={data?.maps.totalPages || 0}
       />
 
-      <Modal open={openModal} onClose={handleClose}>
-        <Box sx={style}>
-          <Typography
-            display="flex"
-            justifyContent="flex-start"
-            mb={2}
-            variant="h6"
-            component="h2"
-          >
-            Create map
-          </Typography>
-
-          <MapForm handleCreateMap={handleCreateMap} setOpen={setOpenModal} />
-        </Box>
-      </Modal>
+      <BasicModal title="Create Map" open={openModal} onClose={handleClose}>
+        <MapForm onCreateMap={handleCreateMap} onClose={handleClose} />
+      </BasicModal>
     </Box>
   );
 };

@@ -4,9 +4,9 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { Typography, Stack } from '@mui/material';
 
-interface ITypeProps {
+type TypeProps = {
   // Add custom props here
-}
+};
 
 const Home: React.FC = () => {
   const { t } = useTranslation('common');
@@ -16,7 +16,7 @@ const Home: React.FC = () => {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      minHeight="65vh"
+      minHeight="80vh"
     >
       <Typography variant="h1" component="h1">
         Hello World!
@@ -25,7 +25,7 @@ const Home: React.FC = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps<ITypeProps> = async ({
+export const getStaticProps: GetStaticProps<TypeProps> = async ({
   locale,
 }) => ({
   props: {

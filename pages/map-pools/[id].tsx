@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQuery } from '@apollo/client';
 
-import Box from '@mui/material/Box';
+import { Box } from '@mui/material';
 
-import { MapPoolForm } from '@/modules/maps/components/mapPools/forms/MapPoolForm';
+import { MapPoolForm } from '@/modules/maps/components/mapPools/forms';
 import { GET_MAP_POOL } from '@/modules/maps/api/mapPools';
 
 import {
@@ -51,9 +51,9 @@ const MapPoolDetail = () => {
   return (
     <Box mt={2}>
       <MapPoolForm
-        handleUpdateMapPool={handleUpdateMapPool}
+        onUpdateMapPool={handleUpdateMapPool}
         valueForm={valueForm}
-        setOpen={() => null}
+        onClose={() => null}
       />
     </Box>
   );

@@ -1,45 +1,43 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@apollo/client';
-import { yupResolver } from '@hookform/resolvers/yup';
 import Link from 'next/link';
+import { object, string, number } from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+
 import { Box, Button, Stack } from '@mui/material';
 
-import { TextField } from '@/modules/core/components/TextField';
-import { CREATE_MAP } from '@/modules/maps/api/maps/mutations';
-import { mapSchema } from './map.schema';
+import { TextField } from '@/core/components/forms/fields';
 
-import {
-  CreateMapMutation,
-  CreateMapMutationVariables,
-} from '@/generated/graphql';
-
-type ITypeFormValues = {
+type FormValuesType = {
   name: string;
   imageUrl: string;
   author: string;
   spots: number;
 };
 
-type ITypeProps = {
-  handleCreateMap?: (data: ITypeFormValues) => void;
-  handleUpdateMap?: (data: ITypeFormValues) => void;
-  setOpen: (value: boolean) => void;
-  valuesForm?: ITypeFormValues;
+type PropsType = {
+  valuesForm?: FormValuesType;
+  onClose: () => void;
+  onCreateMap?: (data: FormValuesType) => void;
+  onUpdateMap?: (data: FormValuesType) => void;
 };
 
-const MapForm: React.FC<ITypeProps> = (props) => {
-  const [createMap] = useMutation<
-    CreateMapMutation,
-    CreateMapMutationVariables
-  >(CREATE_MAP);
+const mapSchema = object().shape({
+  name: string().required('Map name is required'),
+  author: string().required('Author is required'),
+  imageUrl: string().required('Image URL is required'),
+  spots: number()
+    .required('Spots is required')
+    .typeError('Spots must be a number'),
+});
 
+const MapForm: React.FC<PropsType> = (props) => {
   const {
     handleSubmit,
     control,
     formState: { errors },
     reset,
-  } = useForm<ITypeFormValues>({
+  } = useForm<FormValuesType>({
     defaultValues: {
       name: props.valuesForm?.name || '',
       author: props.valuesForm?.author || '',
@@ -58,18 +56,17 @@ const MapForm: React.FC<ITypeProps> = (props) => {
     });
   }, [reset, props.valuesForm]);
 
-  const onSubmit = (data: ITypeFormValues) => {
-    if (props.handleCreateMap) {
-      console.log('create map');
-      props.handleCreateMap(data);
+  const onSubmit = useCallback((values: FormValuesType) => {
+    if (props.onCreateMap) {
+      props.onCreateMap(values);
 
-      props.setOpen(false);
+      props.onClose();
     }
 
-    if (props.handleUpdateMap) {
-      props.handleUpdateMap(data);
+    if (props.onUpdateMap) {
+      props.onUpdateMap(values);
     }
-  };
+  }, [props]);
 
   return (
     <Box
@@ -103,21 +100,19 @@ const MapForm: React.FC<ITypeProps> = (props) => {
         />
 
         <Stack justifyContent="flex-end" direction="row" spacing={3}>
-          {props.handleCreateMap && (
+          {props.onCreateMap && (
             <>
-              <Button
-                onClick={() => props.setOpen(false)}
-                sx={{ color: 'black' }}
-              >
+              <Button onClick={() => props.onClose()} sx={{ color: 'black' }}>
                 Cancel
               </Button>
+
               <Button type="submit" variant="contained" color="primary">
                 Create
               </Button>
             </>
           )}
 
-          {props.handleUpdateMap && (
+          {props.onUpdateMap && (
             <>
               <Link
                 href="/maps"
@@ -127,6 +122,7 @@ const MapForm: React.FC<ITypeProps> = (props) => {
               >
                 <Button sx={{ color: 'black' }}>Back</Button>
               </Link>
+
               <Button type="submit" variant="contained" color="primary">
                 Update
               </Button>

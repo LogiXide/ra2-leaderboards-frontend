@@ -5,15 +5,15 @@ import { useMutation, useQuery } from '@apollo/client';
 import { Box } from '@mui/material';
 
 import { GET_MAP } from '@/modules/maps/api/maps';
+import { MapForm } from '@/modules/maps/components/maps/forms';
 
 import {
   UpdateMapDocument,
   UpdateMapMutation,
   UpdateMapMutationVariables,
 } from '@/generated/graphql';
-import { MapForm } from '@/modules/maps/components/maps/forms/MapForm';
 
-type ITypeFormValues = {
+type FormValuesType = {
   name: string;
   author: string;
   imageUrl: string;
@@ -21,12 +21,13 @@ type ITypeFormValues = {
 };
 
 const MapDetail: React.FC = () => {
-  const [valuesForm, setValuesForm] = useState<ITypeFormValues>({
+  const [valuesForm, setValuesForm] = useState<FormValuesType>({
     name: '',
     author: '',
     imageUrl: '',
     spots: 0,
   });
+
   const router = useRouter();
   const { id } = router.query;
 
@@ -75,9 +76,9 @@ const MapDetail: React.FC = () => {
   return (
     <Box mt={2}>
       <MapForm
-        setOpen={() => null}
+        onClose={() => null}
         valuesForm={valuesForm}
-        handleUpdateMap={handleUpdateMap}
+        onUpdateMap={handleUpdateMap}
       />
     </Box>
   );
