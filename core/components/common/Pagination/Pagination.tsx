@@ -2,7 +2,7 @@ import { Draft } from 'immer';
 
 import { Pagination as PaginationMui, Stack } from '@mui/material';
 
-type TypeProps = {
+type PropsType = {
   totalPages: number;
   pageInfo: {
     currentPage: number;
@@ -12,7 +12,7 @@ type TypeProps = {
   setPageInfo: (draft: Draft<any>) => void;
 }
 
-const Pagination: React.FC<TypeProps> = (props) => {
+const Pagination: React.FC<PropsType> = (props) => {
   const handleChangePage = (page: number) => {
     if (page > props.totalPages || page === 0) {
       return;
