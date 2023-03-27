@@ -5,14 +5,14 @@ import { TextField as MUITextField, FormControl } from '@mui/material';
 import { ErrorMessage } from '@/core/components/common';
 import { addErrorIntoField } from '@/core/utils';
 
-type TypeProps = {
+type PropsType = {
   label: string;
   control: any;
   name: string;
   errors: any;
 };
 
-const TextField: React.FC<TypeProps> = (props) => {
+const TextField: React.FC<PropsType> = (props) => {
   return (
     <FormControl fullWidth sx={{ mb: 1 }}>
       <Controller

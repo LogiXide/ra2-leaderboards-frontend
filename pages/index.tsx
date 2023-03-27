@@ -4,7 +4,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { Typography, Stack } from '@mui/material';
 
-type TypeProps = {
+type PropsType = {
   // Add custom props here
 };
 
@@ -25,7 +25,7 @@ const Home: React.FC = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps<TypeProps> = async ({
+export const getStaticProps: GetStaticProps<PropsType> = async ({
   locale,
 }) => ({
   props: {

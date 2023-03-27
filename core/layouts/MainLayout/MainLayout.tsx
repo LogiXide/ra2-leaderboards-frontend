@@ -2,11 +2,11 @@ import { Container } from '@mui/system';
 
 import { Header } from '@/core/components/common';
 
-type TypeProps = {
+type PropsType = {
   children: React.ReactNode;
 };
 
-const MainLayout: React.FC<TypeProps> = (props) => {
+const MainLayout: React.FC<PropsType> = (props) => {
   return (
     <>
       <Header />

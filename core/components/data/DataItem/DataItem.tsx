@@ -1,10 +1,10 @@
 import { TableCell } from '@mui/material';
 
-type TypeProps = {
+type PropsType = {
   content: string | number | React.ReactNode;
 };
 
-const DataItem: React.FC<TypeProps> = (props) => {
+const DataItem: React.FC<PropsType> = (props) => {
   return <TableCell>{props.content}</TableCell>;
 };
 

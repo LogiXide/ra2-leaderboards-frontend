@@ -5,14 +5,14 @@ import { FormControl, TextField, MenuItem } from '@mui/material';
 import { ErrorMessage } from '@/core/components/common';
 import { addErrorIntoField } from '@/core/utils';
 
-type TypeProps = {
+type PropsType = {
   label: string;
   control: any;
   name: string;
   errors: any;
 };
 
-const SelectField: React.FC<TypeProps> = (props) => {
+const SelectField: React.FC<PropsType> = (props) => {
   return (
     <FormControl fullWidth sx={{ mb: 1 }}>
       <Controller

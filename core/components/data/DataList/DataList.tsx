@@ -2,12 +2,12 @@ import { Table, TableHead, TableBody, TableRow } from '@mui/material';
 
 import { DataColumn, DataItem, TypeDataColumn } from '@/core/components/data';
 
-type TypeProps<T> = {
+type PropsType<T> = {
   columns: TypeDataColumn[];
   list: T[];
 };
 
-const DataList = <T,>(props: TypeProps<T>) => {
+const DataList = <T,>(props: PropsType<T>) => {
   return (
     <Table>
       <TableHead>
