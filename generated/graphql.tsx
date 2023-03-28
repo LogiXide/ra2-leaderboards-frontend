@@ -340,6 +340,13 @@ export type GetMapQueryVariables = Exact<{
 
 export type GetMapQuery = { __typename?: 'Query', map?: { __typename?: 'Map', id: number, name: string, spots: number, author: string, imageUrl: string } | null };
 
+export type GetPlayersQueryVariables = Exact<{
+  options?: InputMaybe<PlayersOptions>;
+}>;
+
+
+export type GetPlayersQuery = { __typename?: 'Query', players: { __typename?: 'PlayersResponse', totalPages: number, data: Array<{ __typename?: 'Map', id: number, name: string } | null> } };
+
 export type GetTeamsQueryVariables = Exact<{
   options?: InputMaybe<TeamsOptions>;
 }>;
@@ -654,6 +661,45 @@ export function useGetMapLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Get
 export type GetMapQueryHookResult = ReturnType<typeof useGetMapQuery>;
 export type GetMapLazyQueryHookResult = ReturnType<typeof useGetMapLazyQuery>;
 export type GetMapQueryResult = Apollo.QueryResult<GetMapQuery, GetMapQueryVariables>;
+export const GetPlayersDocument = gql`
+    query GetPlayers($options: PlayersOptions) {
+  players(options: $options) {
+    data {
+      id
+      name
+    }
+    totalPages
+  }
+}
+    `;
+
+/**
+ * __useGetPlayersQuery__
+ *
+ * To run a query within a React component, call `useGetPlayersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPlayersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPlayersQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetPlayersQuery(baseOptions?: Apollo.QueryHookOptions<GetPlayersQuery, GetPlayersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPlayersQuery, GetPlayersQueryVariables>(GetPlayersDocument, options);
+      }
+export function useGetPlayersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPlayersQuery, GetPlayersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPlayersQuery, GetPlayersQueryVariables>(GetPlayersDocument, options);
+        }
+export type GetPlayersQueryHookResult = ReturnType<typeof useGetPlayersQuery>;
+export type GetPlayersLazyQueryHookResult = ReturnType<typeof useGetPlayersLazyQuery>;
+export type GetPlayersQueryResult = Apollo.QueryResult<GetPlayersQuery, GetPlayersQueryVariables>;
 export const GetTeamsDocument = gql`
     query GetTeams($options: TeamsOptions) {
   teams(options: $options) {
