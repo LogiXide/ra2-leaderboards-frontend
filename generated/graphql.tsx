@@ -304,6 +304,13 @@ export type GetMapPoolsQueryVariables = Exact<{
 
 export type GetMapPoolsQuery = { __typename?: 'Query', mapPools: { __typename?: 'MapPoolsResponse', totalPages: number, data: Array<{ __typename?: 'MapPool', id: number, name: string } | null> } };
 
+export type GetMapPoolQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetMapPoolQuery = { __typename?: 'Query', mapPool?: { __typename?: 'MapPool', id: number, name: string } | null };
+
 export type UpdateMapMutationVariables = Exact<{
   input: UpdateMapInput;
   id: Scalars['Int'];
@@ -325,6 +332,20 @@ export type GetMapsQueryVariables = Exact<{
 
 
 export type GetMapsQuery = { __typename?: 'Query', maps: { __typename?: 'MapsResponse', totalPages: number, data: Array<{ __typename?: 'Map', id: number, name: string, spots: number, author: string, imageUrl: string } | null> } };
+
+export type GetMapQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetMapQuery = { __typename?: 'Query', map?: { __typename?: 'Map', id: number, name: string, spots: number, author: string, imageUrl: string } | null };
+
+export type GetTeamsQueryVariables = Exact<{
+  options?: InputMaybe<TeamsOptions>;
+}>;
+
+
+export type GetTeamsQuery = { __typename?: 'Query', teams: { __typename?: 'TeamsResponse', totalPages: number, data: Array<{ __typename?: 'Map', id: number, name: string } | null> } };
 
 
 export const CreateMapPoolDocument = gql`
@@ -438,6 +459,42 @@ export function useGetMapPoolsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetMapPoolsQueryHookResult = ReturnType<typeof useGetMapPoolsQuery>;
 export type GetMapPoolsLazyQueryHookResult = ReturnType<typeof useGetMapPoolsLazyQuery>;
 export type GetMapPoolsQueryResult = Apollo.QueryResult<GetMapPoolsQuery, GetMapPoolsQueryVariables>;
+export const GetMapPoolDocument = gql`
+    query GetMapPool($id: Int!) {
+  mapPool(id: $id) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useGetMapPoolQuery__
+ *
+ * To run a query within a React component, call `useGetMapPoolQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMapPoolQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMapPoolQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetMapPoolQuery(baseOptions: Apollo.QueryHookOptions<GetMapPoolQuery, GetMapPoolQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMapPoolQuery, GetMapPoolQueryVariables>(GetMapPoolDocument, options);
+      }
+export function useGetMapPoolLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMapPoolQuery, GetMapPoolQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMapPoolQuery, GetMapPoolQueryVariables>(GetMapPoolDocument, options);
+        }
+export type GetMapPoolQueryHookResult = ReturnType<typeof useGetMapPoolQuery>;
+export type GetMapPoolLazyQueryHookResult = ReturnType<typeof useGetMapPoolLazyQuery>;
+export type GetMapPoolQueryResult = Apollo.QueryResult<GetMapPoolQuery, GetMapPoolQueryVariables>;
 export const UpdateMapDocument = gql`
     mutation UpdateMap($input: UpdateMapInput!, $id: Int!) {
   updateMap(input: $input, id: $id) {
@@ -558,3 +615,81 @@ export function useGetMapsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetMapsQueryHookResult = ReturnType<typeof useGetMapsQuery>;
 export type GetMapsLazyQueryHookResult = ReturnType<typeof useGetMapsLazyQuery>;
 export type GetMapsQueryResult = Apollo.QueryResult<GetMapsQuery, GetMapsQueryVariables>;
+export const GetMapDocument = gql`
+    query GetMap($id: Int!) {
+  map(id: $id) {
+    id
+    name
+    spots
+    author
+    imageUrl
+  }
+}
+    `;
+
+/**
+ * __useGetMapQuery__
+ *
+ * To run a query within a React component, call `useGetMapQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMapQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMapQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetMapQuery(baseOptions: Apollo.QueryHookOptions<GetMapQuery, GetMapQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMapQuery, GetMapQueryVariables>(GetMapDocument, options);
+      }
+export function useGetMapLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMapQuery, GetMapQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMapQuery, GetMapQueryVariables>(GetMapDocument, options);
+        }
+export type GetMapQueryHookResult = ReturnType<typeof useGetMapQuery>;
+export type GetMapLazyQueryHookResult = ReturnType<typeof useGetMapLazyQuery>;
+export type GetMapQueryResult = Apollo.QueryResult<GetMapQuery, GetMapQueryVariables>;
+export const GetTeamsDocument = gql`
+    query GetTeams($options: TeamsOptions) {
+  teams(options: $options) {
+    data {
+      id
+      name
+    }
+    totalPages
+  }
+}
+    `;
+
+/**
+ * __useGetTeamsQuery__
+ *
+ * To run a query within a React component, call `useGetTeamsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTeamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTeamsQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetTeamsQuery(baseOptions?: Apollo.QueryHookOptions<GetTeamsQuery, GetTeamsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTeamsQuery, GetTeamsQueryVariables>(GetTeamsDocument, options);
+      }
+export function useGetTeamsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTeamsQuery, GetTeamsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTeamsQuery, GetTeamsQueryVariables>(GetTeamsDocument, options);
+        }
+export type GetTeamsQueryHookResult = ReturnType<typeof useGetTeamsQuery>;
+export type GetTeamsLazyQueryHookResult = ReturnType<typeof useGetTeamsLazyQuery>;
+export type GetTeamsQueryResult = Apollo.QueryResult<GetTeamsQuery, GetTeamsQueryVariables>;
