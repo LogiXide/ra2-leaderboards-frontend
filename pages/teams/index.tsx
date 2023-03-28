@@ -1,18 +1,57 @@
-import { Stack, Typography } from '@mui/material';
+import { useQuery } from '@apollo/client';
+import { useImmer } from 'use-immer';
 
-const Players: React.FC = () => {
+import { Box } from '@mui/material';
+
+import { config } from '@/config';
+import { DataList } from '@/core/components/data';
+import { Pagination } from '@/core/components/common';
+
+import { GetTeamsDocument, GetTeamsQuery } from '@/generated/graphql';
+
+const columns = [
+  {
+    id: 1,
+    label: 'Name',
+    render: (x: any) => x.name,
+  },
+];
+
+const Teams: React.FC = () => {
+  const [pageInfo, setPageInfo] = useImmer({
+    currentPage: 1,
+    limit: config.pagination.size,
+    offset: 0,
+  });
+
+  const { data, loading, error } = useQuery<GetTeamsQuery>(GetTeamsDocument, {
+    variables: {
+      options: {
+        offset: pageInfo.offset,
+        limit: pageInfo.limit,
+      },
+    },
+  });
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (error) {
+    return <h1>Error...</h1>;
+  }
+
   return (
-    <Stack
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="65vh"
-    >
-      <Typography variant="h1" component="h1">
-        Teams!
-      </Typography>
-    </Stack>
+    <Box mt={2}>
+      <DataList list={data?.teams.data || []} columns={columns} />
+
+      <Pagination
+        pageInfo={pageInfo}
+        setPageInfo={setPageInfo}
+        totalPages={data?.teams.totalPages || 0}
+      />
+    </Box>
   );
 };
 
-export default Players;
+export default Teams;
