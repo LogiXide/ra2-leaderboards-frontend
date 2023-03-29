@@ -56,17 +56,20 @@ const MapForm: React.FC<PropsType> = (props) => {
     });
   }, [reset, props.valuesForm]);
 
-  const onSubmit = useCallback((values: FormValuesType) => {
-    if (props.onCreateMap) {
-      props.onCreateMap(values);
+  const onSubmit = useCallback(
+    (values: FormValuesType) => {
+      if (props.onCreateMap) {
+        props.onCreateMap(values);
 
-      props.onClose();
-    }
+        props.onClose();
+      }
 
-    if (props.onUpdateMap) {
-      props.onUpdateMap(values);
-    }
-  }, [props]);
+      if (props.onUpdateMap) {
+        props.onUpdateMap(values);
+      }
+    },
+    [props]
+  );
 
   return (
     <Box

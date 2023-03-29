@@ -53,7 +53,7 @@ const MapPools: React.FC = () => {
   );
 
   const handleOpen = () => setOpenModal(true);
-  
+
   const handleClose = () => setOpenModal(false);
 
   const handleCreateMapPool = useCallback(

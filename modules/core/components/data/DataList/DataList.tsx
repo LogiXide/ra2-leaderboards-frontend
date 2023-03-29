@@ -1,9 +1,13 @@
 import { Table, TableHead, TableBody, TableRow } from '@mui/material';
 
-import { DataColumn, DataItem, TypeDataColumn } from '@/modules/core/components/data';
+import {
+  DataColumn,
+  DataItem,
+  DataColumnType,
+} from '@/modules/core/components/data';
 
 type PropsType<T> = {
-  columns: TypeDataColumn[];
+  columns: DataColumnType[];
   list: T[];
 };
 
