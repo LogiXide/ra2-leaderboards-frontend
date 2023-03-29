@@ -7,7 +7,7 @@ import { MapPoolForm } from '@/modules/maps/components/mapPools/forms';
 import { styles } from '../styles';
 
 type FormValuesType = {
-  mapPoolName: string;
+  name: string;
 };
 
 type PropsType = {

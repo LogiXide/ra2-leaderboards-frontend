@@ -9,18 +9,18 @@ import { Box, Button, Stack } from '@mui/material';
 import { TextField } from '@/modules/core/components/forms/fields';
 
 type FormValuesType = {
-  mapPoolName: string;
+  name: string;
 };
 
 type PropsType = {
-  valueForm?: string;
+  initialValues?: FormValuesType;
   onClose: () => void;
   onCreateMapPool?: (data: FormValuesType) => void;
   onUpdateMapPool?: (data: FormValuesType) => void;
 };
 
 const mapPoolSchema = object().shape({
-  mapPoolName: string().required('Map pool name is required'),
+  name: string().required('Map pool name is required'),
 });
 
 const MapPoolForm: React.FC<PropsType> = (props) => {
@@ -31,16 +31,16 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
     reset,
   } = useForm<FormValuesType>({
     defaultValues: {
-      mapPoolName: props.valueForm || '',
+      name: props.initialValues?.name || '',
     },
     resolver: yupResolver(mapPoolSchema),
   });
 
   useEffect(() => {
     reset({
-      mapPoolName: props.valueForm,
+      name: props.initialValues?.name,
     });
-  }, [reset, props.valueForm]);
+  }, [reset, props.initialValues?.name]);
 
   const onSubmit = useCallback(
     (data: FormValuesType) => {
@@ -66,9 +66,9 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
     >
       <Stack direction="column" spacing={1}>
         <TextField
-          label="Name Map Pool"
+          label="Name"
           control={control}
-          name="mapPoolName"
+          name="name"
           errors={errors}
         />
 
