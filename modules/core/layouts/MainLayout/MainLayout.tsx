@@ -1,6 +1,6 @@
 import { Container } from '@mui/system';
 
-import { Header } from '@/core/components/common';
+import { Header } from '@/modules/core/components/common';
 
 type PropsType = {
   children: React.ReactNode;

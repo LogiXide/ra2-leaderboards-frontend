@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Box, Button, Stack } from '@mui/material';
 
-import { TextField } from '@/core/components/forms/fields';
+import { TextField } from '@/modules/core/components/forms/fields';
 
 type FormValuesType = {
   mapPoolName: string;

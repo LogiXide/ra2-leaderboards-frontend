@@ -6,9 +6,9 @@ import Link from 'next/link';
 import { Button, Stack, Box } from '@mui/material';
 
 import { config } from '@/config';
-import { DataList } from '@/core/components/data';
-import { Pagination } from '@/core/components/common';
-import { BasicModal } from '@/core/components/modals';
+import { DataList } from '@/modules/core/components/data';
+import { Pagination } from '@/modules/core/components/common';
+import { BasicModal } from '@/modules/core/components/modals';
 import { MapPoolForm } from '@/modules/maps/components/mapPools/forms';
 import { CREATE_MAP_POOL } from '@/modules/maps/api/mapPools';
 

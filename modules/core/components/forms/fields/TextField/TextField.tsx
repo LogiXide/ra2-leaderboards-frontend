@@ -2,8 +2,8 @@ import { Controller } from 'react-hook-form';
 
 import { TextField as MUITextField, FormControl } from '@mui/material';
 
-import { ErrorMessage } from '@/core/components/common';
-import { addErrorIntoField } from '@/core/utils';
+import { ErrorMessage } from '@/modules/core/components/common';
+import { addErrorIntoField } from '@/modules/core/utils';
 
 type PropsType = {
   label: string;

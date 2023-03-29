@@ -6,9 +6,9 @@ import { useImmer } from 'use-immer';
 import { Button, Stack, Box } from '@mui/material';
 
 import { config } from '@/config';
-import { DataList } from '@/core/components/data';
-import { Pagination } from '@/core/components/common';
-import { BasicModal } from '@/core/components/modals';
+import { DataList } from '@/modules/core/components/data';
+import { Pagination } from '@/modules/core/components/common';
+import { BasicModal } from '@/modules/core/components/modals';
 import { MapForm } from '@/modules/maps/components/maps/forms/MapForm';
 import { CREATE_MAP } from '@/modules/maps/api/maps';
 
