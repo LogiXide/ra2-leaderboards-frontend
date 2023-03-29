@@ -1,15 +1,14 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import Link from 'next/link';
 import { useImmer } from 'use-immer';
 
-import { Button, Stack, Box } from '@mui/material';
+import { Stack, Box } from '@mui/material';
 
 import { config } from '@/config';
 import { DataList } from '@/modules/core/components/data';
+import { CreateMapModal } from '@/modules/core/components/modals';
 import { Pagination } from '@/modules/core/components/common';
-import { BasicModal } from '@/modules/core/components/modals';
-import { MapForm } from '@/modules/maps/components/maps/forms/MapForm';
 import { CREATE_MAP } from '@/modules/maps/api/maps';
 
 import {
@@ -43,7 +42,6 @@ const columns = [
 ];
 
 const Maps: React.FC = () => {
-  const [openModal, setOpenModal] = useState(false);
   const [pageInfo, setPageInfo] = useImmer({
     currentPage: 1,
     limit: config.pagination.size,
@@ -63,10 +61,6 @@ const Maps: React.FC = () => {
       },
     },
   });
-
-  const handleOpen = () => setOpenModal(true);
-
-  const handleClose = () => setOpenModal(false);
 
   const handleCreateMap = useCallback(
     (data: {
@@ -100,9 +94,7 @@ const Maps: React.FC = () => {
   return (
     <Box mt={2}>
       <Stack justifyContent="flex-end" alignItems="flex-end">
-        <Button onClick={handleOpen} variant="contained">
-          Add Map
-        </Button>
+        <CreateMapModal onCreateMap={handleCreateMap} />
       </Stack>
 
       <DataList list={data?.maps.data || []} columns={columns} />
@@ -112,10 +104,6 @@ const Maps: React.FC = () => {
         setPageInfo={setPageInfo}
         totalPages={data?.maps.totalPages || 0}
       />
-
-      <BasicModal title="Create Map" open={openModal} onClose={handleClose}>
-        <MapForm onCreateMap={handleCreateMap} onClose={handleClose} />
-      </BasicModal>
     </Box>
   );
 };
