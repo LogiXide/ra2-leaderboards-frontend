@@ -1,3 +1,1 @@
-import { MapForm } from './MapForm';
-
-export { MapForm };
+export * from './MapForm';

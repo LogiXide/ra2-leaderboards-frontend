@@ -1,3 +1,1 @@
-import { addErrorIntoField } from './addErrorIntoField';
-
-export { addErrorIntoField };
+export * from './addErrorIntoField';

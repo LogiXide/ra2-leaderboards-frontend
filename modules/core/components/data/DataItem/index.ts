@@ -1,3 +1,1 @@
-import { DataItem } from './DataItem';
-
-export { DataItem };
+export * from './DataItem';

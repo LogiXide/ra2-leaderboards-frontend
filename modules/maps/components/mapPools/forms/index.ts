@@ -1,3 +1,1 @@
-import { MapPoolForm } from './MapPoolForm';
-
-export { MapPoolForm };
+export * from './MapPoolForm';

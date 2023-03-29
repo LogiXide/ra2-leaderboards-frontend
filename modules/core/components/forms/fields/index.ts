@@ -1,4 +1,2 @@
-import { SelectField } from './SelectField';
-import { TextField } from './TextField';
-
-export { SelectField, TextField };
+export * from './SelectField';
+export * from './TextField';

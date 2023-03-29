@@ -1,3 +1,1 @@
-import { DataList } from './DataList';
-
-export { DataList };
+export * from './DataList';

@@ -1,5 +1,3 @@
-import { ErrorMessage } from './ErrorMessage';
-import { Header } from './Header';
-import { Pagination } from './Pagination';
-
-export { ErrorMessage, Header, Pagination };
+export * from './ErrorMessage';
+export * from './Header';
+export * from './Pagination';

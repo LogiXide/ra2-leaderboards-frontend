@@ -1,6 +1,6 @@
 import { TableCell } from '@mui/material';
 
-export type DataColumnType = {
+type DataColumnType = {
   id: number;
   label: string;
   render: (x: any) => number | string | React.ReactNode;
@@ -14,4 +14,4 @@ const DataColumn: React.FC<PropsType> = (props) => {
   return <TableCell>{props.label}</TableCell>;
 };
 
-export { DataColumn };
+export { DataColumn, type DataColumnType };

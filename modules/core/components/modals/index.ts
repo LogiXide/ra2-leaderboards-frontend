@@ -1,3 +1,1 @@
-import { BasicModal } from './BasicModal';
-
-export { BasicModal };
+export * from './BasicModal';
