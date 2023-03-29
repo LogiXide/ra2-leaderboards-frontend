@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@apollo/client';
 
 import { Box } from '@mui/material';
 
-import { MapPoolForm } from '@/modules/maps/components/mapPools/forms';
+import { MapPoolForm } from '@/modules/maps/components';
 import { GET_MAP_POOL } from '@/modules/maps/api/mapPools';
 
 import {

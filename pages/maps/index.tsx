@@ -7,7 +7,7 @@ import { Stack, Box } from '@mui/material';
 
 import { config } from '@/config';
 import { DataList } from '@/modules/core/components/data';
-import { CreateMapModal } from '@/modules/core/components/modals';
+import { CreateMapModal } from '@/modules/maps/components';
 import { Pagination } from '@/modules/core/components/common';
 import { CREATE_MAP } from '@/modules/maps/api/maps';
 

@@ -2,9 +2,7 @@ import { useState } from 'react';
 
 import { Box, Modal, Typography, Button } from '@mui/material';
 
-import { MapForm } from '@/modules/maps/components/maps/forms';
-
-import { styles } from '../styles';
+import { MapForm } from '@/modules/maps/components';
 
 type FormValuesType = {
   name: string;
@@ -15,6 +13,19 @@ type FormValuesType = {
 
 type PropsType = {
   onCreateMap: (data: FormValuesType) => void;
+};
+
+const styles = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  maxWidth: 500,
+  width: '100%',
+  bgcolor: 'background.paper',
+  borderRadius: 1,
+  boxShadow: 24,
+  padding: 3,
 };
 
 const CreateMapModal: React.FC<PropsType> = (props) => {

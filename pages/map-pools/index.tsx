@@ -7,7 +7,7 @@ import { Stack, Box } from '@mui/material';
 
 import { config } from '@/config';
 import { DataList } from '@/modules/core/components/data';
-import { CreateMapPoolModal } from '@/modules/core/components/modals';
+import { CreateMapPoolModal } from '@/modules/maps/components';
 import { Pagination } from '@/modules/core/components/common';
 import { CREATE_MAP_POOL } from '@/modules/maps/api/mapPools';
 
@@ -51,11 +51,11 @@ const MapPools: React.FC = () => {
   );
 
   const handleCreateMapPool = useCallback(
-    (data: { mapPoolName: string }) => {
+    (data: { name: string }) => {
       createMapPool({
         variables: {
           input: {
-            name: data.mapPoolName,
+            name: data.name,
           },
         },
       });
