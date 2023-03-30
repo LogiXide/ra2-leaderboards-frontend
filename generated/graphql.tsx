@@ -287,7 +287,7 @@ export type CreateMapPoolMutationVariables = Exact<{
 }>;
 
 
-export type CreateMapPoolMutation = { __typename?: 'Mutation', createMapPool: { __typename?: 'CreateMapPoolResponse', mapPools: Array<{ __typename?: 'MapPool', name: string }> } };
+export type CreateMapPoolMutation = { __typename?: 'Mutation', createMapPool: { __typename?: 'CreateMapPoolResponse', mapPools: Array<{ __typename?: 'MapPool', id: number, name: string }> } };
 
 export type UpdateMapPoolMutationVariables = Exact<{
   input: UpdateMapPoolInput;
@@ -324,7 +324,7 @@ export type CreateMapMutationVariables = Exact<{
 }>;
 
 
-export type CreateMapMutation = { __typename?: 'Mutation', createMap: { __typename?: 'CreateMapResponse', maps: Array<{ __typename?: 'Map', name: string, author: string, imageUrl: string, spots: number }> } };
+export type CreateMapMutation = { __typename?: 'Mutation', createMap: { __typename?: 'CreateMapResponse', maps: Array<{ __typename?: 'Map', id: number, name: string, author: string, imageUrl: string, spots: number }> } };
 
 export type GetMapsQueryVariables = Exact<{
   options?: InputMaybe<MapsOptions>;
@@ -359,6 +359,7 @@ export const CreateMapPoolDocument = gql`
     mutation CreateMapPool($input: CreateMapPoolInput!) {
   createMapPool(input: $input) {
     mapPools {
+      id
       name
     }
   }
@@ -546,6 +547,7 @@ export const CreateMapDocument = gql`
     mutation createMap($input: CreateMapInput!) {
   createMap(input: $input) {
     maps {
+      id
       name
       author
       imageUrl

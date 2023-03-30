@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useImmer } from 'use-immer';
 import { useQuery, useMutation } from '@apollo/client';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import { Stack, Box } from '@mui/material';
 
@@ -33,10 +34,18 @@ const MapPools: React.FC = () => {
     offset: 0,
   });
 
+  const router = useRouter();
+
   const [createMapPool] = useMutation<
     CreateMapPoolMutation,
     CreateMapPoolMutationVariables
-  >(CREATE_MAP_POOL);
+  >(CREATE_MAP_POOL, {
+    onCompleted(data) {
+      router.push({
+        pathname: `/map-pools/${data.createMapPool.mapPools[0].id}`,
+      });
+    },
+  });
 
   const { data, loading, error } = useQuery<GetMapPoolsQuery>(
     GetMapPoolsDocument,

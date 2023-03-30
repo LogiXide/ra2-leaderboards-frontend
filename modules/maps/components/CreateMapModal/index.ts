@@ -1,1 +1,1 @@
-export * from './createMapModal';
+export * from './CreateMapModal';

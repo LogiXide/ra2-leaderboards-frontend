@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import Link from 'next/link';
 import { useImmer } from 'use-immer';
+import { useRouter } from 'next/router';
 
 import { Stack, Box } from '@mui/material';
 
@@ -48,10 +49,18 @@ const Maps: React.FC = () => {
     offset: 0,
   });
 
+  const router = useRouter();
+
   const [createMap] = useMutation<
     CreateMapMutation,
     CreateMapMutationVariables
-  >(CREATE_MAP);
+  >(CREATE_MAP, {
+    onCompleted(data) {
+      router.push({
+        pathname: `/maps/${data.createMap.maps[0].id}`,
+      });
+    },
+  });
 
   const { data, loading, error } = useQuery<GetMapsQuery>(GetMapsDocument, {
     variables: {
