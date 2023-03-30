@@ -4,8 +4,8 @@ import { useImmer } from 'use-immer';
 import { Box } from '@mui/material';
 
 import { config } from '@/config';
-import { DataList } from '@/core/components/data';
-import { Pagination } from '@/core/components/common';
+import { DataList } from '@/modules/core/components/data';
+import { Pagination } from '@/modules/core/components/common';
 
 import { GetPlayersDocument, GetPlayersQuery } from '@/generated/graphql';
 

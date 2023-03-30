@@ -5,7 +5,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { Box } from '@mui/material';
 
 import { GET_MAP } from '@/modules/maps/api/maps';
-import { MapForm } from '@/modules/maps/components/maps/forms';
+import { MapForm } from '@/modules/maps/components';
 
 import {
   UpdateMapDocument,
@@ -21,7 +21,7 @@ type FormValuesType = {
 };
 
 const MapDetail: React.FC = () => {
-  const [valuesForm, setValuesForm] = useState<FormValuesType>({
+  const [formValues, setFormValues] = useState<FormValuesType>({
     name: '',
     author: '',
     imageUrl: '',
@@ -39,7 +39,7 @@ const MapDetail: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      setValuesForm({
+      setFormValues({
         name: data.map.name,
         author: data.map.author,
         spots: data.map.spots,
@@ -77,7 +77,7 @@ const MapDetail: React.FC = () => {
     <Box mt={2}>
       <MapForm
         onClose={() => null}
-        valuesForm={valuesForm}
+        valuesForm={formValues}
         onUpdateMap={handleUpdateMap}
       />
     </Box>

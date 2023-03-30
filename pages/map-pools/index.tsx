@@ -1,15 +1,14 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useImmer } from 'use-immer';
 import { useQuery, useMutation } from '@apollo/client';
 import Link from 'next/link';
 
-import { Button, Stack, Box } from '@mui/material';
+import { Stack, Box } from '@mui/material';
 
 import { config } from '@/config';
-import { DataList } from '@/core/components/data';
-import { Pagination } from '@/core/components/common';
-import { BasicModal } from '@/core/components/modals';
-import { MapPoolForm } from '@/modules/maps/components/mapPools/forms';
+import { DataList } from '@/modules/core/components/data';
+import { CreateMapPoolModal } from '@/modules/maps/components';
+import { Pagination } from '@/modules/core/components/common';
 import { CREATE_MAP_POOL } from '@/modules/maps/api/mapPools';
 
 import {
@@ -28,7 +27,6 @@ const columns = [
 ];
 
 const MapPools: React.FC = () => {
-  const [openModal, setOpenModal] = useState(false);
   const [pageInfo, setPageInfo] = useImmer({
     currentPage: 1,
     limit: config.pagination.size,
@@ -52,16 +50,12 @@ const MapPools: React.FC = () => {
     }
   );
 
-  const handleOpen = () => setOpenModal(true);
-  
-  const handleClose = () => setOpenModal(false);
-
   const handleCreateMapPool = useCallback(
-    (data: { mapPoolName: string }) => {
+    (data: { name: string }) => {
       createMapPool({
         variables: {
           input: {
-            name: data.mapPoolName,
+            name: data.name,
           },
         },
       });
@@ -80,9 +74,7 @@ const MapPools: React.FC = () => {
   return (
     <Box mt={2}>
       <Stack justifyContent="flex-end" alignItems="flex-end">
-        <Button onClick={handleOpen} variant="contained">
-          Add Map Pools
-        </Button>
+        <CreateMapPoolModal onCreateMapPool={handleCreateMapPool} />
       </Stack>
 
       <DataList list={data?.mapPools.data || []} columns={columns} />
@@ -92,17 +84,6 @@ const MapPools: React.FC = () => {
         setPageInfo={setPageInfo}
         totalPages={data?.mapPools.totalPages || 0}
       />
-
-      <BasicModal
-        open={openModal}
-        onClose={handleClose}
-        title="Create Map Pool"
-      >
-        <MapPoolForm
-          onCreateMapPool={handleCreateMapPool}
-          onClose={handleClose}
-        />
-      </BasicModal>
     </Box>
   );
 };

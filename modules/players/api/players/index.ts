@@ -1,3 +1,1 @@
-import { GET_PLAYERS } from './queries';
-
-export { GET_PLAYERS };
+export * from './queries';

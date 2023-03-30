@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@apollo/client';
 
 import { Box } from '@mui/material';
 
-import { MapPoolForm } from '@/modules/maps/components/mapPools/forms';
+import { MapPoolForm } from '@/modules/maps/components';
 import { GET_MAP_POOL } from '@/modules/maps/api/mapPools';
 
 import {
@@ -13,8 +13,14 @@ import {
   UpdateMapPoolMutationVariables,
 } from '@/generated/graphql';
 
+type FormValuesType = {
+  name: string;
+};
+
 const MapPoolDetail = () => {
-  const [valueForm, setValueForm] = useState<string>('');
+  const [formValues, setFormValues] = useState<FormValuesType>({
+    name: '',
+  });
   const router = useRouter();
   const { id } = router.query;
 
@@ -27,7 +33,9 @@ const MapPoolDetail = () => {
 
   useEffect(() => {
     if (data) {
-      setValueForm(data.mapPool.name);
+      setFormValues({
+        name: data.mapPool.name,
+      });
     }
   }, [data]);
 
@@ -36,11 +44,11 @@ const MapPoolDetail = () => {
     UpdateMapPoolMutationVariables
   >(UpdateMapPoolDocument);
 
-  const handleUpdateMapPool = (data: { mapPoolName: string }) => {
+  const handleUpdateMapPool = (data: { name: string }) => {
     updateMapPool({
       variables: {
         input: {
-          name: data.mapPoolName,
+          name: data.name,
         },
 
         id: Number(id),
@@ -52,7 +60,7 @@ const MapPoolDetail = () => {
     <Box mt={2}>
       <MapPoolForm
         onUpdateMapPool={handleUpdateMapPool}
-        valueForm={valueForm}
+        initialValues={formValues}
         onClose={() => null}
       />
     </Box>

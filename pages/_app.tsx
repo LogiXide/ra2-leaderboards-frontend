@@ -7,9 +7,9 @@ import { CacheProvider, EmotionCache } from '@emotion/react';
 import { theme } from 'shared/theme';
 import createEmotionCache from 'shared/createEmotionCache';
 import { ApolloProvider } from '@apollo/client';
-import { client } from '@/core/apollo/coreApi';
+import { client } from '@/modules/core/apollo/coreApi';
 
-import { MainLayout } from '@/core/layouts';
+import { MainLayout } from '@/modules/core/layouts';
 
 import '@/styles/globals.css';
 
