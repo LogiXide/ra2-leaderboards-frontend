@@ -1,1 +1,1 @@
-export * from './createMapPoolModal';
+export * from './CreateMapPoolModal';
