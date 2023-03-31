@@ -27,4 +27,18 @@ const GET_MAP = gql`
   }
 `;
 
-export { GET_MAPS, GET_MAP };
+const SEARCH_MAP = gql`
+  query searchMap($where: MapsWhere, $options: MapsOptions) {
+    maps(where: $where, options: $options) {
+      data {
+        id
+        name
+        spots
+        author
+        imageUrl
+      }
+    }
+  }
+`;
+
+export { GET_MAPS, GET_MAP, SEARCH_MAP };
