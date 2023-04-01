@@ -1,19 +1,29 @@
-import { useQuery } from '@apollo/client';
+import { useCallback } from 'react';
 import { useImmer } from 'use-immer';
+import { useQuery, useMutation } from '@apollo/client';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
-import { Box } from '@mui/material';
+import { Stack, Box } from '@mui/material';
 
 import { config } from '@/config';
 import { DataList } from '@/modules/core/components/data';
+import { CreatePlayerModal } from '@/modules/players/components';
 import { Pagination } from '@/modules/core/components/common';
+import { CREATE_PLAYER } from '@/modules/players/api/players';
 
-import { GetPlayersDocument, GetPlayersQuery } from '@/generated/graphql';
+import {
+  GetPlayersDocument,
+  GetPlayersQuery,
+  CreatePlayerMutation,
+  CreatePlayerMutationVariables,
+} from '@/generated/graphql';
 
 const columns = [
   {
     id: 1,
     label: 'Name',
-    render: (x: any) => x.name,
+    render: (x: any) => <Link href={`/players/${x.id}`}>{x.name}</Link>,
   },
 ];
 
@@ -22,6 +32,19 @@ const Players: React.FC = () => {
     currentPage: 1,
     limit: config.pagination.size,
     offset: 0,
+  });
+
+  const router = useRouter();
+
+  const [createPlayer] = useMutation<
+    CreatePlayerMutation,
+    CreatePlayerMutationVariables
+  >(CREATE_PLAYER, {
+    onCompleted(data) {
+      router.push({
+        pathname: `/players/${data.createPlayer.players[0].id}`,
+      });
+    },
   });
 
   const { data, loading, error } = useQuery<GetPlayersQuery>(
@@ -36,6 +59,19 @@ const Players: React.FC = () => {
     }
   );
 
+  const handleCreatePlayer = useCallback(
+    (data: { name: string }) => {
+      createPlayer({
+        variables: {
+          input: {
+            name: data.name,
+          },
+        },
+      });
+    },
+    [createPlayer]
+  );
+
   if (loading) {
     return <h1>Loading...</h1>;
   }
@@ -46,6 +82,10 @@ const Players: React.FC = () => {
 
   return (
     <Box mt={2}>
+      <Stack justifyContent="flex-end" alignItems="flex-end">
+        <CreatePlayerModal onCreatePlayer={handleCreatePlayer} />
+      </Stack>
+
       <DataList list={data?.players.data || []} columns={columns} />
 
       <Pagination
