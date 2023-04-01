@@ -13,9 +13,7 @@ import {
   UpdatePlayerMutationVariables,
 } from '@/generated/graphql';
 
-type FormValuesType = {
-  name: string;
-};
+import type { FormValuesType } from '@/modules/players/components';
 
 const PlayerDetail = () => {
   const [formValues, setFormValues] = useState<FormValuesType>({

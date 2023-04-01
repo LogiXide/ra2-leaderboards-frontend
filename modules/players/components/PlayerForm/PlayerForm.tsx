@@ -8,7 +8,7 @@ import { Box, Button, Stack } from '@mui/material';
 
 import { TextField } from '@/modules/core/components/forms/fields';
 
-type FormValuesType = {
+export type FormValuesType = {
   name: string;
 };
 
@@ -50,9 +50,7 @@ const PlayerForm: React.FC<PropsType> = (props) => {
         props.onClose();
       }
 
-      if (props.onUpdatePlayer) {
-        props.onUpdatePlayer(data);
-      }
+      props.onUpdatePlayer?.(data);
     },
     [props]
   );
@@ -65,12 +63,7 @@ const PlayerForm: React.FC<PropsType> = (props) => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <Stack direction="column" spacing={1}>
-        <TextField
-          label="Name"
-          control={control}
-          name="name"
-          errors={errors}
-        />
+        <TextField label="Name" control={control} name="name" errors={errors} />
 
         <Stack justifyContent="flex-end" direction="row" spacing={2}>
           {props.onCreatePlayer && (
