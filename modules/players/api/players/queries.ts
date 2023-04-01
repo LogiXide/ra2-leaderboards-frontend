@@ -12,4 +12,13 @@ const GET_PLAYERS = gql`
   }
 `;
 
-export { GET_PLAYERS };
+const GET_PLAYER = gql`
+  query GetPlayer($id: Int!) {
+    player(id: $id) {
+      id
+      name
+    }
+  }
+`;
+
+export { GET_PLAYERS, GET_PLAYER };

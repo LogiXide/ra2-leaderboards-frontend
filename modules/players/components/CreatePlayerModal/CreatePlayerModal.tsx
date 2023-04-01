@@ -2,14 +2,14 @@ import { useState } from 'react';
 
 import { Box, Modal, Typography, Button } from '@mui/material';
 
-import { MapPoolForm } from '@/modules/maps/components';
+import { PlayerForm } from '@/modules/players/components';
 
 type FormValuesType = {
   name: string;
 };
 
 type PropsType = {
-  onCreateMapPool: (data: FormValuesType) => void;
+  onCreatePlayer: (data: FormValuesType) => void;
 };
 
 const styles = {
@@ -25,7 +25,7 @@ const styles = {
   padding: 3,
 };
 
-const CreateMapPoolModal: React.FC<PropsType> = (props) => {
+const CreatePlayerModal: React.FC<PropsType> = (props) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const handleOpen = () => setOpenModal(true);
@@ -34,7 +34,7 @@ const CreateMapPoolModal: React.FC<PropsType> = (props) => {
   return (
     <>
       <Button onClick={handleOpen} variant="contained">
-        Add Map Pool
+        Add Player
       </Button>
 
       {openModal && (
@@ -47,11 +47,11 @@ const CreateMapPoolModal: React.FC<PropsType> = (props) => {
               variant="h6"
               component="h2"
             >
-              Create Map Pool
+              Create Player
             </Typography>
 
-            <MapPoolForm
-              onCreateMapPool={props.onCreateMapPool}
+            <PlayerForm
+              onCreatePlayer={props.onCreatePlayer}
               onClose={handleClose}
             />
           </Box>
@@ -61,4 +61,4 @@ const CreateMapPoolModal: React.FC<PropsType> = (props) => {
   );
 };
 
-export { CreateMapPoolModal };
+export { CreatePlayerModal };

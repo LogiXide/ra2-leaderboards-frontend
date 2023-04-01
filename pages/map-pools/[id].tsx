@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQuery } from '@apollo/client';
 
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 
 import { MapPoolForm } from '@/modules/maps/components';
 import { GET_MAP_POOL } from '@/modules/maps/api/mapPools';
+
+import { SearchBar } from '@/modules/core/components/common/SearchBar/SearchBar';
 
 import {
   UpdateMapPoolDocument,
@@ -25,7 +27,6 @@ const MapPoolDetail = () => {
   const { id } = router.query;
 
   const { data } = useQuery(GET_MAP_POOL, {
-    // TODO: GetMapPoolsDocument return Array ... ??
     variables: {
       id: Number(id),
     },
@@ -63,6 +64,16 @@ const MapPoolDetail = () => {
         initialValues={formValues}
         onClose={() => null}
       />
+
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        flexWrap="wrap"
+        spacing={5}
+        mt={5}
+      >
+        <SearchBar />
+      </Stack>
     </Box>
   );
 };

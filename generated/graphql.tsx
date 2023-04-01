@@ -23,6 +23,7 @@ export type CreateMapInput = {
 };
 
 export type CreateMapPoolInput = {
+  mapIds?: InputMaybe<Array<Scalars['Int']>>;
   name: Scalars['String'];
 };
 
@@ -34,6 +35,62 @@ export type CreateMapPoolResponse = {
 export type CreateMapResponse = {
   __typename?: 'CreateMapResponse';
   maps: Array<Map>;
+};
+
+export type CreatePlayerInput = {
+  name: Scalars['String'];
+};
+
+export type CreatePlayerResponse = {
+  __typename?: 'CreatePlayerResponse';
+  players: Array<Player>;
+};
+
+export type Game = {
+  __typename?: 'Game';
+  awayPlayer?: Maybe<Player>;
+  awayPlayerId?: Maybe<Scalars['Int']>;
+  awayTeam?: Maybe<Team>;
+  awayTeamId?: Maybe<Scalars['Int']>;
+  homePlayer?: Maybe<Player>;
+  homePlayerId?: Maybe<Scalars['Int']>;
+  homeTeam?: Maybe<Team>;
+  homeTeamId?: Maybe<Scalars['Int']>;
+  id: Scalars['Int'];
+  map?: Maybe<Map>;
+  mapId: Scalars['Int'];
+  match?: Maybe<Match>;
+  matchId: Scalars['Int'];
+  type: Scalars['String'];
+  winner: Scalars['String'];
+};
+
+export enum GameSortOption {
+  ById = 'by_id'
+}
+
+export type GameSortOptions = {
+  direction?: InputMaybe<SortDirection>;
+  option: GameSortOption;
+};
+
+export type GamesOptions = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<GameSortOptions>;
+};
+
+export type GamesResponse = {
+  __typename?: 'GamesResponse';
+  data: Array<Maybe<Game>>;
+  pageNumber: Scalars['Int'];
+  size: Scalars['Int'];
+  totalCount: Scalars['Int'];
+  totalPages: Scalars['Int'];
+};
+
+export type GamesWhere = {
+  name_STARTS_WITH?: InputMaybe<Scalars['String']>;
 };
 
 export type Map = {
@@ -109,12 +166,58 @@ export type MapsWhere = {
   name_STARTS_WITH?: InputMaybe<Scalars['String']>;
 };
 
+export type Match = {
+  __typename?: 'Match';
+  awayPlayer?: Maybe<Player>;
+  awayPlayerId?: Maybe<Scalars['Int']>;
+  awayTeam?: Maybe<Team>;
+  awayTeamId?: Maybe<Scalars['Int']>;
+  games?: Maybe<Array<Maybe<Game>>>;
+  homePlayer?: Maybe<Player>;
+  homePlayerId?: Maybe<Scalars['Int']>;
+  homeTeam?: Maybe<Team>;
+  homeTeamId?: Maybe<Scalars['Int']>;
+  id: Scalars['Int'];
+  type: Scalars['String'];
+  winner: Scalars['String'];
+};
+
+export enum MatchSortOption {
+  ById = 'by_id'
+}
+
+export type MatchSortOptions = {
+  direction?: InputMaybe<SortDirection>;
+  option: MatchSortOption;
+};
+
+export type MatchesOptions = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<MatchSortOptions>;
+};
+
+export type MatchesResponse = {
+  __typename?: 'MatchesResponse';
+  data: Array<Maybe<Match>>;
+  pageNumber: Scalars['Int'];
+  size: Scalars['Int'];
+  totalCount: Scalars['Int'];
+  totalPages: Scalars['Int'];
+};
+
+export type MatchesWhere = {
+  name_STARTS_WITH?: InputMaybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createMap: CreateMapResponse;
   createMapPool: CreateMapPoolResponse;
+  createPlayer: CreatePlayerResponse;
   updateMap: UpdateMapResponse;
   updateMapPool: UpdateMapPoolResponse;
+  updatePlayer: UpdatePlayerResponse;
 };
 
 
@@ -128,6 +231,11 @@ export type MutationCreateMapPoolArgs = {
 };
 
 
+export type MutationCreatePlayerArgs = {
+  input: CreatePlayerInput;
+};
+
+
 export type MutationUpdateMapArgs = {
   id: Scalars['Int'];
   input: UpdateMapInput;
@@ -137,6 +245,12 @@ export type MutationUpdateMapArgs = {
 export type MutationUpdateMapPoolArgs = {
   id: Scalars['Int'];
   input: UpdateMapPoolInput;
+};
+
+
+export type MutationUpdatePlayerArgs = {
+  id: Scalars['Int'];
+  input: UpdatePlayerInput;
 };
 
 export type Player = {
@@ -157,7 +271,7 @@ export type PlayersOptions = {
 
 export type PlayersResponse = {
   __typename?: 'PlayersResponse';
-  data: Array<Maybe<Map>>;
+  data: Array<Maybe<Player>>;
   pageNumber: Scalars['Int'];
   size: Scalars['Int'];
   totalCount: Scalars['Int'];
@@ -175,12 +289,28 @@ export type PlayersWhere = {
 
 export type Query = {
   __typename?: 'Query';
+  game?: Maybe<Game>;
+  games: GamesResponse;
   map?: Maybe<Map>;
   mapPool?: Maybe<MapPool>;
   mapPools: MapPoolsResponse;
   maps: MapsResponse;
+  match?: Maybe<Match>;
+  matches: MatchesResponse;
+  player?: Maybe<Player>;
   players: PlayersResponse;
   teams: TeamsResponse;
+};
+
+
+export type QueryGameArgs = {
+  id?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryGamesArgs = {
+  options?: InputMaybe<GamesOptions>;
+  where?: InputMaybe<GamesWhere>;
 };
 
 
@@ -203,6 +333,22 @@ export type QueryMapPoolsArgs = {
 export type QueryMapsArgs = {
   options?: InputMaybe<MapsOptions>;
   where?: InputMaybe<MapsWhere>;
+};
+
+
+export type QueryMatchArgs = {
+  id?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryMatchesArgs = {
+  options?: InputMaybe<MatchesOptions>;
+  where?: InputMaybe<MatchesWhere>;
+};
+
+
+export type QueryPlayerArgs = {
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -240,7 +386,7 @@ export type TeamsOptions = {
 
 export type TeamsResponse = {
   __typename?: 'TeamsResponse';
-  data: Array<Maybe<Map>>;
+  data: Array<Maybe<Team>>;
   pageNumber: Scalars['Int'];
   size: Scalars['Int'];
   totalCount: Scalars['Int'];
@@ -269,6 +415,7 @@ export type UpdateMapInput = {
 };
 
 export type UpdateMapPoolInput = {
+  mapIds?: InputMaybe<Array<Scalars['Int']>>;
   name: Scalars['String'];
 };
 
@@ -280,6 +427,15 @@ export type UpdateMapPoolResponse = {
 export type UpdateMapResponse = {
   __typename?: 'UpdateMapResponse';
   maps?: Maybe<Array<Map>>;
+};
+
+export type UpdatePlayerInput = {
+  name: Scalars['String'];
+};
+
+export type UpdatePlayerResponse = {
+  __typename?: 'UpdatePlayerResponse';
+  players?: Maybe<Array<Player>>;
 };
 
 export type CreateMapPoolMutationVariables = Exact<{
@@ -295,7 +451,7 @@ export type UpdateMapPoolMutationVariables = Exact<{
 }>;
 
 
-export type UpdateMapPoolMutation = { __typename?: 'Mutation', updateMapPool: { __typename?: 'UpdateMapPoolResponse', mapPools?: Array<{ __typename?: 'MapPool', name: string, id: number }> | null } };
+export type UpdateMapPoolMutation = { __typename?: 'Mutation', updateMapPool: { __typename?: 'UpdateMapPoolResponse', mapPools?: Array<{ __typename?: 'MapPool', id: number, name: string }> | null } };
 
 export type GetMapPoolsQueryVariables = Exact<{
   options?: InputMaybe<MapPoolsOptions>;
@@ -317,7 +473,7 @@ export type UpdateMapMutationVariables = Exact<{
 }>;
 
 
-export type UpdateMapMutation = { __typename?: 'Mutation', updateMap: { __typename?: 'UpdateMapResponse', maps?: Array<{ __typename?: 'Map', name: string, spots: number, imageUrl: string, author: string, id: number }> | null } };
+export type UpdateMapMutation = { __typename?: 'Mutation', updateMap: { __typename?: 'UpdateMapResponse', maps?: Array<{ __typename?: 'Map', id: number, name: string, spots: number, imageUrl: string, author: string }> | null } };
 
 export type CreateMapMutationVariables = Exact<{
   input: CreateMapInput;
@@ -340,19 +496,49 @@ export type GetMapQueryVariables = Exact<{
 
 export type GetMapQuery = { __typename?: 'Query', map?: { __typename?: 'Map', id: number, name: string, spots: number, author: string, imageUrl: string } | null };
 
+export type SearchMapQueryVariables = Exact<{
+  where?: InputMaybe<MapsWhere>;
+  options?: InputMaybe<MapsOptions>;
+}>;
+
+
+export type SearchMapQuery = { __typename?: 'Query', maps: { __typename?: 'MapsResponse', data: Array<{ __typename?: 'Map', id: number, name: string, spots: number, author: string, imageUrl: string } | null> } };
+
+export type CreatePlayerMutationVariables = Exact<{
+  input: CreatePlayerInput;
+}>;
+
+
+export type CreatePlayerMutation = { __typename?: 'Mutation', createPlayer: { __typename?: 'CreatePlayerResponse', players: Array<{ __typename?: 'Player', id: number, name: string }> } };
+
+export type UpdatePlayerMutationVariables = Exact<{
+  input: UpdatePlayerInput;
+  id: Scalars['Int'];
+}>;
+
+
+export type UpdatePlayerMutation = { __typename?: 'Mutation', updatePlayer: { __typename?: 'UpdatePlayerResponse', players?: Array<{ __typename?: 'Player', id: number, name: string }> | null } };
+
 export type GetPlayersQueryVariables = Exact<{
   options?: InputMaybe<PlayersOptions>;
 }>;
 
 
-export type GetPlayersQuery = { __typename?: 'Query', players: { __typename?: 'PlayersResponse', totalPages: number, data: Array<{ __typename?: 'Map', id: number, name: string } | null> } };
+export type GetPlayersQuery = { __typename?: 'Query', players: { __typename?: 'PlayersResponse', totalPages: number, data: Array<{ __typename?: 'Player', id: number, name: string } | null> } };
+
+export type GetPlayerQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetPlayerQuery = { __typename?: 'Query', player?: { __typename?: 'Player', id: number, name: string } | null };
 
 export type GetTeamsQueryVariables = Exact<{
   options?: InputMaybe<TeamsOptions>;
 }>;
 
 
-export type GetTeamsQuery = { __typename?: 'Query', teams: { __typename?: 'TeamsResponse', totalPages: number, data: Array<{ __typename?: 'Map', id: number, name: string } | null> } };
+export type GetTeamsQuery = { __typename?: 'Query', teams: { __typename?: 'TeamsResponse', totalPages: number, data: Array<{ __typename?: 'Team', id: number, name: string } | null> } };
 
 
 export const CreateMapPoolDocument = gql`
@@ -395,8 +581,8 @@ export const UpdateMapPoolDocument = gql`
     mutation UpdateMapPool($input: UpdateMapPoolInput!, $id: Int!) {
   updateMapPool(input: $input, id: $id) {
     mapPools {
-      name
       id
+      name
     }
   }
 }
@@ -507,11 +693,11 @@ export const UpdateMapDocument = gql`
     mutation UpdateMap($input: UpdateMapInput!, $id: Int!) {
   updateMap(input: $input, id: $id) {
     maps {
+      id
       name
       spots
       imageUrl
       author
-      id
     }
   }
 }
@@ -663,6 +849,121 @@ export function useGetMapLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Get
 export type GetMapQueryHookResult = ReturnType<typeof useGetMapQuery>;
 export type GetMapLazyQueryHookResult = ReturnType<typeof useGetMapLazyQuery>;
 export type GetMapQueryResult = Apollo.QueryResult<GetMapQuery, GetMapQueryVariables>;
+export const SearchMapDocument = gql`
+    query searchMap($where: MapsWhere, $options: MapsOptions) {
+  maps(where: $where, options: $options) {
+    data {
+      id
+      name
+      spots
+      author
+      imageUrl
+    }
+  }
+}
+    `;
+
+/**
+ * __useSearchMapQuery__
+ *
+ * To run a query within a React component, call `useSearchMapQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchMapQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchMapQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useSearchMapQuery(baseOptions?: Apollo.QueryHookOptions<SearchMapQuery, SearchMapQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchMapQuery, SearchMapQueryVariables>(SearchMapDocument, options);
+      }
+export function useSearchMapLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchMapQuery, SearchMapQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchMapQuery, SearchMapQueryVariables>(SearchMapDocument, options);
+        }
+export type SearchMapQueryHookResult = ReturnType<typeof useSearchMapQuery>;
+export type SearchMapLazyQueryHookResult = ReturnType<typeof useSearchMapLazyQuery>;
+export type SearchMapQueryResult = Apollo.QueryResult<SearchMapQuery, SearchMapQueryVariables>;
+export const CreatePlayerDocument = gql`
+    mutation CreatePlayer($input: CreatePlayerInput!) {
+  createPlayer(input: $input) {
+    players {
+      id
+      name
+    }
+  }
+}
+    `;
+export type CreatePlayerMutationFn = Apollo.MutationFunction<CreatePlayerMutation, CreatePlayerMutationVariables>;
+
+/**
+ * __useCreatePlayerMutation__
+ *
+ * To run a mutation, you first call `useCreatePlayerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePlayerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPlayerMutation, { data, loading, error }] = useCreatePlayerMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreatePlayerMutation(baseOptions?: Apollo.MutationHookOptions<CreatePlayerMutation, CreatePlayerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePlayerMutation, CreatePlayerMutationVariables>(CreatePlayerDocument, options);
+      }
+export type CreatePlayerMutationHookResult = ReturnType<typeof useCreatePlayerMutation>;
+export type CreatePlayerMutationResult = Apollo.MutationResult<CreatePlayerMutation>;
+export type CreatePlayerMutationOptions = Apollo.BaseMutationOptions<CreatePlayerMutation, CreatePlayerMutationVariables>;
+export const UpdatePlayerDocument = gql`
+    mutation UpdatePlayer($input: UpdatePlayerInput!, $id: Int!) {
+  updatePlayer(input: $input, id: $id) {
+    players {
+      id
+      name
+    }
+  }
+}
+    `;
+export type UpdatePlayerMutationFn = Apollo.MutationFunction<UpdatePlayerMutation, UpdatePlayerMutationVariables>;
+
+/**
+ * __useUpdatePlayerMutation__
+ *
+ * To run a mutation, you first call `useUpdatePlayerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePlayerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePlayerMutation, { data, loading, error }] = useUpdatePlayerMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUpdatePlayerMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePlayerMutation, UpdatePlayerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePlayerMutation, UpdatePlayerMutationVariables>(UpdatePlayerDocument, options);
+      }
+export type UpdatePlayerMutationHookResult = ReturnType<typeof useUpdatePlayerMutation>;
+export type UpdatePlayerMutationResult = Apollo.MutationResult<UpdatePlayerMutation>;
+export type UpdatePlayerMutationOptions = Apollo.BaseMutationOptions<UpdatePlayerMutation, UpdatePlayerMutationVariables>;
 export const GetPlayersDocument = gql`
     query GetPlayers($options: PlayersOptions) {
   players(options: $options) {
@@ -702,6 +1003,42 @@ export function useGetPlayersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetPlayersQueryHookResult = ReturnType<typeof useGetPlayersQuery>;
 export type GetPlayersLazyQueryHookResult = ReturnType<typeof useGetPlayersLazyQuery>;
 export type GetPlayersQueryResult = Apollo.QueryResult<GetPlayersQuery, GetPlayersQueryVariables>;
+export const GetPlayerDocument = gql`
+    query GetPlayer($id: Int!) {
+  player(id: $id) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useGetPlayerQuery__
+ *
+ * To run a query within a React component, call `useGetPlayerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPlayerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPlayerQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetPlayerQuery(baseOptions: Apollo.QueryHookOptions<GetPlayerQuery, GetPlayerQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPlayerQuery, GetPlayerQueryVariables>(GetPlayerDocument, options);
+      }
+export function useGetPlayerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPlayerQuery, GetPlayerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPlayerQuery, GetPlayerQueryVariables>(GetPlayerDocument, options);
+        }
+export type GetPlayerQueryHookResult = ReturnType<typeof useGetPlayerQuery>;
+export type GetPlayerLazyQueryHookResult = ReturnType<typeof useGetPlayerLazyQuery>;
+export type GetPlayerQueryResult = Apollo.QueryResult<GetPlayerQuery, GetPlayerQueryVariables>;
 export const GetTeamsDocument = gql`
     query GetTeams($options: TeamsOptions) {
   teams(options: $options) {
