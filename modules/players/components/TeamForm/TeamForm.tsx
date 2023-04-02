@@ -8,8 +8,6 @@ import { Box, Button, Stack } from '@mui/material';
 
 import { TextField } from '@/modules/core/components/forms/fields';
 
-import { LinkButton } from '@/modules/core/components/common';
-
 type FormValuesType = {
   name: string;
 };
@@ -82,7 +80,14 @@ const TeamForm: React.FC<PropsType> = (props) => {
 
           {props.onUpdateTeam && (
             <>
-              <LinkButton text="Back" href="/teams" />
+              <Link
+                href="/teams"
+                style={{
+                  textDecoration: 'none',
+                }}
+              >
+                <Button sx={{ color: 'black' }}>Back</Button>
+              </Link>
 
               <Button type="submit" variant="contained" color="primary">
                 Update
