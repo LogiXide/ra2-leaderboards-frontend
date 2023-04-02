@@ -12,6 +12,8 @@ import { CreateMapModal } from '@/modules/maps/components';
 import { Pagination } from '@/modules/core/components/common';
 import { CREATE_MAP } from '@/modules/maps/api/maps';
 
+import { showNotifyMessage } from '@/modules/core/utils';
+
 import {
   CreateMapMutation,
   CreateMapMutationVariables,
@@ -88,6 +90,8 @@ const Maps: React.FC = () => {
           },
         },
       });
+
+      showNotifyMessage('Map added!', 'success');
     },
     [createMap]
   );
@@ -97,6 +101,7 @@ const Maps: React.FC = () => {
   }
 
   if (error) {
+    showNotifyMessage('Something went wrong!', 'error');
     return <h1>Error...</h1>;
   }
 

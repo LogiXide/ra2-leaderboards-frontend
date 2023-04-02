@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@apollo/client';
 
 import { Box, Stack } from '@mui/material';
 
+import { showNotifyMessage } from '@/modules/core/utils';
 import { MapPoolForm } from '@/modules/maps/components';
 import { GET_MAP_POOL } from '@/modules/maps/api/mapPools';
 
@@ -55,6 +56,8 @@ const MapPoolDetail = () => {
         id: Number(id),
       },
     });
+
+    showNotifyMessage('Map Pool updated!', 'success');
   };
 
   return (

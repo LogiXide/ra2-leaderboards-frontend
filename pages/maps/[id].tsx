@@ -7,6 +7,8 @@ import { Box } from '@mui/material';
 import { GET_MAP } from '@/modules/maps/api/maps';
 import { MapForm } from '@/modules/maps/components';
 
+import { showNotifyMessage } from '@/modules/core/utils';
+
 import {
   UpdateMapDocument,
   UpdateMapMutation,
@@ -71,6 +73,8 @@ const MapDetail: React.FC = () => {
         id: Number(id),
       },
     });
+
+    showNotifyMessage('Map updated!', 'success');
   };
 
   return (

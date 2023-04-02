@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@apollo/client';
 
 import { Box } from '@mui/material';
 
+import { showNotifyMessage } from '@/modules/core/utils';
 import { TeamForm } from '@/modules/players/components';
 import { GET_TEAM } from '@/modules/players/api/teams';
 
@@ -52,6 +53,8 @@ const TeamDetail = () => {
         id: teamId,
       },
     });
+
+    showNotifyMessage('Team updated!', 'success');
   };
 
   return (
