@@ -37,6 +37,20 @@ export type CreateMapResponse = {
   maps: Array<Map>;
 };
 
+export type CreateMatchInput = {
+  awayPlayerId?: InputMaybe<Scalars['Int']>;
+  awayTeamId?: InputMaybe<Scalars['Int']>;
+  homePlayerId?: InputMaybe<Scalars['Int']>;
+  homeTeamId?: InputMaybe<Scalars['Int']>;
+  type: Scalars['String'];
+  winner?: InputMaybe<Scalars['String']>;
+};
+
+export type CreateMatchResponse = {
+  __typename?: 'CreateMatchResponse';
+  matches: Array<Match>;
+};
+
 export type CreatePlayerInput = {
   name: Scalars['String'];
 };
@@ -46,22 +60,33 @@ export type CreatePlayerResponse = {
   players: Array<Player>;
 };
 
+export type CreateTeamInput = {
+  name: Scalars['String'];
+};
+
+export type CreateTeamResponse = {
+  __typename?: 'CreateTeamResponse';
+  teams: Array<Team>;
+};
+
 export type Game = {
   __typename?: 'Game';
   awayPlayer?: Maybe<Player>;
   awayPlayerId?: Maybe<Scalars['Int']>;
   awayTeam?: Maybe<Team>;
   awayTeamId?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['String'];
   homePlayer?: Maybe<Player>;
   homePlayerId?: Maybe<Scalars['Int']>;
   homeTeam?: Maybe<Team>;
   homeTeamId?: Maybe<Scalars['Int']>;
   id: Scalars['Int'];
-  map?: Maybe<Map>;
+  map: Map;
   mapId: Scalars['Int'];
-  match?: Maybe<Match>;
+  match: Match;
   matchId: Scalars['Int'];
   type: Scalars['String'];
+  updatedAt: Scalars['String'];
   winner: Scalars['String'];
 };
 
@@ -96,18 +121,22 @@ export type GamesWhere = {
 export type Map = {
   __typename?: 'Map';
   author: Scalars['String'];
+  createdAt: Scalars['String'];
   id: Scalars['Int'];
   imageUrl: Scalars['String'];
   mapPools?: Maybe<Array<MapPool>>;
   name: Scalars['String'];
   spots: Scalars['Int'];
+  updatedAt: Scalars['String'];
 };
 
 export type MapPool = {
   __typename?: 'MapPool';
+  createdAt: Scalars['String'];
   id: Scalars['Int'];
   maps?: Maybe<Array<Map>>;
   name: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export enum MapPoolSortOption {
@@ -172,6 +201,7 @@ export type Match = {
   awayPlayerId?: Maybe<Scalars['Int']>;
   awayTeam?: Maybe<Team>;
   awayTeamId?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['String'];
   games?: Maybe<Array<Maybe<Game>>>;
   homePlayer?: Maybe<Player>;
   homePlayerId?: Maybe<Scalars['Int']>;
@@ -179,7 +209,8 @@ export type Match = {
   homeTeamId?: Maybe<Scalars['Int']>;
   id: Scalars['Int'];
   type: Scalars['String'];
-  winner: Scalars['String'];
+  updatedAt: Scalars['String'];
+  winner?: Maybe<Scalars['String']>;
 };
 
 export enum MatchSortOption {
@@ -214,10 +245,14 @@ export type Mutation = {
   __typename?: 'Mutation';
   createMap: CreateMapResponse;
   createMapPool: CreateMapPoolResponse;
+  createMatch: CreateMatchResponse;
   createPlayer: CreatePlayerResponse;
+  createTeam: CreateTeamResponse;
   updateMap: UpdateMapResponse;
   updateMapPool: UpdateMapPoolResponse;
+  updateMatch: UpdateMatchResponse;
   updatePlayer: UpdatePlayerResponse;
+  updateTeam: UpdateTeamResponse;
 };
 
 
@@ -231,8 +266,18 @@ export type MutationCreateMapPoolArgs = {
 };
 
 
+export type MutationCreateMatchArgs = {
+  input: CreateMatchInput;
+};
+
+
 export type MutationCreatePlayerArgs = {
   input: CreatePlayerInput;
+};
+
+
+export type MutationCreateTeamArgs = {
+  input: CreateTeamInput;
 };
 
 
@@ -248,15 +293,29 @@ export type MutationUpdateMapPoolArgs = {
 };
 
 
+export type MutationUpdateMatchArgs = {
+  id: Scalars['Int'];
+  input: UpdateMatchInput;
+};
+
+
 export type MutationUpdatePlayerArgs = {
   id: Scalars['Int'];
   input: UpdatePlayerInput;
 };
 
+
+export type MutationUpdateTeamArgs = {
+  id: Scalars['Int'];
+  input: UpdateTeamInput;
+};
+
 export type Player = {
   __typename?: 'Player';
+  createdAt: Scalars['String'];
   id: Scalars['Int'];
   name: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export enum PlayerSortOption {
@@ -299,6 +358,7 @@ export type Query = {
   matches: MatchesResponse;
   player?: Maybe<Player>;
   players: PlayersResponse;
+  team?: Maybe<Team>;
   teams: TeamsResponse;
 };
 
@@ -358,6 +418,11 @@ export type QueryPlayersArgs = {
 };
 
 
+export type QueryTeamArgs = {
+  id?: InputMaybe<Scalars['Int']>;
+};
+
+
 export type QueryTeamsArgs = {
   options?: InputMaybe<TeamsOptions>;
   where?: InputMaybe<TeamsWhere>;
@@ -370,8 +435,10 @@ export enum SortDirection {
 
 export type Team = {
   __typename?: 'Team';
+  createdAt: Scalars['String'];
   id: Scalars['Int'];
   name: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export enum TeamSortOption {
@@ -429,6 +496,19 @@ export type UpdateMapResponse = {
   maps?: Maybe<Array<Map>>;
 };
 
+export type UpdateMatchInput = {
+  awayPlayerId?: InputMaybe<Scalars['Int']>;
+  awayTeamId?: InputMaybe<Scalars['Int']>;
+  homePlayerId?: InputMaybe<Scalars['Int']>;
+  homeTeamId?: InputMaybe<Scalars['Int']>;
+  winner?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateMatchResponse = {
+  __typename?: 'UpdateMatchResponse';
+  matches?: Maybe<Array<Match>>;
+};
+
 export type UpdatePlayerInput = {
   name: Scalars['String'];
 };
@@ -436,6 +516,15 @@ export type UpdatePlayerInput = {
 export type UpdatePlayerResponse = {
   __typename?: 'UpdatePlayerResponse';
   players?: Maybe<Array<Player>>;
+};
+
+export type UpdateTeamInput = {
+  name: Scalars['String'];
+};
+
+export type UpdateTeamResponse = {
+  __typename?: 'UpdateTeamResponse';
+  teams?: Maybe<Array<Team>>;
 };
 
 export type CreateMapPoolMutationVariables = Exact<{
@@ -533,12 +622,34 @@ export type GetPlayerQueryVariables = Exact<{
 
 export type GetPlayerQuery = { __typename?: 'Query', player?: { __typename?: 'Player', id: number, name: string } | null };
 
+export type CreateTeamMutationVariables = Exact<{
+  input: CreateTeamInput;
+}>;
+
+
+export type CreateTeamMutation = { __typename?: 'Mutation', createTeam: { __typename?: 'CreateTeamResponse', teams: Array<{ __typename?: 'Team', id: number, name: string }> } };
+
+export type UpdateTeamMutationVariables = Exact<{
+  input: UpdateTeamInput;
+  id: Scalars['Int'];
+}>;
+
+
+export type UpdateTeamMutation = { __typename?: 'Mutation', updateTeam: { __typename?: 'UpdateTeamResponse', teams?: Array<{ __typename?: 'Team', id: number, name: string }> | null } };
+
 export type GetTeamsQueryVariables = Exact<{
   options?: InputMaybe<TeamsOptions>;
 }>;
 
 
 export type GetTeamsQuery = { __typename?: 'Query', teams: { __typename?: 'TeamsResponse', totalPages: number, data: Array<{ __typename?: 'Team', id: number, name: string } | null> } };
+
+export type GetTeamQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetTeamQuery = { __typename?: 'Query', team?: { __typename?: 'Team', id: number, name: string } | null };
 
 
 export const CreateMapPoolDocument = gql`
@@ -1039,6 +1150,79 @@ export function useGetPlayerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetPlayerQueryHookResult = ReturnType<typeof useGetPlayerQuery>;
 export type GetPlayerLazyQueryHookResult = ReturnType<typeof useGetPlayerLazyQuery>;
 export type GetPlayerQueryResult = Apollo.QueryResult<GetPlayerQuery, GetPlayerQueryVariables>;
+export const CreateTeamDocument = gql`
+    mutation CreateTeam($input: CreateTeamInput!) {
+  createTeam(input: $input) {
+    teams {
+      id
+      name
+    }
+  }
+}
+    `;
+export type CreateTeamMutationFn = Apollo.MutationFunction<CreateTeamMutation, CreateTeamMutationVariables>;
+
+/**
+ * __useCreateTeamMutation__
+ *
+ * To run a mutation, you first call `useCreateTeamMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTeamMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTeamMutation, { data, loading, error }] = useCreateTeamMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateTeamMutation(baseOptions?: Apollo.MutationHookOptions<CreateTeamMutation, CreateTeamMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateTeamMutation, CreateTeamMutationVariables>(CreateTeamDocument, options);
+      }
+export type CreateTeamMutationHookResult = ReturnType<typeof useCreateTeamMutation>;
+export type CreateTeamMutationResult = Apollo.MutationResult<CreateTeamMutation>;
+export type CreateTeamMutationOptions = Apollo.BaseMutationOptions<CreateTeamMutation, CreateTeamMutationVariables>;
+export const UpdateTeamDocument = gql`
+    mutation UpdateTeam($input: UpdateTeamInput!, $id: Int!) {
+  updateTeam(input: $input, id: $id) {
+    teams {
+      id
+      name
+    }
+  }
+}
+    `;
+export type UpdateTeamMutationFn = Apollo.MutationFunction<UpdateTeamMutation, UpdateTeamMutationVariables>;
+
+/**
+ * __useUpdateTeamMutation__
+ *
+ * To run a mutation, you first call `useUpdateTeamMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTeamMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTeamMutation, { data, loading, error }] = useUpdateTeamMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUpdateTeamMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTeamMutation, UpdateTeamMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateTeamMutation, UpdateTeamMutationVariables>(UpdateTeamDocument, options);
+      }
+export type UpdateTeamMutationHookResult = ReturnType<typeof useUpdateTeamMutation>;
+export type UpdateTeamMutationResult = Apollo.MutationResult<UpdateTeamMutation>;
+export type UpdateTeamMutationOptions = Apollo.BaseMutationOptions<UpdateTeamMutation, UpdateTeamMutationVariables>;
 export const GetTeamsDocument = gql`
     query GetTeams($options: TeamsOptions) {
   teams(options: $options) {
@@ -1078,3 +1262,39 @@ export function useGetTeamsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetTeamsQueryHookResult = ReturnType<typeof useGetTeamsQuery>;
 export type GetTeamsLazyQueryHookResult = ReturnType<typeof useGetTeamsLazyQuery>;
 export type GetTeamsQueryResult = Apollo.QueryResult<GetTeamsQuery, GetTeamsQueryVariables>;
+export const GetTeamDocument = gql`
+    query GetTeam($id: Int!) {
+  team(id: $id) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useGetTeamQuery__
+ *
+ * To run a query within a React component, call `useGetTeamQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTeamQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTeamQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetTeamQuery(baseOptions: Apollo.QueryHookOptions<GetTeamQuery, GetTeamQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTeamQuery, GetTeamQueryVariables>(GetTeamDocument, options);
+      }
+export function useGetTeamLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTeamQuery, GetTeamQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTeamQuery, GetTeamQueryVariables>(GetTeamDocument, options);
+        }
+export type GetTeamQueryHookResult = ReturnType<typeof useGetTeamQuery>;
+export type GetTeamLazyQueryHookResult = ReturnType<typeof useGetTeamLazyQuery>;
+export type GetTeamQueryResult = Apollo.QueryResult<GetTeamQuery, GetTeamQueryVariables>;
