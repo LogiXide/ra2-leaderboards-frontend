@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { Stack, Box } from '@mui/material';
 
 import { config } from '@/config';
+import { showNotifyMessage } from '@/modules/core/utils';
 import { DataList } from '@/modules/core/components/data';
 import { CreateTeamModal } from '@/modules/players/components';
 import { Pagination } from '@/modules/core/components/common';
@@ -65,6 +66,8 @@ const Teams: React.FC = () => {
           },
         },
       });
+
+      showNotifyMessage('Team added!', 'success');
     },
     [createTeam]
   );
@@ -74,8 +77,9 @@ const Teams: React.FC = () => {
   }
 
   if (error) {
-    return <h1>Error...</h1>;
-  }
+   showNotifyMessage('Something went wrong!', 'error');
+   return <h1>Error...</h1>;
+ }
 
   return (
     <Box mt={2}>

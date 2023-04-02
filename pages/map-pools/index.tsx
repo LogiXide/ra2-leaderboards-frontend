@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { Stack, Box } from '@mui/material';
 
 import { config } from '@/config';
+import { showNotifyMessage } from '@/modules/core/utils';
 import { DataList } from '@/modules/core/components/data';
 import { CreateMapPoolModal } from '@/modules/maps/components';
 import { Pagination } from '@/modules/core/components/common';
@@ -68,6 +69,8 @@ const MapPools: React.FC = () => {
           },
         },
       });
+
+      showNotifyMessage('Map Pool added!', 'success');
     },
     [createMapPool]
   );
@@ -77,6 +80,7 @@ const MapPools: React.FC = () => {
   }
 
   if (error) {
+    showNotifyMessage('Something went wrong!', 'error');
     return <h1>Error...</h1>;
   }
 

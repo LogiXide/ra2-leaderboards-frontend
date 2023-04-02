@@ -4,8 +4,10 @@ import { useMutation, useQuery } from '@apollo/client';
 
 import { Box } from '@mui/material';
 
+import { showNotifyMessage } from '@/modules/core/utils';
 import { PlayerForm } from '@/modules/players/components';
 import { GET_PLAYER } from '@/modules/players/api/players';
+
 
 import {
   UpdatePlayerDocument,
@@ -52,6 +54,8 @@ const PlayerDetail = () => {
         id: playerId,
       },
     });
+
+    showNotifyMessage('Player updated!', 'success');
   };
 
   return (
