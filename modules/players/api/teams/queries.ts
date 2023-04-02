@@ -12,4 +12,13 @@ const GET_TEAMS = gql`
   }
 `;
 
-export { GET_TEAMS };
+const GET_TEAM = gql`
+  query GetTeam($id: Int!) {
+    team(id: $id) {
+      id
+      name
+    }
+  }
+`;
+
+export { GET_TEAMS, GET_TEAM };
