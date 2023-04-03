@@ -11,7 +11,7 @@ npm install
 ## Start
 
 ```shell
-npm run start
+npm run dev
 ```
 
 ## Open in browser
