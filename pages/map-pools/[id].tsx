@@ -8,35 +8,38 @@ import { showNotifyMessage } from '@/modules/core/utils';
 import { MapPoolForm } from '@/modules/maps/components';
 import { GET_MAP_POOL } from '@/modules/maps/api/mapPools';
 
-import { SearchBar } from '@/modules/core/components/common/SearchBar/SearchBar';
+import { SearchMapList } from '@/modules/core/components/common/SearchMapList';
+import { SelectedMapList } from '@/modules/core/components/common/SelectedMapList';
 
 import {
+  GetMapPoolDocument,
+  GetMapPoolQuery,
   UpdateMapPoolDocument,
   UpdateMapPoolMutation,
   UpdateMapPoolMutationVariables,
 } from '@/generated/graphql';
 
-type FormValuesType = {
-  name: string;
-};
+import type { FormValuesType } from '@/modules/maps/components';
 
-const MapPoolDetail = () => {
+const MapPoolDetail: React.FC = () => {
   const [formValues, setFormValues] = useState<FormValuesType>({
     name: '',
   });
-  const router = useRouter();
-  const { id } = router.query;
 
-  const { data } = useQuery(GET_MAP_POOL, {
+  const router = useRouter();
+
+  const mapPoolId = parseInt(router.query.id as string, 10);
+
+  const { data } = useQuery<GetMapPoolQuery>(GetMapPoolDocument, {
     variables: {
-      id: Number(id),
+      id: mapPoolId,
     },
   });
 
   useEffect(() => {
     if (data) {
       setFormValues({
-        name: data.mapPool.name,
+        name: data?.mapPool?.name || '',
       });
     }
   }, [data]);
@@ -53,7 +56,7 @@ const MapPoolDetail = () => {
           name: data.name,
         },
 
-        id: Number(id),
+        id: mapPoolId,
       },
     });
 
@@ -75,7 +78,8 @@ const MapPoolDetail = () => {
         spacing={5}
         mt={5}
       >
-        <SearchBar />
+        <SearchMapList />
+        <SelectedMapList maps={data?.mapPool?.maps || []} />
       </Stack>
     </Box>
   );

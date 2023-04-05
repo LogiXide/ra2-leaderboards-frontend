@@ -554,7 +554,7 @@ export type GetMapPoolQueryVariables = Exact<{
 }>;
 
 
-export type GetMapPoolQuery = { __typename?: 'Query', mapPool?: { __typename?: 'MapPool', id: number, name: string } | null };
+export type GetMapPoolQuery = { __typename?: 'Query', mapPool?: { __typename?: 'MapPool', id: number, name: string, maps?: Array<{ __typename?: 'Map', id: number, name: string }> | null } | null };
 
 export type UpdateMapMutationVariables = Exact<{
   input: UpdateMapInput;
@@ -769,6 +769,10 @@ export const GetMapPoolDocument = gql`
   mapPool(id: $id) {
     id
     name
+    maps {
+      id
+      name
+    }
   }
 }
     `;

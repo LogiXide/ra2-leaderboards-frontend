@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 
-import { SearchMapDocument, SearchMapQuery } from '@/generated/graphql';
-
 import {
   Box,
   Typography,
@@ -15,14 +13,17 @@ import {
   Checkbox,
 } from '@mui/material';
 
-const SearchBar: React.FC = () => {
-  const [name, setName] = useState<string>('');
+import { SearchMapDocument, SearchMapQuery } from '@/generated/graphql';
+
+
+const SearchMapList: React.FC = () => {
+  const [searchText, setSearchText] = useState<string>('');
   const [checked, setChecked] = useState<number[]>([0]);
 
   const { data } = useQuery<SearchMapQuery>(SearchMapDocument, {
     variables: {
       where: {
-        name_STARTS_WITH: name,
+        name_STARTS_WITH: searchText,
       },
       options: {
         limit: 50,
@@ -44,7 +45,7 @@ const SearchBar: React.FC = () => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
+    setSearchText(e.target.value);
   };
 
   return (
@@ -53,7 +54,12 @@ const SearchBar: React.FC = () => {
         Available Maps
       </Typography>
 
-      <TextField fullWidth size="small" value={name} onChange={handleChange} />
+      <TextField
+        fullWidth
+        size="small"
+        value={searchText}
+        onChange={handleChange}
+      />
 
       <List
         sx={{
@@ -82,4 +88,4 @@ const SearchBar: React.FC = () => {
   );
 };
 
-export { SearchBar };
+export { SearchMapList };

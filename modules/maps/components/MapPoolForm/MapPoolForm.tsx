@@ -8,7 +8,7 @@ import { Box, Button, Stack } from '@mui/material';
 
 import { TextField } from '@/modules/core/components/forms/fields';
 
-type FormValuesType = {
+export type FormValuesType = {
   name: string;
 };
 
