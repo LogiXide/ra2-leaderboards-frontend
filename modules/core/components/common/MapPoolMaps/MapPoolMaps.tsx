@@ -12,13 +12,7 @@ type PropsType = {
 };
 
 export const MapPoolMaps: React.FC<PropsType> = (props) => {
-  const [checkedMaps, setCheckedMaps] = useState<Map[]>([]);
-
-  console.log(checkedMaps);
-
-  useEffect(() => {
-    setCheckedMaps(props.maps);
-  }, [props]);
+  const [checkedMaps, setCheckedMaps] = useState<Map[]>(props.maps);
 
   return (
     <Stack
@@ -32,6 +26,7 @@ export const MapPoolMaps: React.FC<PropsType> = (props) => {
         checkedMaps={checkedMaps}
         setCheckedMaps={setCheckedMaps}
       />
+
       <SelectedMapList
         checkedMaps={checkedMaps}
         setCheckedMaps={setCheckedMaps}

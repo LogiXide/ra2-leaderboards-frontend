@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useQuery } from '@apollo/client';
 
 import {
@@ -17,7 +17,7 @@ import {
 
 import { SEARCH_MAP } from '@/modules/maps/api/maps';
 
-import { Map } from '@/generated/graphql';
+import type { Map } from '@/generated/graphql';
 
 type PropsType = {
   checkedMaps: Map[];
@@ -37,28 +37,37 @@ const SearchMapList: React.FC<PropsType> = (props) => {
         limit: 50,
       },
     },
-    onCompleted: (data) => setMaps([...data.maps.data]),
+    onCompleted: (data) => setMaps(data.maps.data),
   });
 
-  const handleToggle = (map: Map) => () => {
-    const currentMap = props.checkedMaps.find((m) => m.id === map.id);
+  useEffect(() => {
+    setMaps([...props.checkedMaps, ...maps]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props]);
 
-    let newChecked = [...props.checkedMaps];
+  const handleToggle = useCallback(
+    (map: Map) => () => {
+      const currentMap = props.checkedMaps.find((m) => m.id === map.id);
 
-    if (!currentMap) {
-      newChecked.push(map);
+      let newChecked = [...props.checkedMaps];
 
-      const newMaps = maps.filter((m) => m.id !== map.id);
+      if (!currentMap) {
+        newChecked.push(map);
 
-      setMaps(newMaps);
-    } else {
-      const newArr = newChecked.filter((n) => n.id !== map.id);
+        const newMaps = maps.filter((m) => m.id !== map.id);
 
-      newChecked = newArr;
-    }
+        setMaps(newMaps);
+      } else {
+        const newArr = newChecked.filter((n) => n.id !== map.id);
 
-    props.setCheckedMaps(newChecked);
-  };
+        newChecked = newArr;
+      }
+
+      props.setCheckedMaps([...newChecked]);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [props]
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);

@@ -22,36 +22,42 @@ type PropsType = {
 const SelectedMapList: React.FC<PropsType> = (props) => {
   const [searchText, setSearchText] = useState<string>('');
 
-  const filterMaps = (maps: Map[], query: string) => {
+  const filterMaps = useCallback((maps: Map[], query: string) => {
     return maps.filter((map) =>
       map.name.toLowerCase().startsWith(query.toLowerCase())
     );
-  };
+  }, []);
 
   const visibleMaps = useMemo(
     () => filterMaps(props.checkedMaps, searchText),
-    [props.checkedMaps, searchText]
+    [props.checkedMaps, searchText, filterMaps]
   );
 
-  const handleToggle = (map: Map) => () => {
-    const currentMap = props.checkedMaps.find((m) => m.id === map.id);
+  const handleToggle = useCallback(
+    (map: Map) => () => {
+      const checkMap = props.checkedMaps.find(
+        (checkedMap) => checkedMap.id === map.id
+      );
 
-    let newChecked = [...props.checkedMaps];
+      let newChecked = [...props.checkedMaps];
 
-    if (!currentMap) {
-      newChecked.push(map);
+      if (!checkMap) {
+        newChecked.push(map);
 
-      const newMaps = props.checkedMaps.filter((m) => m.id !== map.id);
+        const newMaps = props.checkedMaps.filter((m) => m.id !== map.id);
 
-      props.setCheckedMaps(newMaps);
-    } else {
-      const newArr = newChecked.filter((n) => n.id !== map.id);
+        props.setCheckedMaps(newMaps);
+      } else {
+        const newArr = newChecked.filter((n) => n.id !== map.id);
+        console.log('newArr', newArr);
 
-      newChecked = newArr;
-    }
+        newChecked = newArr;
+      }
 
-    props.setCheckedMaps(newChecked);
-  };
+      props.setCheckedMaps([...newChecked]);
+    },
+    [props]
+  );
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);

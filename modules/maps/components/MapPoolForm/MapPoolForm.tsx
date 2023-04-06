@@ -28,6 +28,7 @@ const mapPoolSchema = object().shape({
 });
 
 const MapPoolForm: React.FC<PropsType> = (props) => {
+  console.log(props.initialValues);
   const {
     handleSubmit,
     control,
