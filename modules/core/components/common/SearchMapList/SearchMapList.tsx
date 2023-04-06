@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 
 import {
@@ -13,14 +13,22 @@ import {
   Checkbox,
 } from '@mui/material';
 
-import { SearchMapDocument, SearchMapQuery } from '@/generated/graphql';
+// import { SearchMapDocument, SearchMapQuery } from '@/generated/graphql';
 
+import { SEARCH_MAP } from '@/modules/maps/api/maps';
 
-const SearchMapList: React.FC = () => {
+import { Map } from '@/generated/graphql';
+
+type PropsType = {
+  checkedMaps: Map[];
+  setCheckedMaps: (data: Map[]) => void;
+};
+
+const SearchMapList: React.FC<PropsType> = (props) => {
   const [searchText, setSearchText] = useState<string>('');
-  const [checked, setChecked] = useState<number[]>([0]);
+  const [maps, setMaps] = useState<Map[]>([]);
 
-  const { data } = useQuery<SearchMapQuery>(SearchMapDocument, {
+  const { data } = useQuery(SEARCH_MAP, {
     variables: {
       where: {
         name_STARTS_WITH: searchText,
@@ -29,19 +37,27 @@ const SearchMapList: React.FC = () => {
         limit: 50,
       },
     },
+    onCompleted: (data) => setMaps([...data.maps.data]),
   });
 
-  const handleToggle = (value: number) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+  const handleToggle = (map: Map) => () => {
+    const currentMap = props.checkedMaps.find((m) => m.id === map.id);
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
+    let newChecked = [...props.checkedMaps];
+
+    if (!currentMap) {
+      newChecked.push(map);
+
+      const newMaps = maps.filter((m) => m.id !== map.id);
+
+      setMaps(newMaps);
     } else {
-      newChecked.splice(currentIndex, 1);
+      const newArr = newChecked.filter((n) => n.id !== map.id);
+
+      newChecked = newArr;
     }
 
-    setChecked(newChecked);
+    props.setCheckedMaps(newChecked);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,19 +86,22 @@ const SearchMapList: React.FC = () => {
           mt: '10px',
         }}
       >
-        {data?.maps.data.map((map) => (
-          <ListItem key={map?.id} disablePadding>
-            <ListItemButton onClick={handleToggle(map?.id || 0)}>
-              <ListItemIcon>
-                <Checkbox
-                  edge="start"
-                  checked={checked.indexOf(map?.id || 0) !== -1}
-                />
-              </ListItemIcon>
-              <ListItemText primary={map?.name} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {maps?.map(
+          (map: Map) =>
+            !props.checkedMaps.some((o) => o.id === map.id) && (
+              <ListItem key={map?.id} disablePadding>
+                <ListItemButton onClick={handleToggle(map)}>
+                  <ListItemIcon>
+                    <Checkbox
+                      edge="start"
+                      checked={props.checkedMaps.some((o) => o.id === map.id)}
+                    />
+                  </ListItemIcon>
+                  <ListItemText primary={map?.name} />
+                </ListItemButton>
+              </ListItem>
+            )
+        )}
       </List>
     </Box>
   );

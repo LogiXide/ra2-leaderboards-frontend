@@ -12,49 +12,46 @@ import {
   Checkbox,
 } from '@mui/material';
 
+import type { Map } from '@/generated/graphql';
+
 type PropsType = {
-  maps: { id: number; name: string }[];
+  checkedMaps: Map[];
+  setCheckedMaps: (data: Map[]) => void;
 };
 
 const SelectedMapList: React.FC<PropsType> = (props) => {
   const [searchText, setSearchText] = useState<string>('');
 
-  const mapsIds = () => {
-    const result: number[] = [];
-
-    props.maps.forEach((map) => result.push(map.id));
-
-    return result;
-  };
-
-  const [checked, setChecked] = useState<number[]>(mapsIds());
-
-  const filterMaps = (maps: { id: number; name: string }[], query: string) => {
+  const filterMaps = (maps: Map[], query: string) => {
     return maps.filter((map) =>
       map.name.toLowerCase().startsWith(query.toLowerCase())
     );
   };
 
   const visibleMaps = useMemo(
-    () => filterMaps(props.maps, searchText),
-    [props.maps, searchText]
+    () => filterMaps(props.checkedMaps, searchText),
+    [props.checkedMaps, searchText]
   );
 
-  const handleToggle = useCallback(
-    (value: number) => () => {
-      const currentIndex = checked.indexOf(value);
-      const newChecked = [...checked];
+  const handleToggle = (map: Map) => () => {
+    const currentMap = props.checkedMaps.find((m) => m.id === map.id);
 
-      if (currentIndex === -1) {
-        newChecked.push(value);
-      } else {
-        newChecked.splice(currentIndex, 1);
-      }
+    let newChecked = [...props.checkedMaps];
 
-      setChecked(newChecked);
-    },
-    [checked]
-  );
+    if (!currentMap) {
+      newChecked.push(map);
+
+      const newMaps = props.checkedMaps.filter((m) => m.id !== map.id);
+
+      props.setCheckedMaps(newMaps);
+    } else {
+      const newArr = newChecked.filter((n) => n.id !== map.id);
+
+      newChecked = newArr;
+    }
+
+    props.setCheckedMaps(newChecked);
+  };
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
@@ -84,11 +81,11 @@ const SelectedMapList: React.FC<PropsType> = (props) => {
       >
         {visibleMaps.map((map) => (
           <ListItem key={map?.id} disablePadding>
-            <ListItemButton onClick={handleToggle(map?.id || 0)}>
+            <ListItemButton onClick={handleToggle(map)}>
               <ListItemIcon>
                 <Checkbox
                   edge="start"
-                  checked={checked.indexOf(map?.id || 0) !== -1}
+                  checked={props.checkedMaps.some((o) => o.id === map.id)}
                 />
               </ListItemIcon>
               <ListItemText primary={map?.name} />

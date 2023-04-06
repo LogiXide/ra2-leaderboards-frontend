@@ -7,9 +7,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Stack } from '@mui/material';
 
 import { TextField } from '@/modules/core/components/forms/fields';
+import type { Map } from '@/generated/graphql';
+
+import { MapPoolMaps } from '@/modules/core/components/common';
 
 export type FormValuesType = {
   name: string;
+  maps: Map[];
 };
 
 type PropsType = {
@@ -32,6 +36,7 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
   } = useForm<FormValuesType>({
     defaultValues: {
       name: props.initialValues?.name || '',
+      maps: props.initialValues?.maps || [],
     },
     resolver: yupResolver(mapPoolSchema),
   });
@@ -65,28 +70,25 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <Stack direction="column" spacing={1}>
-        <TextField
-          label="Name"
-          control={control}
-          name="name"
-          errors={errors}
-        />
+        <TextField label="Name" control={control} name="name" errors={errors} />
 
-        <Stack justifyContent="flex-end" direction="row" spacing={2}>
-          {props.onCreateMapPool && (
-            <>
-              <Button onClick={() => props.onClose()} sx={{ color: 'black' }}>
-                Cancel
-              </Button>
+        {props.onCreateMapPool && (
+          <Stack justifyContent="flex-end" direction="row" spacing={2}>
+            <Button onClick={() => props.onClose()} sx={{ color: 'black' }}>
+              Cancel
+            </Button>
 
-              <Button type="submit" variant="contained" color="primary">
-                Create
-              </Button>
-            </>
-          )}
+            <Button type="submit" variant="contained" color="primary">
+              Create
+            </Button>
+          </Stack>
+        )}
 
-          {props.onUpdateMapPool && (
-            <>
+        {props.onUpdateMapPool && (
+          <>
+            <MapPoolMaps maps={props.initialValues?.maps || []} />
+
+            <Stack justifyContent="flex-end" direction="row" spacing={2}>
               <Link
                 href="/map-pools"
                 style={{
@@ -99,9 +101,9 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
               <Button type="submit" variant="contained" color="primary">
                 Update
               </Button>
-            </>
-          )}
-        </Stack>
+            </Stack>
+          </>
+        )}
       </Stack>
     </Box>
   );
