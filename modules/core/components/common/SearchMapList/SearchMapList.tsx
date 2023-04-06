@@ -22,28 +22,32 @@ import type { Map } from '@/generated/graphql';
 type PropsType = {
   checkedMaps: Map[];
   setCheckedMaps: (data: Map[]) => void;
+  setSearchText: (value: string) => void;
+  searchText: string;
+  maps: Map[];
 };
 
 const SearchMapList: React.FC<PropsType> = (props) => {
-  const [searchText, setSearchText] = useState<string>('');
+  // const [searchText, setSearchText] = useState<string>('');
   const [maps, setMaps] = useState<Map[]>([]);
 
-  const { data } = useQuery(SEARCH_MAP, {
-    variables: {
-      where: {
-        name_STARTS_WITH: searchText,
-      },
-      options: {
-        limit: 50,
-      },
-    },
-    onCompleted: (data) => setMaps(data.maps.data),
-  });
+  console.log(props.maps)
 
-  useEffect(() => {
-    setMaps([...props.checkedMaps, ...maps]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props]);
+  //  const { data } = useQuery(SEARCH_MAP, {
+  //    variables: {
+  //      where: {
+  //        name_STARTS_WITH: searchText,
+  //      },
+  //      options: {
+  //        limit: 50,
+  //      },
+  //    },
+  //  });
+
+  //  useEffect(() => {
+  //    setMaps([...props.checkedMaps, ...maps]);
+  //    // eslint-disable-next-line react-hooks/exhaustive-deps
+  //  }, [props]);
 
   const handleToggle = useCallback(
     (map: Map) => () => {
@@ -70,7 +74,7 @@ const SearchMapList: React.FC<PropsType> = (props) => {
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(e.target.value);
+    props.setSearchText(e.target.value);
   };
 
   return (
@@ -82,7 +86,7 @@ const SearchMapList: React.FC<PropsType> = (props) => {
       <TextField
         fullWidth
         size="small"
-        value={searchText}
+        value={props.searchText}
         onChange={handleChange}
       />
 
@@ -95,22 +99,19 @@ const SearchMapList: React.FC<PropsType> = (props) => {
           mt: '10px',
         }}
       >
-        {maps?.map(
-          (map: Map) =>
-            !props.checkedMaps.some((o) => o.id === map.id) && (
-              <ListItem key={map?.id} disablePadding>
-                <ListItemButton onClick={handleToggle(map)}>
-                  <ListItemIcon>
-                    <Checkbox
-                      edge="start"
-                      checked={props.checkedMaps.some((o) => o.id === map.id)}
-                    />
-                  </ListItemIcon>
-                  <ListItemText primary={map?.name} />
-                </ListItemButton>
-              </ListItem>
-            )
-        )}
+        {props.maps?.map((map: Map) => (
+          <ListItem key={map?.id} disablePadding>
+            <ListItemButton onClick={handleToggle(map)}>
+              <ListItemIcon>
+                <Checkbox
+                  edge="start"
+                  checked={props.checkedMaps.some((o) => o.id === map.id)}
+                />
+              </ListItemIcon>
+              <ListItemText primary={map?.name} />
+            </ListItemButton>
+          </ListItem>
+        ))}
       </List>
     </Box>
   );
