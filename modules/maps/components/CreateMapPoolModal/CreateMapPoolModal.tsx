@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { Box, Modal, Typography, Button } from '@mui/material';
 
-import { MapPoolForm } from '@/modules/maps/components';
+import { CreateMapPoolForm } from '@/modules/maps/components';
 
 type FormValuesType = {
   name: string;
@@ -50,7 +50,7 @@ const CreateMapPoolModal: React.FC<PropsType> = (props) => {
               Create Map Pool
             </Typography>
 
-            <MapPoolForm
+            <CreateMapPoolForm
               onCreateMapPool={props.onCreateMapPool}
               onClose={handleClose}
             />

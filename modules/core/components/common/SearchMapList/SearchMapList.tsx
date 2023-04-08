@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useQuery } from '@apollo/client';
+import { useState, useCallback } from 'react';
 
 import {
   Box,
@@ -13,10 +12,6 @@ import {
   Checkbox,
 } from '@mui/material';
 
-// import { SearchMapDocument, SearchMapQuery } from '@/generated/graphql';
-
-import { SEARCH_MAP } from '@/modules/maps/api/maps';
-
 import type { Map } from '@/generated/graphql';
 
 type PropsType = {
@@ -28,26 +23,7 @@ type PropsType = {
 };
 
 const SearchMapList: React.FC<PropsType> = (props) => {
-  // const [searchText, setSearchText] = useState<string>('');
   const [maps, setMaps] = useState<Map[]>([]);
-
-  console.log(props.maps)
-
-  //  const { data } = useQuery(SEARCH_MAP, {
-  //    variables: {
-  //      where: {
-  //        name_STARTS_WITH: searchText,
-  //      },
-  //      options: {
-  //        limit: 50,
-  //      },
-  //    },
-  //  });
-
-  //  useEffect(() => {
-  //    setMaps([...props.checkedMaps, ...maps]);
-  //    // eslint-disable-next-line react-hooks/exhaustive-deps
-  //  }, [props]);
 
   const handleToggle = useCallback(
     (map: Map) => () => {
@@ -106,6 +82,7 @@ const SearchMapList: React.FC<PropsType> = (props) => {
                 <Checkbox
                   edge="start"
                   checked={props.checkedMaps.some((o) => o.id === map.id)}
+                  value={props.checkedMaps}
                 />
               </ListItemIcon>
               <ListItemText primary={map?.name} />

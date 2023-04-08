@@ -5,7 +5,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { Box } from '@mui/material';
 
 import { showNotifyMessage } from '@/modules/core/utils';
-import { MapPoolForm } from '@/modules/maps/components';
+import { UpdateMapPoolForm } from '@/modules/maps/components';
 
 import {
   GetMapPoolDocument,
@@ -15,8 +15,9 @@ import {
   UpdateMapPoolMutationVariables,
 } from '@/generated/graphql';
 
-import type { FormValuesType } from '@/modules/maps/components';
 import { GET_MAP_POOL } from '@/modules/maps/api/mapPools';
+
+import type { FormValuesType } from '@/modules/maps/components';
 
 const MapPoolDetail: React.FC = () => {
   const [formValues, setFormValues] = useState<FormValuesType>({
@@ -53,6 +54,7 @@ const MapPoolDetail: React.FC = () => {
       variables: {
         input: {
           name: data.name,
+          // mapIds: ?????
         },
 
         id: mapPoolId,
@@ -64,10 +66,9 @@ const MapPoolDetail: React.FC = () => {
 
   return (
     <Box mt={2}>
-      <MapPoolForm
+      <UpdateMapPoolForm
         onUpdateMapPool={handleUpdateMapPool}
         initialValues={formValues}
-        onClose={() => null}
       />
     </Box>
   );

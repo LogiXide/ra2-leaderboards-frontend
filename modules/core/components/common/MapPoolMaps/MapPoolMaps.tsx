@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 import { useQuery } from '@apollo/client';
 
@@ -13,13 +13,27 @@ import type { Map } from '@/generated/graphql';
 
 type PropsType = {
   maps: Map[];
+  control: any;
+  fields: any;
 };
 
-export const MapPoolMaps: React.FC<PropsType> = (props) => {
+const MapPoolMaps: React.FC<PropsType> = (props) => {
   const [checkedMaps, setCheckedMaps] = useState<Map[]>(props.maps);
+
   const [searchText, setSearchText] = useState<string>('');
 
   const [maps, setMaps] = useState<Map[]>([]);
+
+  const getIds = (arr: Map[]) => {
+    let result = [] as number[];
+    arr.forEach((ar) => result.push(ar.id));
+
+    return result;
+  };
+
+  const mapIds = useMemo(() => getIds(checkedMaps), [checkedMaps]);
+
+  console.log(mapIds);
 
   const { data } = useQuery(SEARCH_MAP, {
     variables: {
@@ -34,19 +48,10 @@ export const MapPoolMaps: React.FC<PropsType> = (props) => {
 
   useEffect(() => {
     setMaps([...checkedMaps, ...maps]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props]);
-
-  useEffect(() => {
-    let isMounted = true;
 
     setCheckedMaps(props.maps);
-
-    return () => {
-      isMounted = false;
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.maps]);
+  }, [props]);
 
   return (
     <Stack
@@ -65,9 +70,13 @@ export const MapPoolMaps: React.FC<PropsType> = (props) => {
       />
 
       <SelectedMapList
+        fields={props.fields}
+        control={props.control}
         checkedMaps={checkedMaps}
         setCheckedMaps={setCheckedMaps}
       />
     </Stack>
   );
 };
+
+export { MapPoolMaps };

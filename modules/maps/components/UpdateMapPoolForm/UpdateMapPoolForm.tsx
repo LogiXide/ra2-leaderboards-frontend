@@ -1,7 +1,7 @@
-import { useCallback, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useCallback, useEffect, useState } from 'react';
+import { useForm, useFieldArray } from 'react-hook-form';
 import Link from 'next/link';
-import { array, object, string } from 'yup';
+import { object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Box, Button, Stack } from '@mui/material';
@@ -11,24 +11,22 @@ import type { Map } from '@/generated/graphql';
 
 import { MapPoolMaps } from '@/modules/core/components/common';
 
-export type FormValuesType = {
+type FormValuesType = {
   name: string;
   maps: Map[];
 };
 
 type PropsType = {
   initialValues?: FormValuesType;
-  onClose: () => void;
   onCreateMapPool?: (data: FormValuesType) => void;
   onUpdateMapPool?: (data: FormValuesType) => void;
 };
 
 const mapPoolSchema = object().shape({
   name: string().required('Map pool name is required'),
-  maps: array(),
 });
 
-const MapPoolForm: React.FC<PropsType> = (props) => {
+const UpdateMapPoolForm: React.FC<PropsType> = (props) => {
   const {
     handleSubmit,
     control,
@@ -42,6 +40,11 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
     resolver: yupResolver(mapPoolSchema),
   });
 
+  const { fields } = useFieldArray({
+    name: 'maps',
+    control,
+  });
+
   useEffect(() => {
     reset({
       name: props.initialValues?.name,
@@ -50,13 +53,8 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
 
   const onSubmit = useCallback(
     (data: FormValuesType) => {
-      if (props.onCreateMapPool) {
-        props.onCreateMapPool(data);
-
-        props.onClose();
-      }
-
       if (props.onUpdateMapPool) {
+        console.log(data);
         props.onUpdateMapPool(data);
       }
     },
@@ -73,44 +71,29 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
       <Stack direction="column" spacing={1}>
         <TextField label="Name" control={control} name="name" errors={errors} />
 
-        {props.onCreateMapPool && (
-          <Stack justifyContent="flex-end" direction="row" spacing={2}>
-            <Button onClick={() => props.onClose()} sx={{ color: 'black' }}>
-              Cancel
-            </Button>
+        <MapPoolMaps
+          fields={fields}
+          control={control}
+          maps={props.initialValues?.maps || []}
+        />
 
-            <Button type="submit" variant="contained" color="primary">
-              Create
-            </Button>
-          </Stack>
-        )}
+        <Stack justifyContent="flex-end" direction="row" spacing={2}>
+          <Link
+            href="/map-pools"
+            style={{
+              textDecoration: 'none',
+            }}
+          >
+            <Button sx={{ color: 'black' }}>Back</Button>
+          </Link>
 
-        {props.onUpdateMapPool && (
-          <>
-            {/*<MapPoolMaps
-              control={control}
-              maps={props.initialValues?.maps || []}
-            />*/}
-
-            <Stack justifyContent="flex-end" direction="row" spacing={2}>
-              <Link
-                href="/map-pools"
-                style={{
-                  textDecoration: 'none',
-                }}
-              >
-                <Button sx={{ color: 'black' }}>Back</Button>
-              </Link>
-
-              <Button type="submit" variant="contained" color="primary">
-                Update
-              </Button>
-            </Stack>
-          </>
-        )}
+          <Button type="submit" variant="contained" color="primary">
+            Update
+          </Button>
+        </Stack>
       </Stack>
     </Box>
   );
 };
 
-export { MapPoolForm };
+export { UpdateMapPoolForm };

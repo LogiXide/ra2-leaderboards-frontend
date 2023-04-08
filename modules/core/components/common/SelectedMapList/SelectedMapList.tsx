@@ -1,5 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 
+import { Controller } from 'react-hook-form';
+
 import {
   Box,
   Typography,
@@ -17,6 +19,8 @@ import type { Map } from '@/generated/graphql';
 type PropsType = {
   checkedMaps: Map[];
   setCheckedMaps: (data: Map[]) => void;
+  control: any;
+  fields: any;
 };
 
 const SelectedMapList: React.FC<PropsType> = (props) => {
@@ -89,9 +93,18 @@ const SelectedMapList: React.FC<PropsType> = (props) => {
           <ListItem key={map?.id} disablePadding>
             <ListItemButton onClick={handleToggle(map)}>
               <ListItemIcon>
-                <Checkbox
-                  edge="start"
-                  checked={props.checkedMaps.some((o) => o.id === map.id)}
+                <Controller
+                  name="maps"
+                  control={props.control}
+                  defaultValue={false}
+                  render={({ field }) => (
+                    <Checkbox
+                      {...field}
+                      edge="start"
+                      checked={props.checkedMaps.some((o) => o.id === map.id)}
+                      onChange={handleToggle(map)}
+                    />
+                  )}
                 />
               </ListItemIcon>
               <ListItemText primary={map?.name} />
