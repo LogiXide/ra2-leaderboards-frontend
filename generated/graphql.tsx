@@ -62,6 +62,7 @@ export type CreatePlayerResponse = {
 
 export type CreateTeamInput = {
   name: Scalars['String'];
+  playerIds?: InputMaybe<Array<Scalars['Int']>>;
 };
 
 export type CreateTeamResponse = {
@@ -115,7 +116,7 @@ export type GamesResponse = {
 };
 
 export type GamesWhere = {
-  name_STARTS_WITH?: InputMaybe<Scalars['String']>;
+  id_EQUALS?: InputMaybe<Scalars['Int']>;
 };
 
 export type Map = {
@@ -164,6 +165,7 @@ export type MapPoolsSortOptions = {
 };
 
 export type MapPoolsWhere = {
+  id_EQUALS?: InputMaybe<Scalars['Int']>;
   name_STARTS_WITH?: InputMaybe<Scalars['String']>;
 };
 
@@ -192,6 +194,7 @@ export type MapsResponse = {
 };
 
 export type MapsWhere = {
+  id_EQUALS?: InputMaybe<Scalars['Int']>;
   name_STARTS_WITH?: InputMaybe<Scalars['String']>;
 };
 
@@ -238,7 +241,7 @@ export type MatchesResponse = {
 };
 
 export type MatchesWhere = {
-  name_STARTS_WITH?: InputMaybe<Scalars['String']>;
+  id_EQUALS?: InputMaybe<Scalars['Int']>;
 };
 
 export type Mutation = {
@@ -315,6 +318,7 @@ export type Player = {
   createdAt: Scalars['String'];
   id: Scalars['Int'];
   name: Scalars['String'];
+  teams?: Maybe<Array<Team>>;
   updatedAt: Scalars['String'];
 };
 
@@ -343,6 +347,7 @@ export type PlayersSortOptions = {
 };
 
 export type PlayersWhere = {
+  id_EQUALS?: InputMaybe<Scalars['Int']>;
   name_STARTS_WITH?: InputMaybe<Scalars['String']>;
 };
 
@@ -438,6 +443,7 @@ export type Team = {
   createdAt: Scalars['String'];
   id: Scalars['Int'];
   name: Scalars['String'];
+  players?: Maybe<Array<Player>>;
   updatedAt: Scalars['String'];
 };
 
@@ -466,6 +472,7 @@ export type TeamsSortOptions = {
 };
 
 export type TeamsWhere = {
+  id_EQUALS?: InputMaybe<Scalars['Int']>;
   name_STARTS_WITH?: InputMaybe<Scalars['String']>;
 };
 
@@ -520,6 +527,7 @@ export type UpdatePlayerResponse = {
 
 export type UpdateTeamInput = {
   name: Scalars['String'];
+  playerIds?: InputMaybe<Array<Scalars['Int']>>;
 };
 
 export type UpdateTeamResponse = {
@@ -532,7 +540,7 @@ export type CreateMapPoolMutationVariables = Exact<{
 }>;
 
 
-export type CreateMapPoolMutation = { __typename?: 'Mutation', createMapPool: { __typename?: 'CreateMapPoolResponse', mapPools: Array<{ __typename?: 'MapPool', id: number, name: string }> } };
+export type CreateMapPoolMutation = { __typename?: 'Mutation', createMapPool: { __typename?: 'CreateMapPoolResponse', mapPools: Array<{ __typename?: 'MapPool', id: number, name: string, maps?: Array<{ __typename?: 'Map', id: number }> | null }> } };
 
 export type UpdateMapPoolMutationVariables = Exact<{
   input: UpdateMapPoolInput;
@@ -540,7 +548,7 @@ export type UpdateMapPoolMutationVariables = Exact<{
 }>;
 
 
-export type UpdateMapPoolMutation = { __typename?: 'Mutation', updateMapPool: { __typename?: 'UpdateMapPoolResponse', mapPools?: Array<{ __typename?: 'MapPool', id: number, name: string }> | null } };
+export type UpdateMapPoolMutation = { __typename?: 'Mutation', updateMapPool: { __typename?: 'UpdateMapPoolResponse', mapPools?: Array<{ __typename?: 'MapPool', id: number, name: string, maps?: Array<{ __typename?: 'Map', id: number }> | null }> | null } };
 
 export type GetMapPoolsQueryVariables = Exact<{
   options?: InputMaybe<MapPoolsOptions>;
@@ -658,6 +666,9 @@ export const CreateMapPoolDocument = gql`
     mapPools {
       id
       name
+      maps {
+        id
+      }
     }
   }
 }
@@ -694,6 +705,9 @@ export const UpdateMapPoolDocument = gql`
     mapPools {
       id
       name
+      maps {
+        id
+      }
     }
   }
 }

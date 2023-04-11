@@ -5,7 +5,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { Box } from '@mui/material';
 
 import { showNotifyMessage } from '@/modules/core/utils';
-import { UpdateMapPoolForm } from '@/modules/maps/components';
+import { MapPoolForm } from '@/modules/maps/components';
 
 import {
   GetMapPoolDocument,
@@ -17,17 +17,20 @@ import {
 
 import { GET_MAP_POOL } from '@/modules/maps/api/mapPools';
 
-import type { FormValuesType } from '@/modules/maps/components';
+type FormValuesType = {
+  name: string;
+  mapIds: number[] | [];
+};
 
 const MapPoolDetail: React.FC = () => {
   const [formValues, setFormValues] = useState<FormValuesType>({
     name: '',
-    maps: [],
+    mapIds: [],
   });
 
   const router = useRouter();
 
-  const mapPoolId = parseInt(router.query.id as string, 10);
+  const mapPoolId = parseInt(router.query.mapPoolId as string, 10);
 
   const { data } = useQuery(GET_MAP_POOL, {
     variables: {
@@ -39,7 +42,7 @@ const MapPoolDetail: React.FC = () => {
     if (data) {
       setFormValues({
         name: data?.mapPool?.name || '',
-        maps: data?.mapPool?.maps || [],
+        mapIds: data?.mapPool?.maps || [],
       });
     }
   }, [data]);
@@ -49,12 +52,13 @@ const MapPoolDetail: React.FC = () => {
     UpdateMapPoolMutationVariables
   >(UpdateMapPoolDocument);
 
-  const handleUpdateMapPool = (data: { name: string }) => {
+  const handleUpdateMapPool = (values: FormValuesType) => {
+    console.log(values);
     updateMapPool({
       variables: {
         input: {
-          name: data.name,
-          // mapIds: ?????
+          name: values.name,
+          mapIds: values.mapIds,
         },
 
         id: mapPoolId,
@@ -66,8 +70,9 @@ const MapPoolDetail: React.FC = () => {
 
   return (
     <Box mt={2}>
-      <UpdateMapPoolForm
-        onUpdateMapPool={handleUpdateMapPool}
+      <MapPoolForm
+        type="update"
+        onSubmit={handleUpdateMapPool}
         initialValues={formValues}
       />
     </Box>

@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { Stack, Box } from '@mui/material';
 
 import { config } from '@/config';
+
 import { showNotifyMessage } from '@/modules/core/utils';
 import { DataList } from '@/modules/core/components/data';
 import { CreateMapPoolModal } from '@/modules/maps/components';
@@ -35,6 +36,18 @@ const MapPools: React.FC = () => {
     offset: 0,
   });
 
+  const { data, loading, error } = useQuery<GetMapPoolsQuery>(
+    GetMapPoolsDocument,
+    {
+      variables: {
+        options: {
+          offset: pageInfo.offset,
+          limit: pageInfo.limit,
+        },
+      },
+    }
+  );
+
   const router = useRouter();
 
   const [createMapPool] = useMutation<
@@ -48,24 +61,12 @@ const MapPools: React.FC = () => {
     },
   });
 
-  const { data, loading, error } = useQuery<GetMapPoolsQuery>(
-    GetMapPoolsDocument,
-    {
-      variables: {
-        options: {
-          offset: pageInfo.offset,
-          limit: pageInfo.limit,
-        },
-      },
-    }
-  );
-
   const handleCreateMapPool = useCallback(
-    (data: { name: string }) => {
+    (values: { name: string }) => {
       createMapPool({
         variables: {
           input: {
-            name: data.name,
+            name: values.name,
           },
         },
       });
@@ -75,6 +76,7 @@ const MapPools: React.FC = () => {
     [createMapPool]
   );
 
+  // TODO: add wrapper...
   if (loading) {
     return <h1>Loading...</h1>;
   }

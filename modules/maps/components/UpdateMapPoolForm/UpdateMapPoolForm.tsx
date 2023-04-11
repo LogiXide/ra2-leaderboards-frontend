@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import Link from 'next/link';
-import { object, string } from 'yup';
+import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Box, Button, Stack } from '@mui/material';
@@ -22,8 +22,8 @@ type PropsType = {
   onUpdateMapPool?: (data: FormValuesType) => void;
 };
 
-const mapPoolSchema = object().shape({
-  name: string().required('Map pool name is required'),
+const schema = yup.object().shape({
+  name: yup.string().required('Map pool name is required'),
 });
 
 const UpdateMapPoolForm: React.FC<PropsType> = (props) => {
@@ -37,7 +37,7 @@ const UpdateMapPoolForm: React.FC<PropsType> = (props) => {
       name: props.initialValues?.name || '',
       maps: props.initialValues?.maps || [],
     },
-    resolver: yupResolver(mapPoolSchema),
+    resolver: yupResolver(schema),
   });
 
   const { fields } = useFieldArray({
