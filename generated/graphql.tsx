@@ -62,6 +62,7 @@ export type CreatePlayerResponse = {
 
 export type CreateTeamInput = {
   name: Scalars['String'];
+  playerIds?: InputMaybe<Array<Scalars['Int']>>;
 };
 
 export type CreateTeamResponse = {
@@ -115,7 +116,7 @@ export type GamesResponse = {
 };
 
 export type GamesWhere = {
-  name_STARTS_WITH?: InputMaybe<Scalars['String']>;
+  id_EQUALS?: InputMaybe<Scalars['Int']>;
 };
 
 export type Map = {
@@ -164,6 +165,7 @@ export type MapPoolsSortOptions = {
 };
 
 export type MapPoolsWhere = {
+  id_EQUALS?: InputMaybe<Scalars['Int']>;
   name_STARTS_WITH?: InputMaybe<Scalars['String']>;
 };
 
@@ -192,6 +194,7 @@ export type MapsResponse = {
 };
 
 export type MapsWhere = {
+  id_EQUALS?: InputMaybe<Scalars['Int']>;
   name_STARTS_WITH?: InputMaybe<Scalars['String']>;
 };
 
@@ -238,7 +241,7 @@ export type MatchesResponse = {
 };
 
 export type MatchesWhere = {
-  name_STARTS_WITH?: InputMaybe<Scalars['String']>;
+  id_EQUALS?: InputMaybe<Scalars['Int']>;
 };
 
 export type Mutation = {
@@ -315,6 +318,7 @@ export type Player = {
   createdAt: Scalars['String'];
   id: Scalars['Int'];
   name: Scalars['String'];
+  teams?: Maybe<Array<Team>>;
   updatedAt: Scalars['String'];
 };
 
@@ -343,6 +347,7 @@ export type PlayersSortOptions = {
 };
 
 export type PlayersWhere = {
+  id_EQUALS?: InputMaybe<Scalars['Int']>;
   name_STARTS_WITH?: InputMaybe<Scalars['String']>;
 };
 
@@ -438,6 +443,7 @@ export type Team = {
   createdAt: Scalars['String'];
   id: Scalars['Int'];
   name: Scalars['String'];
+  players?: Maybe<Array<Player>>;
   updatedAt: Scalars['String'];
 };
 
@@ -466,6 +472,7 @@ export type TeamsSortOptions = {
 };
 
 export type TeamsWhere = {
+  id_EQUALS?: InputMaybe<Scalars['Int']>;
   name_STARTS_WITH?: InputMaybe<Scalars['String']>;
 };
 
@@ -520,6 +527,7 @@ export type UpdatePlayerResponse = {
 
 export type UpdateTeamInput = {
   name: Scalars['String'];
+  playerIds?: InputMaybe<Array<Scalars['Int']>>;
 };
 
 export type UpdateTeamResponse = {
@@ -592,6 +600,13 @@ export type SearchMapQueryVariables = Exact<{
 
 
 export type SearchMapQuery = { __typename?: 'Query', maps: { __typename?: 'MapsResponse', data: Array<{ __typename?: 'Map', id: number, name: string, spots: number, author: string, imageUrl: string } | null> } };
+
+export type GetMatchesQueryVariables = Exact<{
+  options?: InputMaybe<MatchesOptions>;
+}>;
+
+
+export type GetMatchesQuery = { __typename?: 'Query', matches: { __typename?: 'MatchesResponse', totalPages: number, data: Array<{ __typename?: 'Match', id: number, type: string, homePlayerId?: number | null, homeTeamId?: number | null, awayPlayerId?: number | null, awayTeamId?: number | null } | null> } };
 
 export type CreatePlayerMutationVariables = Exact<{
   input: CreatePlayerInput;
@@ -1002,6 +1017,49 @@ export function useSearchMapLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type SearchMapQueryHookResult = ReturnType<typeof useSearchMapQuery>;
 export type SearchMapLazyQueryHookResult = ReturnType<typeof useSearchMapLazyQuery>;
 export type SearchMapQueryResult = Apollo.QueryResult<SearchMapQuery, SearchMapQueryVariables>;
+export const GetMatchesDocument = gql`
+    query GetMatches($options: MatchesOptions) {
+  matches(options: $options) {
+    data {
+      id
+      type
+      homePlayerId
+      homeTeamId
+      awayPlayerId
+      awayTeamId
+    }
+    totalPages
+  }
+}
+    `;
+
+/**
+ * __useGetMatchesQuery__
+ *
+ * To run a query within a React component, call `useGetMatchesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMatchesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMatchesQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetMatchesQuery(baseOptions?: Apollo.QueryHookOptions<GetMatchesQuery, GetMatchesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMatchesQuery, GetMatchesQueryVariables>(GetMatchesDocument, options);
+      }
+export function useGetMatchesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMatchesQuery, GetMatchesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMatchesQuery, GetMatchesQueryVariables>(GetMatchesDocument, options);
+        }
+export type GetMatchesQueryHookResult = ReturnType<typeof useGetMatchesQuery>;
+export type GetMatchesLazyQueryHookResult = ReturnType<typeof useGetMatchesLazyQuery>;
+export type GetMatchesQueryResult = Apollo.QueryResult<GetMatchesQuery, GetMatchesQueryVariables>;
 export const CreatePlayerDocument = gql`
     mutation CreatePlayer($input: CreatePlayerInput!) {
   createPlayer(input: $input) {

@@ -17,6 +17,7 @@ const menuList: TypeMenuItem[] = [
   { id: 3, label: 'Map Pools', href: '/map-pools' },
   { id: 4, label: 'Players', href: '/players' },
   { id: 5, label: 'Teams', href: '/teams' },
+  { id: 6, label: 'Matches', href: '/matches' },
 ];
 
 const Header: React.FC = () => {
