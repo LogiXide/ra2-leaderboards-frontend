@@ -62,11 +62,12 @@ const MapPools: React.FC = () => {
   });
 
   const handleCreateMapPool = useCallback(
-    (values: { name: string }) => {
+    (values: { name: string; mapIds: number[] }) => {
       createMapPool({
         variables: {
           input: {
-            name: values.name,
+            name: values.name || '',
+            mapIds: values.mapIds || [],
           },
         },
       });

@@ -13,6 +13,7 @@ type PropsType = {
   onCreateMapPool: (values: FormValuesType) => void;
 };
 
+// TODO: move styles
 const styles = {
   position: 'absolute' as 'absolute',
   top: '50%',

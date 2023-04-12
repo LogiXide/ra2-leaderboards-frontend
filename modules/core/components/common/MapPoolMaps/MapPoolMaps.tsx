@@ -1,44 +1,28 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 
 import { useQuery } from '@apollo/client';
 
 import { SEARCH_MAP } from '@/modules/maps/api/maps';
 
-import { SearchMapList } from '../SearchMapList';
-import { SelectedMapList } from '../SelectedMapList';
+import { ItemList } from '../ItemList';
 
-import { Stack } from '@mui/material';
-
-import type { Map } from '@/generated/graphql';
+import Stack from '@mui/material/Stack';
+import { Map } from '@/generated/graphql';
 
 type PropsType = {
-  maps: Map[];
-  control: any;
-  fields: any;
+  selectedMaps: { id: number; name: string; checked: boolean }[];
 };
 
 const MapPoolMaps: React.FC<PropsType> = (props) => {
-  const [checkedMaps, setCheckedMaps] = useState<Map[]>(props.maps);
+  const { selectedMaps } = props;
 
-  const [searchText, setSearchText] = useState<string>('');
-
-  const [maps, setMaps] = useState<Map[]>([]);
-
-  const getIds = (arr: Map[]) => {
-    let result = [] as number[];
-    arr.forEach((ar) => result.push(ar.id));
-
-    return result;
-  };
-
-  const mapIds = useMemo(() => getIds(checkedMaps), [checkedMaps]);
-
-  console.log(mapIds);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery2, setSearchQuery2] = useState<string>('');
 
   const { data } = useQuery(SEARCH_MAP, {
     variables: {
       where: {
-        name_STARTS_WITH: searchText,
+        name_STARTS_WITH: searchQuery,
       },
       options: {
         limit: 50,
@@ -46,12 +30,33 @@ const MapPoolMaps: React.FC<PropsType> = (props) => {
     },
   });
 
-  useEffect(() => {
-    setMaps([...checkedMaps, ...maps]);
+  const availableFields = useMemo(() => {
+    const result: { id: number; name: string; checked: boolean }[] = [];
 
-    setCheckedMaps(props.maps);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props]);
+    data?.maps?.data.forEach((map: Map) => {
+      const newObj = {
+        id: map.id,
+        name: map.name,
+        checked: false,
+      };
+
+      result.push(newObj);
+    });
+
+    return result;
+  }, [data?.maps.data]);
+
+  const selectedFields = useMemo(() => {
+    if (searchQuery2) {
+      return selectedMaps.filter((it) => it.name.startsWith(searchQuery2));
+    }
+
+    return selectedMaps;
+  }, [searchQuery2, selectedMaps]);
+
+  const onChecked = (id: number) => {
+    console.log(id);
+  };
 
   return (
     <Stack
@@ -61,19 +66,20 @@ const MapPoolMaps: React.FC<PropsType> = (props) => {
       spacing={5}
       mt={5}
     >
-      <SearchMapList
-        checkedMaps={checkedMaps}
-        setCheckedMaps={setCheckedMaps}
-        setSearchText={setSearchText}
-        searchText={searchText}
-        maps={data?.maps.data}
+      <ItemList
+        title="Available Maps"
+        fields={availableFields}
+        query={searchQuery}
+        onSearch={setSearchQuery}
+        onChecked={onChecked}
       />
 
-      <SelectedMapList
-        fields={props.fields}
-        control={props.control}
-        checkedMaps={checkedMaps}
-        setCheckedMaps={setCheckedMaps}
+      <ItemList
+        title="Selected Maps"
+        fields={selectedFields}
+        query={searchQuery2}
+        onSearch={setSearchQuery2}
+        onChecked={onChecked}
       />
     </Stack>
   );

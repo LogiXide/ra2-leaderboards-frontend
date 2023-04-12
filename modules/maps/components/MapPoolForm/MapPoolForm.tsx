@@ -4,10 +4,11 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Link from 'next/link';
 
-import { Box, Button, Stack, Select, MenuItem } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 
-// import { TextField } from '@/modules/core/components/forms/fields';
+
 import { TextField } from '@/modules/core/components/forms/fields/TextFieldNew/TextField';
+import { MapPoolMaps } from '@/modules/core/components/common';
 
 type FormValuesType = {
   name: string;
@@ -17,6 +18,7 @@ type FormValuesType = {
 type PropsType = {
   type: 'create' | 'update';
   initialValues?: FormValuesType;
+  selectedMaps?: { id: number; name: string; checked: boolean }[];
   onCancel?: () => void;
   onSubmit: (values: FormValuesType) => void;
 };
@@ -26,9 +28,7 @@ const schema = yup.object().shape({
 });
 
 const MapPoolForm: React.FC<PropsType> = (props) => {
-  const { initialValues, onSubmit, onCancel, type } = props;
-
-  console.log(onSubmit);
+  const { initialValues, selectedMaps, type, onSubmit, onCancel} = props;
 
   const { handleSubmit, control, reset } = useForm<FormValuesType>({
     defaultValues: {
@@ -42,8 +42,9 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
   useEffect(() => {
     reset({
       name: initialValues?.name,
+      mapIds: initialValues?.mapIds,
     });
-  }, [reset, initialValues?.name]);
+  }, [reset, initialValues]);
 
   const onSubmitForm = useCallback(
     (values: FormValuesType) => {
@@ -79,6 +80,9 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
           )}
         />
 
+        {type === 'update' && <MapPoolMaps selectedMaps={selectedMaps || []} />}
+
+        {/*TODO: refactor for buttons */}
         <Stack justifyContent="flex-end" direction="row" spacing={2}>
           {onCancel ? (
             <Button onClick={() => onCancel()} sx={{ color: 'black' }}>

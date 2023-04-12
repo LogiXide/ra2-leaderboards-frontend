@@ -1,21 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQuery } from '@apollo/client';
 
 import { Box } from '@mui/material';
 
-import { showNotifyMessage } from '@/modules/core/utils';
 import { MapPoolForm } from '@/modules/maps/components';
 
 import {
-  GetMapPoolDocument,
-  GetMapPoolQuery,
+  //  GetMapPoolDocument,
+  //  GetMapPoolQuery,
   UpdateMapPoolDocument,
   UpdateMapPoolMutation,
   UpdateMapPoolMutationVariables,
 } from '@/generated/graphql';
 
 import { GET_MAP_POOL } from '@/modules/maps/api/mapPools';
+import { Map } from '@/generated/graphql';
 
 type FormValuesType = {
   name: string;
@@ -38,11 +38,37 @@ const MapPoolDetail: React.FC = () => {
     },
   });
 
+  const selectedMaps = useMemo(() => {
+    const result: { id: number; name: string; checked: boolean }[] = [];
+
+    data?.mapPool?.maps.forEach((it: Map) => {
+      const newObj = {
+        id: it.id,
+        name: it.name,
+        checked: true,
+      };
+
+      result.push(newObj);
+    });
+
+    return result;
+  }, [data]);
+
+  const convertDataToId = useMemo(() => {
+    const result: number[] = [];
+
+    data?.mapPool?.maps.forEach((it: Map) => {
+      result.push(it.id);
+    });
+
+    return result;
+  }, [data]);
+
   useEffect(() => {
     if (data) {
       setFormValues({
-        name: data?.mapPool?.name || '',
-        mapIds: data?.mapPool?.maps || [],
+        name: data?.mapPool?.name,
+        mapIds: convertDataToId,
       });
     }
   }, [data]);
@@ -52,8 +78,7 @@ const MapPoolDetail: React.FC = () => {
     UpdateMapPoolMutationVariables
   >(UpdateMapPoolDocument);
 
-  const handleUpdateMapPool = (values: FormValuesType) => {
-    console.log(values);
+  const handleUpdateMapPool = (values: { name: string; mapIds: number[] }) => {
     updateMapPool({
       variables: {
         input: {
@@ -64,8 +89,6 @@ const MapPoolDetail: React.FC = () => {
         id: mapPoolId,
       },
     });
-
-    showNotifyMessage('Map Pool updated!', 'success');
   };
 
   return (
@@ -74,6 +97,7 @@ const MapPoolDetail: React.FC = () => {
         type="update"
         onSubmit={handleUpdateMapPool}
         initialValues={formValues}
+        selectedMaps={selectedMaps}
       />
     </Box>
   );
