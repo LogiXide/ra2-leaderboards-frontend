@@ -6,7 +6,7 @@ import { MapPoolForm } from '@/modules/maps/components';
 
 type FormValuesType = {
   name: string;
-  mapIds: number[] | [];
+  maps: { id: number; name: string }[];
 };
 
 type PropsType = {
@@ -55,11 +55,7 @@ const CreateMapPoolModal: React.FC<PropsType> = (props) => {
               Create Map Pool
             </Typography>
 
-            <MapPoolForm
-              type="create"
-              onSubmit={onCreateMapPool}
-              onCancel={handleCloseModal}
-            />
+            <MapPoolForm type="create" onSubmit={onCreateMapPool} />
           </Box>
         </Modal>
       )}

@@ -8,23 +8,25 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 
+type FieldType = {
+  id: number;
+  name: string;
+  checked: boolean;
+};
+
 type PropsType = {
   title: string;
   query: string;
-  fields: { id: number; name: string; checked: boolean }[];
-  onChecked: (id: number) => void;
+  fields: FieldType[];
+  onChecked: (field: FieldType) => void;
   onSearch: (query: string) => void;
 };
 
 export const ItemList: React.FC<PropsType> = (props) => {
-  const { title, fields, query, onSearch, onChecked } = props;
+  const { title, query, fields, onChecked, onSearch } = props;
 
-  const handleChangeQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onSearch(e.target.value);
-  };
-
-  const handleCheckedField = (id: number) => {
-    onChecked(id);
   };
 
   return (
@@ -37,12 +39,7 @@ export const ItemList: React.FC<PropsType> = (props) => {
         {title}
       </Typography>
 
-      <TextField
-        fullWidth
-        size="small"
-        value={query}
-        onChange={handleChangeQuery}
-      />
+      <TextField fullWidth size="small" value={query} onChange={handleChange} />
 
       <List
         sx={{
@@ -53,13 +50,17 @@ export const ItemList: React.FC<PropsType> = (props) => {
           mt: '10px',
         }}
       >
-        {fields?.map((it) => (
-          <ListItem key={it?.id} disablePadding>
-            <ListItemButton onClick={() => handleCheckedField(it.id)}>
+        {fields.map((field: FieldType) => (
+          <ListItem key={field.id} disablePadding>
+            <ListItemButton
+              onClick={() => {
+                onChecked(field);
+              }}
+            >
               <ListItemIcon>
-                <Checkbox edge="start" checked={it.checked} />
+                <Checkbox edge="start" checked={field.checked} />
               </ListItemIcon>
-              <ListItemText primary={it?.name} />
+              <ListItemText primary={field.name} />
             </ListItemButton>
           </ListItem>
         ))}

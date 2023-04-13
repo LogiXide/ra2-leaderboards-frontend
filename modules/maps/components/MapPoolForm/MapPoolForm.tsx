@@ -1,25 +1,27 @@
-import { useCallback, useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useCallback, useEffect, useRef } from 'react';
+import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Link from 'next/link';
 
-import { Box, Button, Stack } from '@mui/material';
+import { Box, Button, Stack, TextField } from '@mui/material';
 
-
-import { TextField } from '@/modules/core/components/forms/fields/TextFieldNew/TextField';
 import { MapPoolMaps } from '@/modules/core/components/common';
+
+type FieldType = {
+  id: number;
+  name: string;
+  checked: boolean;
+};
 
 type FormValuesType = {
   name: string;
-  mapIds: number[] | [];
+  maps: { id: number; name: string; checked: boolean }[];
 };
 
 type PropsType = {
   type: 'create' | 'update';
-  initialValues?: FormValuesType;
-  selectedMaps?: { id: number; name: string; checked: boolean }[];
-  onCancel?: () => void;
+  defaultValues?: FormValuesType;
   onSubmit: (values: FormValuesType) => void;
 };
 
@@ -28,38 +30,31 @@ const schema = yup.object().shape({
 });
 
 const MapPoolForm: React.FC<PropsType> = (props) => {
-  const { initialValues, selectedMaps, type, onSubmit, onCancel} = props;
+  const { defaultValues, type, onSubmit } = props;
 
   const { handleSubmit, control, reset } = useForm<FormValuesType>({
-    defaultValues: {
-      name: initialValues?.name || '',
-      mapIds: initialValues?.mapIds || [],
-    },
-
+    defaultValues,
     resolver: yupResolver(schema),
   });
 
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'maps',
+  });
+
+  // https://stackoverflow.com/questions/62242657/how-to-change-react-hook-form-defaultvalue-with-useeffect
   useEffect(() => {
     reset({
-      name: initialValues?.name,
-      mapIds: initialValues?.mapIds,
+      name: defaultValues?.name,
+      maps: defaultValues?.maps,
     });
-  }, [reset, initialValues]);
+  }, [reset, defaultValues]);
 
   const onSubmitForm = useCallback(
     (values: FormValuesType) => {
-      if (type === 'create' && onCancel) {
-        onSubmit(values);
-
-        onCancel();
-      }
-
-      if (type === 'update') {
-        onSubmit(values);
-      }
+      onSubmit(values);
     },
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [onSubmit]
   );
 
@@ -76,18 +71,40 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
           name="name"
           control={control}
           render={({ fieldState, field }) => (
-            <TextField variant="standard" fieldState={fieldState} {...field} />
+            <TextField
+              required
+              label={field.name}
+              error={!!fieldState?.error}
+              helperText={fieldState.error?.message}
+              {...field}
+              sx={{ textTransform: 'capitalize' }}
+            />
           )}
         />
 
-        {type === 'update' && <MapPoolMaps selectedMaps={selectedMaps || []} />}
+        {type === 'update' && (
+          <Controller
+            name="maps"
+            control={control}
+            render={({ field }) => (
+              <MapPoolMaps
+                fields={fields}
+                onChecked={(field: FieldType) => {
+                  console.log('remove field', field);
+                  remove(field.id);
+                }}
+                onSelect={(field: FieldType) => {
+                  append({ id: field.id, name: field.name, checked: true });
+                }}
+                {...field}
+              />
+            )}
+          />
+        )}
 
-        {/*TODO: refactor for buttons */}
         <Stack justifyContent="flex-end" direction="row" spacing={2}>
-          {onCancel ? (
-            <Button onClick={() => onCancel()} sx={{ color: 'black' }}>
-              Cancel
-            </Button>
+          {type === 'create' ? (
+            <Button sx={{ color: 'black' }}>Cancel</Button>
           ) : (
             <Link
               href="/map-pools"
