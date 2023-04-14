@@ -44,7 +44,7 @@ const MapPoolDetail: React.FC = () => {
     },
   });
 
-  const convertDataToMaps = useMemo(() => {
+  const convertDataToFields = useMemo(() => {
     const fields: Field[] = [];
 
     data?.mapPool?.maps.forEach((map: Map) => {
@@ -58,16 +58,16 @@ const MapPoolDetail: React.FC = () => {
     });
 
     return fields;
-  }, [data]);
+  }, [data?.mapPool?.maps]);
 
   useEffect(() => {
-    if (data) {
+    if (data?.mapPool?.name) {
       setFormValues({
         name: data?.mapPool?.name,
-        maps: convertDataToMaps,
+        maps: convertDataToFields,
       });
     }
-  }, [data]);
+  }, [data?.mapPool?.name, convertDataToFields]);
 
   const [updateMapPool] = useMutation<
     UpdateMapPoolMutation,
