@@ -58,6 +58,25 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
     [onSubmit]
   );
 
+  const onSelectField = (field: FieldType) => {
+    const checkField = fields.some((f) => f.name === field.name);
+
+    if (!checkField) {
+      const newField = {
+        id: field.id,
+        name: field.name,
+        checked: true,
+      };
+
+      append(newField);
+    }
+  };
+
+  const onRemoveField = (field: FieldType) => {
+    console.log('remove field', field);
+    remove(field.id);
+  };
+
   return (
     <Box
       component="form"
@@ -89,13 +108,8 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
             render={({ field }) => (
               <MapPoolMaps
                 fields={fields}
-                onChecked={(field: FieldType) => {
-                  console.log('remove field', field);
-                  remove(field.id);
-                }}
-                onSelect={(field: FieldType) => {
-                  append({ id: field.id, name: field.name, checked: true });
-                }}
+                onSelectField={onSelectField}
+                onRemoveField={onRemoveField}
                 {...field}
               />
             )}

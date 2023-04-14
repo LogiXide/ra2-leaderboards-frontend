@@ -18,12 +18,12 @@ type FieldType = {
 
 type PropsType = {
   fields: FieldType[];
-  onChecked: (field: FieldType) => void;
-  onSelect: (field: FieldType) => void;
+  onSelectField: (field: FieldType) => void;
+  onRemoveField: (field: FieldType) => void;
 } & ControllerRenderProps;
 
 const MapPoolMaps: React.FC<PropsType> = (props) => {
-  const { onChecked, onSelect, fields, ...field } = props;
+  const { fields, onRemoveField, onSelectField, ...field } = props;
 
   const [searchAvailableField, setSearchAvailableField] = useState<string>('');
   const [searchSelectedField, setSearchSelectedField] = useState<string>('');
@@ -94,7 +94,7 @@ const MapPoolMaps: React.FC<PropsType> = (props) => {
         fields={availableFields}
         query={searchAvailableField}
         onSearch={setSearchAvailableField}
-        onChecked={onSelect}
+        onChecked={onSelectField}
       />
 
       <ItemList
@@ -102,7 +102,7 @@ const MapPoolMaps: React.FC<PropsType> = (props) => {
         fields={selectedFields}
         query={searchSelectedField}
         onSearch={setSearchSelectedField}
-        onChecked={onChecked}
+        onChecked={onRemoveField}
       />
     </Stack>
   );
