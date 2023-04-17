@@ -8,7 +8,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 
-type FieldType = {
+type ItemType = {
   id: number;
   name: string;
   checked: boolean;
@@ -17,13 +17,13 @@ type FieldType = {
 type PropsType = {
   title: string;
   query: string;
-  fields: FieldType[];
-  onChecked: (field: FieldType) => void;
+  items: ItemType[];
+  onChecked: (item: ItemType, checked: boolean) => void;
   onSearch: (query: string) => void;
 };
 
-export const ItemList: React.FC<PropsType> = (props) => {
-  const { title, query, fields, onChecked, onSearch } = props;
+export const ItemsList: React.FC<PropsType> = (props) => {
+  const { title, query, items, onChecked, onSearch } = props;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onSearch(e.target.value);
@@ -47,20 +47,20 @@ export const ItemList: React.FC<PropsType> = (props) => {
           position: 'relative',
           overflow: 'auto',
           height: 400,
-          mt: '10px',
+          mt: 1,
         }}
       >
-        {fields.map((field: FieldType) => (
-          <ListItem key={field.id} disablePadding>
+        {items.map((item: ItemType) => (
+          <ListItem key={item.id} disablePadding>
             <ListItemButton
               onClick={() => {
-                onChecked(field);
+                onChecked(item, item.checked);
               }}
             >
               <ListItemIcon>
-                <Checkbox edge="start" checked={field.checked} />
+                <Checkbox edge="start" checked={item.checked} />
               </ListItemIcon>
-              <ListItemText primary={field.name} />
+              <ListItemText primary={item.name} />
             </ListItemButton>
           </ListItem>
         ))}

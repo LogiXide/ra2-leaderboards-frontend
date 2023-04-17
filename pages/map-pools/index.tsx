@@ -4,15 +4,15 @@ import { useQuery, useMutation } from '@apollo/client';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { Stack, Box } from '@mui/material';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 
-import { config } from '@/config';
-
-import { showNotifyMessage } from '@/modules/core/utils';
 import { DataList } from '@/modules/core/components/data';
-import { CreateMapPoolModal } from '@/modules/maps/components';
 import { Pagination } from '@/modules/core/components/common';
+import { CreateMapPoolModal } from '@/modules/maps/components';
 import { CREATE_MAP_POOL } from '@/modules/maps/api/mapPools';
+import { showNotifyMessage } from '@/modules/core/utils';
+import { config } from '@/config';
 
 import {
   GetMapPoolsDocument,
@@ -63,17 +63,13 @@ const MapPools: React.FC = () => {
 
   const handleCreateMapPool = useCallback(
     (values: { name: string; maps: { id: number; name: string }[] }) => {
-      const mapIds: number[] = [];
-
-      values?.maps?.forEach((it) => {
-        mapIds.push(it.id);
-      });
+      const mapIds = values.maps.map((map) => map.id);
 
       createMapPool({
         variables: {
           input: {
-            name: values.name || '',
-            mapIds,
+            name: values.name,
+            mapIds: mapIds || [],
           },
         },
       });

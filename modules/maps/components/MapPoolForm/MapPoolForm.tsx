@@ -1,14 +1,17 @@
 import { useCallback, useEffect } from 'react';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
+import Link from 'next/link';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import Link from 'next/link';
 
-import { Box, Button, Stack, TextField } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 
 import { MapPoolMaps } from '@/modules/core/components/common';
 
-type FieldType = {
+type ItemType = {
   id: number;
   name: string;
   checked: boolean;
@@ -16,7 +19,7 @@ type FieldType = {
 
 type FormValuesType = {
   name: string;
-  maps: { id: number; name: string; checked: boolean }[];
+  maps: ItemType[];
 };
 
 type PropsType = {
@@ -37,8 +40,9 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
     resolver: yupResolver(schema),
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, replace } = useFieldArray({
     control,
+    keyName: '_',
     name: 'maps',
   });
 
@@ -58,24 +62,24 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
     [onSubmit]
   );
 
-  const onSelectField = (field: FieldType) => {
-    const checkField = fields.some((f) => f.name === field.name);
+  const onChecked = useCallback(
+    (item: ItemType, checked: boolean) => {
+      if (checked) {
+        const newFields = fields.filter((field) => field.id !== item.id);
 
-    if (!checkField) {
-      const newField = {
-        id: field.id,
-        name: field.name,
-        checked: true,
-      };
+        replace(newFields);
+      } else if (!checked) {
+        const newField = {
+          id: item.id,
+          name: item.name,
+          checked: true,
+        };
 
-      append(newField);
-    }
-  };
-
-  const onRemoveField = (field: FieldType) => {
-    console.log('remove field', field);
-    remove(field.id);
-  };
+        append(newField);
+      }
+    },
+    [fields, append, replace]
+  );
 
   return (
     <Box
@@ -105,14 +109,7 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
           <Controller
             name="maps"
             control={control}
-            render={({ field }) => (
-              <MapPoolMaps
-                fields={fields}
-                onSelectField={onSelectField}
-                onRemoveField={onRemoveField}
-                {...field}
-              />
-            )}
+            render={() => <MapPoolMaps items={fields} onChecked={onChecked} />}
           />
         )}
 

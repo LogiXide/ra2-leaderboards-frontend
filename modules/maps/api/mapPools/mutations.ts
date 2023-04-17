@@ -6,7 +6,6 @@ const CREATE_MAP_POOL = gql`
       mapPools {
         id
         name
-
         maps {
           id
         }
@@ -21,7 +20,6 @@ const UPDATE_MAP_POOL = gql`
       mapPools {
         id
         name
-
         maps {
           id
         }

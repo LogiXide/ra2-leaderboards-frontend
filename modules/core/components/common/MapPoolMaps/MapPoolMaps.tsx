@@ -1,29 +1,24 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useQuery } from '@apollo/client';
+
 import Stack from '@mui/material/Stack';
 
-import { ControllerRenderProps } from 'react-hook-form';
-
+import { ItemsList } from '@/modules/core/components/common';
 import { SEARCH_MAP } from '@/modules/maps/api/maps';
 
-import { ItemList } from '../ItemList';
-
-import type { Map } from '@/generated/graphql';
-
-type FieldType = {
+type MapType = {
   id: number;
   name: string;
   checked: boolean;
 };
 
 type PropsType = {
-  fields: FieldType[];
-  onSelectField: (field: FieldType) => void;
-  onRemoveField: (field: FieldType) => void;
-} & ControllerRenderProps;
+  items: MapType[];
+  onChecked: (item: MapType, checked: boolean) => void;
+};
 
 const MapPoolMaps: React.FC<PropsType> = (props) => {
-  const { fields, onRemoveField, onSelectField, ...field } = props;
+  const { items, onChecked } = props;
 
   const [searchAvailableField, setSearchAvailableField] = useState<string>('');
   const [searchSelectedField, setSearchSelectedField] = useState<string>('');
@@ -39,47 +34,45 @@ const MapPoolMaps: React.FC<PropsType> = (props) => {
     },
   });
 
-  const compareFields = useCallback(() => {
-    const fieldName: string[] = [];
-
-    field.value.forEach((field: any) => {
-      fieldName.push(field.name);
-    });
-
-    return fieldName;
-  }, [field.value]);
-
-  console.log(compareFields());
-
   const availableFields = useMemo(() => {
-    const result: FieldType[] = [];
+    const fields =
+      data?.maps?.data.map((it: MapType) => ({
+        id: it.id,
+        name: it.name,
+        checked: false,
+      })) || [];
 
-    const arrayNames = compareFields();
+    const newItems = items.map((it: MapType) => ({
+      id: it.id,
+      name: it.name,
+      checked: true,
+    }));
 
-    data?.maps?.data.forEach((map: Map) => {
-      const checked: boolean = arrayNames.includes(map.name);
+    const keyedItems = fields.reduce(
+      (acc: Map<number, MapType>, item: MapType) =>
+        acc.set(item.id, { ...item }),
+      new Map()
+    );
 
-      const newObj = {
-        id: map.id,
-        name: map.name,
-        checked: checked,
-      };
+    for (const item of newItems) {
+      const originalItem = keyedItems.get(item.id);
+      if (originalItem) {
+        originalItem.checked = item.checked;
+      }
+    }
 
-      result.push(newObj);
-    });
+    const newFields = [...keyedItems.values()];
 
-    return result;
-  }, [data?.maps.data, compareFields]);
+    return newFields;
+  }, [data?.maps.data, items]);
 
   const selectedFields = useMemo(() => {
     if (searchSelectedField) {
-      return fields.filter((field) =>
-        field.name.startsWith(searchSelectedField)
-      );
+      return items.filter((item) => item.name.startsWith(searchSelectedField));
     }
 
-    return fields;
-  }, [searchSelectedField, fields]);
+    return items;
+  }, [searchSelectedField, items]);
 
   return (
     <Stack
@@ -89,20 +82,20 @@ const MapPoolMaps: React.FC<PropsType> = (props) => {
       spacing={5}
       mt={5}
     >
-      <ItemList
+      <ItemsList
         title="Available Maps"
-        fields={availableFields}
+        items={availableFields}
         query={searchAvailableField}
         onSearch={setSearchAvailableField}
-        onChecked={onSelectField}
+        onChecked={onChecked}
       />
 
-      <ItemList
+      <ItemsList
         title="Selected Maps"
-        fields={selectedFields}
+        items={selectedFields}
         query={searchSelectedField}
         onSearch={setSearchSelectedField}
-        onChecked={onRemoveField}
+        onChecked={onChecked}
       />
     </Stack>
   );

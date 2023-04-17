@@ -5,6 +5,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { Box } from '@mui/material';
 
 import { MapPoolForm } from '@/modules/maps/components';
+import { convertDataToFields } from '@/modules/core/utils';
 
 import {
   //  GetMapPoolDocument,
@@ -15,9 +16,8 @@ import {
 } from '@/generated/graphql';
 
 import { GET_MAP_POOL } from '@/modules/maps/api/mapPools';
-import { Map } from '@/generated/graphql';
 
-type Field = {
+type MapType = {
   id: number;
   name: string;
   checked: boolean;
@@ -25,7 +25,7 @@ type Field = {
 
 type FormValuesType = {
   name: string;
-  maps: Field[];
+  maps: MapType[];
 };
 
 const MapPoolDetail: React.FC = () => {
@@ -44,37 +44,25 @@ const MapPoolDetail: React.FC = () => {
     },
   });
 
-  const convertDataToFields = useMemo(() => {
-    const fields: Field[] = [];
-
-    data?.mapPool?.maps.forEach((map: Map) => {
-      const newField = {
-        id: map.id,
-        name: map.name,
-        checked: true,
-      };
-
-      fields.push(newField);
-    });
-
-    return fields;
+  const selectedItems = useMemo(() => {
+    return convertDataToFields(data?.mapPool?.maps || []);
   }, [data?.mapPool?.maps]);
 
   useEffect(() => {
     if (data?.mapPool?.name) {
       setFormValues({
         name: data?.mapPool?.name,
-        maps: convertDataToFields,
+        maps: selectedItems,
       });
     }
-  }, [data?.mapPool?.name, convertDataToFields]);
+  }, [data?.mapPool?.name, selectedItems]);
 
   const [updateMapPool] = useMutation<
     UpdateMapPoolMutation,
     UpdateMapPoolMutationVariables
   >(UpdateMapPoolDocument);
 
-  const handleUpdateMapPool = (values: { name: string; maps: Field[] }) => {
+  const handleUpdateMapPool = (values: FormValuesType) => {
     const mapIds: number[] = [];
 
     values.maps.forEach((map) => {
