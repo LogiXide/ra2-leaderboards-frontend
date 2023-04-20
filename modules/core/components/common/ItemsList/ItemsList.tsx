@@ -8,7 +8,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 
-type ItemType = {
+export type ItemType = {
   id: number;
   name: string;
   checked: boolean;

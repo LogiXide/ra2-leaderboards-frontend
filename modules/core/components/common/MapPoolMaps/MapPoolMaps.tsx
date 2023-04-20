@@ -6,15 +6,11 @@ import Stack from '@mui/material/Stack';
 import { ItemsList } from '@/modules/core/components/common';
 import { SEARCH_MAP } from '@/modules/maps/api/maps';
 
-type MapType = {
-  id: number;
-  name: string;
-  checked: boolean;
-};
+import type { ItemType } from '@/modules/common/ItemList';
 
 type PropsType = {
-  items: MapType[];
-  onChecked: (item: MapType, checked: boolean) => void;
+  items: ItemType[];
+  onChecked: (item: ItemType, checked: boolean) => void;
 };
 
 const MapPoolMaps: React.FC<PropsType> = (props) => {
@@ -36,20 +32,20 @@ const MapPoolMaps: React.FC<PropsType> = (props) => {
 
   const availableFields = useMemo(() => {
     const fields =
-      data?.maps?.data.map((it: MapType) => ({
+      data?.maps?.data.map((it: ItemType) => ({
         id: it.id,
         name: it.name,
         checked: false,
       })) || [];
 
-    const newItems = items.map((it: MapType) => ({
+    const newItems = items.map((it: ItemType) => ({
       id: it.id,
       name: it.name,
       checked: true,
     }));
 
     const keyedItems = fields.reduce(
-      (acc: Map<number, MapType>, item: MapType) =>
+      (acc: Map<number, ItemType>, item: ItemType) =>
         acc.set(item.id, { ...item }),
       new Map()
     );

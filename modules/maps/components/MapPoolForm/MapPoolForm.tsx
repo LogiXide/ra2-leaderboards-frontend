@@ -100,7 +100,6 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
               error={!!fieldState?.error}
               helperText={fieldState.error?.message}
               {...field}
-              sx={{ textTransform: 'capitalize' }}
             />
           )}
         />

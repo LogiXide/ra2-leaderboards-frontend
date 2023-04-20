@@ -5,7 +5,6 @@ import { useMutation, useQuery } from '@apollo/client';
 import { Box } from '@mui/material';
 
 import { MapPoolForm } from '@/modules/maps/components';
-import { convertDataToFields } from '@/modules/core/utils';
 
 import {
   //  GetMapPoolDocument,
@@ -17,15 +16,19 @@ import {
 
 import { GET_MAP_POOL } from '@/modules/maps/api/mapPools';
 
-type MapType = {
-  id: number;
-  name: string;
-  checked: boolean;
-};
+export type { ItemType } from '@/modules/common/ItemList';
 
 type FormValuesType = {
   name: string;
-  maps: MapType[];
+  maps: ItemType[];
+};
+
+const convertDataToFields = (data: ItemType[]) => {
+  return data.map((it: ItemType) => ({
+    id: it.id,
+    name: it.name,
+    checked: true,
+  }));
 };
 
 const MapPoolDetail: React.FC = () => {
