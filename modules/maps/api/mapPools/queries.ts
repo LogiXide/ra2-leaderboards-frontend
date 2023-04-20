@@ -17,6 +17,10 @@ const GET_MAP_POOL = gql`
     mapPool(id: $id) {
       id
       name
+      maps {
+        id
+        name
+      }
     }
   }
 `;

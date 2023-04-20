@@ -540,7 +540,7 @@ export type CreateMapPoolMutationVariables = Exact<{
 }>;
 
 
-export type CreateMapPoolMutation = { __typename?: 'Mutation', createMapPool: { __typename?: 'CreateMapPoolResponse', mapPools: Array<{ __typename?: 'MapPool', id: number, name: string }> } };
+export type CreateMapPoolMutation = { __typename?: 'Mutation', createMapPool: { __typename?: 'CreateMapPoolResponse', mapPools: Array<{ __typename?: 'MapPool', id: number, name: string, maps?: Array<{ __typename?: 'Map', id: number }> | null }> } };
 
 export type UpdateMapPoolMutationVariables = Exact<{
   input: UpdateMapPoolInput;
@@ -548,7 +548,7 @@ export type UpdateMapPoolMutationVariables = Exact<{
 }>;
 
 
-export type UpdateMapPoolMutation = { __typename?: 'Mutation', updateMapPool: { __typename?: 'UpdateMapPoolResponse', mapPools?: Array<{ __typename?: 'MapPool', id: number, name: string }> | null } };
+export type UpdateMapPoolMutation = { __typename?: 'Mutation', updateMapPool: { __typename?: 'UpdateMapPoolResponse', mapPools?: Array<{ __typename?: 'MapPool', id: number, name: string, maps?: Array<{ __typename?: 'Map', id: number }> | null }> | null } };
 
 export type GetMapPoolsQueryVariables = Exact<{
   options?: InputMaybe<MapPoolsOptions>;
@@ -562,7 +562,7 @@ export type GetMapPoolQueryVariables = Exact<{
 }>;
 
 
-export type GetMapPoolQuery = { __typename?: 'Query', mapPool?: { __typename?: 'MapPool', id: number, name: string } | null };
+export type GetMapPoolQuery = { __typename?: 'Query', mapPool?: { __typename?: 'MapPool', id: number, name: string, maps?: Array<{ __typename?: 'Map', id: number, name: string }> | null } | null };
 
 export type UpdateMapMutationVariables = Exact<{
   input: UpdateMapInput;
@@ -673,6 +673,9 @@ export const CreateMapPoolDocument = gql`
     mapPools {
       id
       name
+      maps {
+        id
+      }
     }
   }
 }
@@ -709,6 +712,9 @@ export const UpdateMapPoolDocument = gql`
     mapPools {
       id
       name
+      maps {
+        id
+      }
     }
   }
 }
@@ -784,6 +790,10 @@ export const GetMapPoolDocument = gql`
   mapPool(id: $id) {
     id
     name
+    maps {
+      id
+      name
+    }
   }
 }
     `;

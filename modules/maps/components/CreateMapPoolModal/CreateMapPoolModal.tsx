@@ -6,12 +6,14 @@ import { MapPoolForm } from '@/modules/maps/components';
 
 type FormValuesType = {
   name: string;
+  maps: { id: number; name: string }[];
 };
 
 type PropsType = {
-  onCreateMapPool: (data: FormValuesType) => void;
+  onCreateMapPool: (values: FormValuesType) => void;
 };
 
+// TODO: move styles
 const styles = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -26,19 +28,22 @@ const styles = {
 };
 
 const CreateMapPoolModal: React.FC<PropsType> = (props) => {
+  const { onCreateMapPool } = props;
+
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const handleOpen = () => setOpenModal(true);
-  const handleClose = () => setOpenModal(false);
+  const handleOpenModal = () => setOpenModal(true);
+
+  const handleCloseModal = () => setOpenModal(false);
 
   return (
     <>
-      <Button onClick={handleOpen} variant="contained">
+      <Button onClick={handleOpenModal} variant="contained">
         Add Map Pool
       </Button>
 
       {openModal && (
-        <Modal open={openModal} onClose={handleClose}>
+        <Modal open={openModal} onClose={handleCloseModal}>
           <Box sx={styles}>
             <Typography
               display="flex"
@@ -50,10 +55,7 @@ const CreateMapPoolModal: React.FC<PropsType> = (props) => {
               Create Map Pool
             </Typography>
 
-            <MapPoolForm
-              onCreateMapPool={props.onCreateMapPool}
-              onClose={handleClose}
-            />
+            <MapPoolForm type="create" onSubmit={onCreateMapPool} />
           </Box>
         </Modal>
       )}
