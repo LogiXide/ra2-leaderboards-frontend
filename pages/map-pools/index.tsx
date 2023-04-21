@@ -3,9 +3,7 @@ import { useImmer } from 'use-immer';
 import { useQuery, useMutation } from '@apollo/client';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
+import { Box, Stack } from '@mui/material';
 
 import { DataList } from '@/modules/core/components/data';
 import { Pagination } from '@/modules/core/components/common';
@@ -63,13 +61,11 @@ const MapPools: React.FC = () => {
 
   const handleCreateMapPool = useCallback(
     (values: { name: string; maps: { id: number; name: string }[] }) => {
-      const mapIds = values.maps.map((map) => map.id);
-
       createMapPool({
         variables: {
           input: {
             name: values.name,
-            mapIds: mapIds || [],
+            mapIds: values?.maps?.map((it) => it.id),
           },
         },
       });
