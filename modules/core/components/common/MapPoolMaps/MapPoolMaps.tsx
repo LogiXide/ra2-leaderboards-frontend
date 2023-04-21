@@ -64,7 +64,9 @@ const MapPoolMaps: React.FC<PropsType> = (props) => {
 
   const selectedFields = useMemo(() => {
     if (searchSelectedField) {
-      return items.filter((item) => item.name.startsWith(searchSelectedField));
+      return items.filter((item) =>
+        item.name.toLowerCase().startsWith(searchSelectedField.toLowerCase())
+      );
     }
 
     return items;
