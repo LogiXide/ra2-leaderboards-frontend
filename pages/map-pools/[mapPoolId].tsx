@@ -41,10 +41,13 @@ const MapPoolDetail: React.FC = () => {
 
   const mapPoolId = parseInt(router.query.mapPoolId as string, 10);
 
+  console.log(mapPoolId);
+
   const { data } = useQuery(GET_MAP_POOL, {
     variables: {
       id: mapPoolId,
     },
+    skip: Number.isNaN(mapPoolId),
   });
 
   const selectedItems = useMemo(() => {
