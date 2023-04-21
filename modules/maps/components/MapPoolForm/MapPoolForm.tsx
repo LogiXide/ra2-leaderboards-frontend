@@ -11,11 +11,7 @@ import TextField from '@mui/material/TextField';
 
 import { MapPoolMaps } from '@/modules/core/components/common';
 
-type ItemType = {
-  id: number;
-  name: string;
-  checked: boolean;
-};
+import { ItemType } from '@/modules/core/components/common';
 
 type FormValuesType = {
   name: string;

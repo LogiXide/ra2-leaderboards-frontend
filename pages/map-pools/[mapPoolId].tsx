@@ -16,7 +16,7 @@ import {
 
 import { GET_MAP_POOL } from '@/modules/maps/api/mapPools';
 
-export type { ItemType } from '@/modules/common/ItemList';
+import { ItemType } from '@/modules/core/components/common';
 
 type FormValuesType = {
   name: string;
