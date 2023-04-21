@@ -45,6 +45,7 @@ const MapPoolDetail: React.FC = () => {
     variables: {
       id: mapPoolId,
     },
+    skip: Number.isNaN(mapPoolId),
   });
 
   const selectedItems = useMemo(() => {
