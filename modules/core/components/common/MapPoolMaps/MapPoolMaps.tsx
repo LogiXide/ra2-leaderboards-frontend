@@ -6,7 +6,7 @@ import Stack from '@mui/material/Stack';
 import { ItemsList } from '@/modules/core/components/common';
 import { SEARCH_MAP } from '@/modules/maps/api/maps';
 
-import type { ItemType } from '@/modules/common/ItemList';
+import { ItemType } from '@/modules/core/components/common';
 
 type PropsType = {
   items: ItemType[];
