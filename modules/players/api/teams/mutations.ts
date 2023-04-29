@@ -6,6 +6,9 @@ const CREATE_TEAM = gql`
       teams {
         id
         name
+        players {
+          id
+        }
       }
     }
   }
@@ -17,6 +20,9 @@ const UPDATE_TEAM = gql`
       teams {
         id
         name
+        players {
+          id
+        }
       }
     }
   }

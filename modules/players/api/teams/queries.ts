@@ -17,6 +17,10 @@ const GET_TEAM = gql`
     team(id: $id) {
       id
       name
+      players {
+        id
+        name
+      }
     }
   }
 `;

@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQuery } from '@apollo/client';
-
 import { Box } from '@mui/material';
 
 import { MapPoolForm } from '@/modules/maps/components';

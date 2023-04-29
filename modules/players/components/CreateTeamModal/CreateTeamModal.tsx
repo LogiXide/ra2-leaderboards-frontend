@@ -1,15 +1,18 @@
 import { useState } from 'react';
-
 import { Box, Modal, Typography, Button } from '@mui/material';
 
 import { TeamForm } from '@/modules/players/components';
 
-import type { FormValuesType } from '@/modules/players/components';
-
-type PropsType = {
-  onCreateTeam: (data: FormValuesType) => void;
+type FormValuesType = {
+  name: string;
+  players: { id: number; name: string }[];
 };
 
+type PropsType = {
+  onCreateTeam: (values: FormValuesType) => void;
+};
+
+// TODO: move styles
 const styles = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -24,19 +27,18 @@ const styles = {
 };
 
 const CreateTeamModal: React.FC<PropsType> = (props) => {
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const { onCreateTeam } = props;
 
-  const handleOpen = () => setOpenModal(true);
-  const handleClose = () => setOpenModal(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   return (
     <>
-      <Button onClick={handleOpen} variant="contained">
+      <Button variant="contained" onClick={() => setOpenModal(true)}>
         Add Team
       </Button>
 
       {openModal && (
-        <Modal open={openModal} onClose={handleClose}>
+        <Modal open={openModal} onClose={() => setOpenModal(false)}>
           <Box sx={styles}>
             <Typography
               display="flex"
@@ -48,10 +50,7 @@ const CreateTeamModal: React.FC<PropsType> = (props) => {
               Create Player
             </Typography>
 
-            <TeamForm
-              onCreateTeam={props.onCreateTeam}
-              onClose={handleClose}
-            />
+            <TeamForm onSubmit={onCreateTeam} type="create" />
           </Box>
         </Modal>
       )}

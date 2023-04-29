@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import { useImmer } from 'use-immer';
 import { useQuery, useMutation } from '@apollo/client';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Box, Stack } from '@mui/material';
+import Link from 'next/link';
 
 import { DataList } from '@/modules/core/components/data';
 import { Pagination } from '@/modules/core/components/common';
@@ -11,7 +11,6 @@ import { CreateMapPoolModal } from '@/modules/maps/components';
 import { CREATE_MAP_POOL } from '@/modules/maps/api/mapPools';
 import { showNotifyMessage } from '@/modules/core/utils';
 import { config } from '@/config';
-
 import {
   GetMapPoolsDocument,
   GetMapPoolsQuery,
@@ -27,7 +26,7 @@ const columns = [
   },
 ];
 
-const MapPools: React.FC = () => {
+const MapPools = () => {
   const [pageInfo, setPageInfo] = useImmer({
     currentPage: 1,
     limit: config.pagination.size,
@@ -75,7 +74,7 @@ const MapPools: React.FC = () => {
     [createMapPool]
   );
 
-  // TODO: add wrapper...
+  // TODO: here add wrapper component
   if (loading) {
     return <h1>Loading...</h1>;
   }

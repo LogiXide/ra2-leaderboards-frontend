@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import { Box, Modal, Typography, Button } from '@mui/material';
 
 import { MapPoolForm } from '@/modules/maps/components';
@@ -32,18 +31,14 @@ const CreateMapPoolModal: React.FC<PropsType> = (props) => {
 
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const handleOpenModal = () => setOpenModal(true);
-
-  const handleCloseModal = () => setOpenModal(false);
-
   return (
     <>
-      <Button onClick={handleOpenModal} variant="contained">
+      <Button variant="contained" onClick={() => setOpenModal(true)}>
         Add Map Pool
       </Button>
 
       {openModal && (
-        <Modal open={openModal} onClose={handleCloseModal}>
+        <Modal open={openModal} onClose={() => setOpenModal(false)}>
           <Box sx={styles}>
             <Typography
               display="flex"
