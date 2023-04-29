@@ -1,12 +1,14 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
+import {
+  Box,
+  Typography,
+  TextField,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Checkbox,
+} from '@mui/material';
 
 export type ItemType = {
   id: number;
@@ -16,18 +18,14 @@ export type ItemType = {
 
 type PropsType = {
   title: string;
-  query: string;
+  searchQuery: string;
   items: ItemType[];
   onChecked: (item: ItemType, checked: boolean) => void;
   onSearch: (query: string) => void;
 };
 
 export const ItemsList: React.FC<PropsType> = (props) => {
-  const { title, query, items, onChecked, onSearch } = props;
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onSearch(e.target.value);
-  };
+  const { title, searchQuery, items, onChecked, onSearch } = props;
 
   return (
     <Box
@@ -39,7 +37,14 @@ export const ItemsList: React.FC<PropsType> = (props) => {
         {title}
       </Typography>
 
-      <TextField fullWidth size="small" value={query} onChange={handleChange} />
+      <TextField
+        fullWidth
+        size="small"
+        value={searchQuery}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          onSearch(e.target.value);
+        }}
+      />
 
       <List
         sx={{

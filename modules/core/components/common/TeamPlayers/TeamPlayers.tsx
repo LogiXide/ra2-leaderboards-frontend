@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 import Stack from '@mui/material/Stack';
 
 import { ItemsList } from '@/modules/core/components/common';
-import { SEARCH_MAP } from '@/modules/maps/api/maps';
+import { SEARCH_PLAYER } from '@/modules/players/api/players';
 
 import { ItemType } from '@/modules/core/components/common';
 
@@ -13,13 +13,13 @@ type PropsType = {
   onChecked: (item: ItemType, checked: boolean) => void;
 };
 
-const MapPoolMaps: React.FC<PropsType> = (props) => {
+const TeamPlayers: React.FC<PropsType> = (props) => {
   const { items, onChecked } = props;
 
   const [searchAvailableField, setSearchAvailableField] = useState<string>('');
   const [searchSelectedField, setSearchSelectedField] = useState<string>('');
 
-  const { data } = useQuery(SEARCH_MAP, {
+  const { data } = useQuery(SEARCH_PLAYER, {
     variables: {
       where: {
         name_STARTS_WITH: searchAvailableField,
@@ -31,36 +31,21 @@ const MapPoolMaps: React.FC<PropsType> = (props) => {
   });
 
   const availableFields = useMemo(() => {
+    const mySet = new Set<number>();
+
+    items.forEach((it) => {
+      mySet.add(it.id);
+    });
+
     const fields =
-      data?.maps?.data.map((it: ItemType) => ({
+      data?.players.data.map((it: any) => ({
         id: it.id,
         name: it.name,
-        checked: false,
+        checked: mySet.has(it.id),
       })) || [];
 
-    const newItems = items.map((it: ItemType) => ({
-      id: it.id,
-      name: it.name,
-      checked: true,
-    }));
-
-    const keyedItems = fields.reduce(
-      (acc: Map<number, ItemType>, item: ItemType) =>
-        acc.set(item.id, { ...item }),
-      new Map()
-    );
-
-    for (const item of newItems) {
-      const originalItem = keyedItems.get(item.id);
-      if (originalItem) {
-        originalItem.checked = item.checked;
-      }
-    }
-
-    const newFields = [...keyedItems.values()];
-
-    return newFields;
-  }, [data?.maps.data, items]);
+    return fields;
+  }, [data?.players.data, items]);
 
   const selectedFields = useMemo(() => {
     if (searchSelectedField) {
@@ -81,7 +66,7 @@ const MapPoolMaps: React.FC<PropsType> = (props) => {
       mt={5}
     >
       <ItemsList
-        title="Available Maps"
+        title="Available Players"
         items={availableFields}
         searchQuery={searchAvailableField}
         onSearch={setSearchAvailableField}
@@ -89,7 +74,7 @@ const MapPoolMaps: React.FC<PropsType> = (props) => {
       />
 
       <ItemsList
-        title="Selected Maps"
+        title="Selected Players"
         items={selectedFields}
         searchQuery={searchSelectedField}
         onSearch={setSearchSelectedField}
@@ -99,4 +84,4 @@ const MapPoolMaps: React.FC<PropsType> = (props) => {
   );
 };
 
-export { MapPoolMaps };
+export { TeamPlayers };

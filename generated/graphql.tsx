@@ -637,12 +637,20 @@ export type GetPlayerQueryVariables = Exact<{
 
 export type GetPlayerQuery = { __typename?: 'Query', player?: { __typename?: 'Player', id: number, name: string } | null };
 
+export type SearchPlayerQueryVariables = Exact<{
+  where?: InputMaybe<PlayersWhere>;
+  options?: InputMaybe<PlayersOptions>;
+}>;
+
+
+export type SearchPlayerQuery = { __typename?: 'Query', players: { __typename?: 'PlayersResponse', data: Array<{ __typename?: 'Player', id: number, name: string } | null> } };
+
 export type CreateTeamMutationVariables = Exact<{
   input: CreateTeamInput;
 }>;
 
 
-export type CreateTeamMutation = { __typename?: 'Mutation', createTeam: { __typename?: 'CreateTeamResponse', teams: Array<{ __typename?: 'Team', id: number, name: string }> } };
+export type CreateTeamMutation = { __typename?: 'Mutation', createTeam: { __typename?: 'CreateTeamResponse', teams: Array<{ __typename?: 'Team', id: number, name: string, players?: Array<{ __typename?: 'Player', id: number }> | null }> } };
 
 export type UpdateTeamMutationVariables = Exact<{
   input: UpdateTeamInput;
@@ -650,7 +658,7 @@ export type UpdateTeamMutationVariables = Exact<{
 }>;
 
 
-export type UpdateTeamMutation = { __typename?: 'Mutation', updateTeam: { __typename?: 'UpdateTeamResponse', teams?: Array<{ __typename?: 'Team', id: number, name: string }> | null } };
+export type UpdateTeamMutation = { __typename?: 'Mutation', updateTeam: { __typename?: 'UpdateTeamResponse', teams?: Array<{ __typename?: 'Team', id: number, name: string, players?: Array<{ __typename?: 'Player', id: number }> | null }> | null } };
 
 export type GetTeamsQueryVariables = Exact<{
   options?: InputMaybe<TeamsOptions>;
@@ -664,7 +672,7 @@ export type GetTeamQueryVariables = Exact<{
 }>;
 
 
-export type GetTeamQuery = { __typename?: 'Query', team?: { __typename?: 'Team', id: number, name: string } | null };
+export type GetTeamQuery = { __typename?: 'Query', team?: { __typename?: 'Team', id: number, name: string, players?: Array<{ __typename?: 'Player', id: number, name: string }> | null } | null };
 
 
 export const CreateMapPoolDocument = gql`
@@ -1218,12 +1226,54 @@ export function useGetPlayerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetPlayerQueryHookResult = ReturnType<typeof useGetPlayerQuery>;
 export type GetPlayerLazyQueryHookResult = ReturnType<typeof useGetPlayerLazyQuery>;
 export type GetPlayerQueryResult = Apollo.QueryResult<GetPlayerQuery, GetPlayerQueryVariables>;
+export const SearchPlayerDocument = gql`
+    query searchPlayer($where: PlayersWhere, $options: PlayersOptions) {
+  players(where: $where, options: $options) {
+    data {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useSearchPlayerQuery__
+ *
+ * To run a query within a React component, call `useSearchPlayerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchPlayerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchPlayerQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useSearchPlayerQuery(baseOptions?: Apollo.QueryHookOptions<SearchPlayerQuery, SearchPlayerQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchPlayerQuery, SearchPlayerQueryVariables>(SearchPlayerDocument, options);
+      }
+export function useSearchPlayerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchPlayerQuery, SearchPlayerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchPlayerQuery, SearchPlayerQueryVariables>(SearchPlayerDocument, options);
+        }
+export type SearchPlayerQueryHookResult = ReturnType<typeof useSearchPlayerQuery>;
+export type SearchPlayerLazyQueryHookResult = ReturnType<typeof useSearchPlayerLazyQuery>;
+export type SearchPlayerQueryResult = Apollo.QueryResult<SearchPlayerQuery, SearchPlayerQueryVariables>;
 export const CreateTeamDocument = gql`
     mutation CreateTeam($input: CreateTeamInput!) {
   createTeam(input: $input) {
     teams {
       id
       name
+      players {
+        id
+      }
     }
   }
 }
@@ -1260,6 +1310,9 @@ export const UpdateTeamDocument = gql`
     teams {
       id
       name
+      players {
+        id
+      }
     }
   }
 }
@@ -1335,6 +1388,10 @@ export const GetTeamDocument = gql`
   team(id: $id) {
     id
     name
+    players {
+      id
+      name
+    }
   }
 }
     `;

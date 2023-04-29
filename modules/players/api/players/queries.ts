@@ -21,4 +21,15 @@ const GET_PLAYER = gql`
   }
 `;
 
-export { GET_PLAYERS, GET_PLAYER };
+const SEARCH_PLAYER = gql`
+  query searchPlayer($where: PlayersWhere, $options: PlayersOptions) {
+    players(where: $where, options: $options) {
+      data {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export { GET_PLAYERS, GET_PLAYER, SEARCH_PLAYER };

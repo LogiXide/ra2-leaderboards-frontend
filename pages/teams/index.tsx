@@ -1,18 +1,16 @@
 import { useCallback } from 'react';
 import { useImmer } from 'use-immer';
 import { useQuery, useMutation } from '@apollo/client';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-
 import { Stack, Box } from '@mui/material';
+import Link from 'next/link';
 
-import { config } from '@/config';
-import { showNotifyMessage } from '@/modules/core/utils';
 import { DataList } from '@/modules/core/components/data';
-import { CreateTeamModal } from '@/modules/players/components';
 import { Pagination } from '@/modules/core/components/common';
+import { CreateTeamModal } from '@/modules/players/components';
 import { CREATE_TEAM } from '@/modules/players/api/teams';
-
+import { showNotifyMessage } from '@/modules/core/utils';
+import { config } from '@/config';
 import {
   GetTeamsDocument,
   GetTeamsQuery,
@@ -28,11 +26,20 @@ const columns = [
   },
 ];
 
-const Teams: React.FC = () => {
+const Teams = () => {
   const [pageInfo, setPageInfo] = useImmer({
     currentPage: 1,
     limit: config.pagination.size,
     offset: 0,
+  });
+
+  const { data, loading, error } = useQuery<GetTeamsQuery>(GetTeamsDocument, {
+    variables: {
+      options: {
+        offset: pageInfo.offset,
+        limit: pageInfo.limit,
+      },
+    },
   });
 
   const router = useRouter();
@@ -48,21 +55,13 @@ const Teams: React.FC = () => {
     },
   });
 
-  const { data, loading, error } = useQuery<GetTeamsQuery>(GetTeamsDocument, {
-    variables: {
-      options: {
-        offset: pageInfo.offset,
-        limit: pageInfo.limit,
-      },
-    },
-  });
-
   const handleCreateTeam = useCallback(
-    (data: { name: string }) => {
+    (values: { name: string; players: { id: number; name: string }[] }) => {
       createTeam({
         variables: {
           input: {
-            name: data.name,
+            name: values.name,
+            playerIds: values?.players?.map((player) => player.id),
           },
         },
       });
@@ -72,14 +71,15 @@ const Teams: React.FC = () => {
     [createTeam]
   );
 
+  // TODO: here add wrapper component
   if (loading) {
     return <h1>Loading...</h1>;
   }
 
   if (error) {
-   showNotifyMessage('Something went wrong!', 'error');
-   return <h1>Error...</h1>;
- }
+    showNotifyMessage('Something went wrong!', 'error');
+    return <h1>Error...</h1>;
+  }
 
   return (
     <Box mt={2}>

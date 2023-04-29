@@ -3,11 +3,7 @@ import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import Link from 'next/link';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
+import { Box, Button, Stack, TextField } from '@mui/material';
 
 import { MapPoolMaps } from '@/modules/core/components/common';
 
@@ -42,21 +38,13 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
     name: 'maps',
   });
 
-  // https://stackoverflow.com/questions/62242657/how-to-change-react-hook-form-defaultvalue-with-useeffect
+  // NOTE: https://stackoverflow.com/questions/62242657/how-to-change-react-hook-form-defaultvalue-with-useeffect
   useEffect(() => {
     reset({
       name: defaultValues?.name,
       maps: defaultValues?.maps,
     });
   }, [reset, defaultValues]);
-
-  const onSubmitForm = useCallback(
-    (values: FormValuesType) => {
-      onSubmit(values);
-    },
-
-    [onSubmit]
-  );
 
   const onChecked = useCallback(
     (item: ItemType, checked: boolean) => {
@@ -80,7 +68,7 @@ const MapPoolForm: React.FC<PropsType> = (props) => {
   return (
     <Box
       component="form"
-      onSubmit={handleSubmit(onSubmitForm)}
+      onSubmit={handleSubmit(onSubmit)}
       noValidate
       autoComplete="off"
       sx={{ width: '100%' }}

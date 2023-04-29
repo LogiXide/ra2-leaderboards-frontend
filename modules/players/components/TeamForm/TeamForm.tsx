@@ -1,99 +1,117 @@
 import { useCallback, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import Link from 'next/link';
 import { object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Box, Button, Stack, TextField } from '@mui/material';
 
-import { Box, Button, Stack } from '@mui/material';
-
-import { TextField } from '@/modules/core/components/forms/fields';
+import { ItemType } from '@/modules/core/components/common';
+import { TeamPlayers } from '@/modules/core/components/common/TeamPlayers';
 
 type FormValuesType = {
   name: string;
+  players: ItemType[];
 };
 
 type PropsType = {
-  initialValues?: FormValuesType;
-  onClose: () => void;
-  onCreateTeam?: (data: FormValuesType) => void;
-  onUpdateTeam?: (data: FormValuesType) => void;
+  type: 'create' | 'update';
+  defaultValues?: FormValuesType;
+  onSubmit: (values: FormValuesType) => void;
 };
 
-const TeamSchema = object().shape({
+const schema = object().shape({
   name: string().required('Team name is required'),
 });
 
 const TeamForm: React.FC<PropsType> = (props) => {
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-    reset,
-  } = useForm<FormValuesType>({
-    defaultValues: {
-      name: props.initialValues?.name || '',
-    },
-    resolver: yupResolver(TeamSchema),
+  const { defaultValues, type, onSubmit } = props;
+
+  const { handleSubmit, control, reset } = useForm<FormValuesType>({
+    defaultValues,
+    resolver: yupResolver(schema),
   });
 
+  const { fields, append, replace } = useFieldArray({
+    control,
+    keyName: '_',
+    name: 'players',
+  });
+
+  // NOTE: https://stackoverflow.com/questions/62242657/how-to-change-react-hook-form-defaultvalue-with-useeffect
   useEffect(() => {
     reset({
-      name: props.initialValues?.name,
+      name: defaultValues?.name,
+      players: defaultValues?.players,
     });
-  }, [reset, props.initialValues?.name]);
+  }, [reset, defaultValues]);
 
-  const onSubmit = useCallback(
-    (data: FormValuesType) => {
-      if (props.onCreateTeam) {
-        props.onCreateTeam(data);
+  const onChecked = useCallback(
+    (item: ItemType, checked: boolean) => {
+      if (checked) {
+        const newFields = fields.filter((field) => field.id !== item.id);
 
-        props.onClose();
+        replace(newFields);
+      } else if (!checked) {
+        const newField = {
+          id: item.id,
+          name: item.name,
+          checked: true,
+        };
+
+        append(newField);
       }
-
-      props.onUpdateTeam?.(data);
     },
-    [props]
+    [fields, append, replace]
   );
 
   return (
     <Box
-      noValidate
       component="form"
-      sx={{ width: '100%', mt: 1 }}
       onSubmit={handleSubmit(onSubmit)}
+      noValidate
+      autoComplete="off"
+      sx={{ width: '100%' }}
     >
       <Stack direction="column" spacing={1}>
-        <TextField label="Name" control={control} name="name" errors={errors} />
+        <Controller
+          name="name"
+          control={control}
+          render={({ fieldState, field }) => (
+            <TextField
+              required
+              label={field.name}
+              error={!!fieldState?.error}
+              helperText={fieldState.error?.message}
+              {...field}
+            />
+          )}
+        />
+
+        {type === 'update' && (
+          <Controller
+            name="players"
+            control={control}
+            render={() => <TeamPlayers items={fields} onChecked={onChecked} />}
+          />
+        )}
 
         <Stack justifyContent="flex-end" direction="row" spacing={2}>
-          {props.onCreateTeam && (
-            <>
-              <Button onClick={() => props.onClose()} sx={{ color: 'black' }}>
-                Cancel
-              </Button>
-
-              <Button type="submit" variant="contained" color="primary">
-                Create
-              </Button>
-            </>
+          {type === 'create' ? (
+            <Button sx={{ color: 'black' }}>Cancel</Button>
+          ) : (
+            <Link
+              href="/teams"
+              style={{
+                textDecoration: 'none',
+              }}
+            >
+              <Button sx={{ color: 'black' }}>Back</Button>
+            </Link>
           )}
 
-          {props.onUpdateTeam && (
-            <>
-              <Link
-                href="/teams"
-                style={{
-                  textDecoration: 'none',
-                }}
-              >
-                <Button sx={{ color: 'black' }}>Back</Button>
-              </Link>
-
-              <Button type="submit" variant="contained" color="primary">
-                Update
-              </Button>
-            </>
-          )}
+          <Button type="submit" variant="contained" color="primary">
+            {type === 'create' ? 'Create' : 'Update'}
+          </Button>
         </Stack>
       </Stack>
     </Box>
